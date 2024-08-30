@@ -1,4 +1,4 @@
-package com.crypto_trader.scheduler.utils;
+package com.crypto_trader.scheduler.global.utils;
 
 import java.util.function.Consumer;
 import java.util.function.Function;

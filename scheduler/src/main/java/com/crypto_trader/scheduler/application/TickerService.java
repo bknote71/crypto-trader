@@ -8,13 +8,12 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 
 import java.util.List;
 
-import static com.crypto_trader.scheduler.config.WebSocketConst.WEBSOCKET_URL;
+import static com.crypto_trader.scheduler.global.constant.WebSocketConst.WEBSOCKET_URL;
 
 @Service
 public class TickerService {
 
     private final TickerWebSocketHandler tickerWebSocketHandler;
-
 
     @Autowired
     public TickerService(TickerWebSocketHandler tickerWebSocketHandler) {

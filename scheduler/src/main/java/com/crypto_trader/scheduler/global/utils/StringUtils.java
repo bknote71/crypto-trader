@@ -1,4 +1,4 @@
-package com.crypto_trader.scheduler.utils;
+package com.crypto_trader.scheduler.global.utils;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
