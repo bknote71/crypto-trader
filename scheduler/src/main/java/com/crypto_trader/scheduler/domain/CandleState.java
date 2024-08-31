@@ -23,7 +23,7 @@ public class CandleState {
         this.last = value;
         this.high = value;
         this.low = value;
-        this.time = LocalDateTime.now();
+        this.time = LocalDateTime.now().withSecond(0).withNano(0);
     }
 
     public CandleState(double open, double last, double high, double low) {
@@ -31,7 +31,7 @@ public class CandleState {
         this.last = last;
         this.high = high;
         this.low = low;
-        this.time = LocalDateTime.now();
+        this.time = LocalDateTime.now().withSecond(0).withNano(0);
     }
 
 

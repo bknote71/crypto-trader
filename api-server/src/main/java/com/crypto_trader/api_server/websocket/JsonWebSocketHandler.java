@@ -1,5 +1,6 @@
 package com.crypto_trader.api_server.websocket;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.socket.CloseStatus;
@@ -14,7 +15,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public abstract class JsonWebSocketHandler<T, V> extends TextWebSocketHandler {
 
-    private final ObjectMapper objectMapper;
+    protected final ObjectMapper objectMapper;
 
     public JsonWebSocketHandler(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
@@ -46,7 +47,7 @@ public abstract class JsonWebSocketHandler<T, V> extends TextWebSocketHandler {
 
     protected void sendMessage(V message, WebSocketSession session) {
         try {
-            String payload = objectMapper.writeValueAsString(message);
+            String payload = convertToV(message);
             session.sendMessage(new TextMessage(payload));
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -62,6 +63,10 @@ public abstract class JsonWebSocketHandler<T, V> extends TextWebSocketHandler {
         } catch (IOException e) {
             // TODO: session이 close될 수 있다.
         }
+    }
+
+    protected String convertToV(V message) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(message);
     }
 
     // private

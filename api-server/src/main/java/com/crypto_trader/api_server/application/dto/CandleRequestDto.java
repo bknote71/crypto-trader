@@ -1,7 +1,9 @@
-package com.crypto_trader.api_server.domain;
+package com.crypto_trader.api_server.application.dto;
 
 
-public class CandleRequest {
+import com.crypto_trader.api_server.domain.CandleUnit;
+
+public class CandleRequestDto {
     private String market;
     private CandleUnit unit;
 

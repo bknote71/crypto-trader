@@ -30,6 +30,8 @@ public class CandleService {
 
     @PostConstruct
     public void init() {
+        // TODO: init redis minute_candle with mongodb candle data
+
         redisTemplate
                 .listenToChannel(REDIS_TICKER)
                 .subscribe((value) -> {

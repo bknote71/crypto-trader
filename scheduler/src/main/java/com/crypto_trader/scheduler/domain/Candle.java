@@ -27,7 +27,7 @@ public class Candle {
         this.close = close;
         this.high = high;
         this.low = low;
-        this.time = LocalDateTime.now();
+        this.time = LocalDateTime.now().withSecond(0).withNano(0);
     }
 
     public String getId() {

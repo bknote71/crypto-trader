@@ -1,27 +1,26 @@
 package com.crypto_trader.api_server.websocket;
 
+import com.crypto_trader.api_server.domain.Ticker;
+import com.crypto_trader.api_server.domain.events.TickerChangeEvent;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.ReactiveRedisTemplate;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketSession;
-import reactor.core.Disposable;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Component
-public class TickerWebSocketHandler extends JsonWebSocketHandler<Void, String> {
+public class TickerWebSocketHandler extends JsonWebSocketHandler<Void, Ticker> {
 
-    private final ReactiveRedisTemplate<String, String> redisTemplate;
-    private final Map<String, Disposable> sessionMap = new ConcurrentHashMap<>();
+    private final List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
 
     @Autowired
-    public TickerWebSocketHandler(ReactiveRedisTemplate<String, String> redisTemplate,
-                                  ObjectMapper objectMapper) {
+    public TickerWebSocketHandler(ObjectMapper objectMapper) {
         super(objectMapper);
-        this.redisTemplate = redisTemplate;
     }
 
     @Override
@@ -32,20 +31,20 @@ public class TickerWebSocketHandler extends JsonWebSocketHandler<Void, String> {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         super.afterConnectionEstablished(session);
-
-        Disposable subscribe = redisTemplate
-                .listenToChannel("ticker")
-                .subscribe(value -> {
-                    String message = value.getMessage();
-                    sendJsonMessage(message, session);
-                });
-
-        sessionMap.put(session.getId(), subscribe);
+        sessions.add(session);
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         super.afterConnectionClosed(session, status);
-        sessionMap.remove(session.getId());
+        sessions.remove(session);
+    }
+
+    @EventListener
+    public void onTickerChange(TickerChangeEvent event) throws JsonProcessingException {
+        String ticker = convertToV(event.getTicker());
+        sessions
+                .parallelStream()
+                .forEach(session -> sendJsonMessage(ticker, session));
     }
 }

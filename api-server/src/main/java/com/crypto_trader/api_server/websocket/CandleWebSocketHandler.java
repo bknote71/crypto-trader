@@ -1,6 +1,6 @@
 package com.crypto_trader.api_server.websocket;
 
-import com.crypto_trader.api_server.domain.CandleRequest;
+import com.crypto_trader.api_server.application.dto.CandleRequestDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import static io.lettuce.core.protocol.CommandType.RPUSH;
 
 @Component
-public class CandleWebSocketHandler extends JsonWebSocketHandler<CandleRequest, String> {
+public class CandleWebSocketHandler extends JsonWebSocketHandler<CandleRequestDto, String> {
 
     private final ReactiveRedisTemplate<String, String> redisTemplate;
     private final Map<String, Disposable> sessionMap = new ConcurrentHashMap<>();
@@ -29,7 +29,7 @@ public class CandleWebSocketHandler extends JsonWebSocketHandler<CandleRequest, 
     }
 
     @Override
-    public void doHandleMessage(CandleRequest instance, WebSocketSession session) {
+    public void doHandleMessage(CandleRequestDto instance, WebSocketSession session) {
         Disposable disposable = sessionMap.get(session.getId());
         if (disposable != null) {
             disposable.dispose();
