@@ -1,6 +1,7 @@
 package com.crypto_trader.api_server.application;
 
 import com.crypto_trader.api_server.application.dto.OrderCancelRequestDto;
+import com.crypto_trader.api_server.auth.PrincipalUser;
 import com.crypto_trader.api_server.domain.entities.Order;
 import com.crypto_trader.api_server.domain.entities.OrderState;
 import com.crypto_trader.api_server.domain.entities.UserEntity;
@@ -27,7 +28,9 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderResponseDto createOrder(UserEntity user, OrderCreateRequestDto orderCreateRequestDto) {
+    public OrderResponseDto createOrder(PrincipalUser principalUser, OrderCreateRequestDto orderCreateRequestDto) {
+        UserEntity user = principalUser.getUser();
+
         Order order = orderCreateRequestDto.toEntity();
         order.validationWith(user);
 
@@ -38,7 +41,9 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public List<OrderResponseDto> getAllOrders(UserEntity user) {
+    public List<OrderResponseDto> getAllOrders(PrincipalUser principalUser) {
+        UserEntity user = principalUser.getUser();
+
         return orderRepository.findByUserId(user.getId())
                 .stream()
                 .map(OrderResponseDto::toDto)
@@ -47,7 +52,9 @@ public class OrderService {
 
     @Transactional
     @Lock(value = LockModeType.PESSIMISTIC_WRITE)
-    public OrderResponseDto cancelOrder(UserEntity user, OrderCancelRequestDto dto) {
+    public OrderResponseDto cancelOrder(PrincipalUser principalUser, OrderCancelRequestDto dto) {
+        UserEntity user = principalUser.getUser();
+
         Order order = orderRepository.findById(dto.getOrderId())
                 .orElseThrow(() -> new IllegalArgumentException("Order not found"));
 

@@ -37,4 +37,15 @@ public class AuthService {
 
         return jwtUtil.generateToken(username);
     }
+
+    @Transactional
+    public void signup(String username) {
+        userEntityRepository.findByUsername(username)
+                .ifPresent(u -> {
+                    throw new RuntimeException("username already exists");
+                });
+
+        UserEntity user = new UserEntity(username);
+        userEntityRepository.save(user);
+    }
 }

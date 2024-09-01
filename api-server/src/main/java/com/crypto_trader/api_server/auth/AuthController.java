@@ -30,4 +30,10 @@ public class AuthController {
         System.out.println(user);
         return user.getUsername();
     }
+
+    @PostMapping("/signup")
+    public String signup(String username) {
+        authService.signup(username);
+        return "success";
+    }
 }

@@ -24,7 +24,7 @@ public class UserEntity {
 
     public UserEntity(String username) {
         this.username = username;
-        this.account = new Account();
+        this.account = initAccount();
     }
 
     // getter
@@ -52,5 +52,9 @@ public class UserEntity {
                 .orElse(null);
     }
 
+    // private
 
+    private Account initAccount() {
+        return new Account("유저의 계좌번호");
+    }
 }
