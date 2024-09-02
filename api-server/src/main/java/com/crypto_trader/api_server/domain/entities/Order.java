@@ -35,6 +35,7 @@ public class Order {
         this.side = side;
         this.volume = volume;
         this.price = price;
+        this.state = OrderState.CREATED;
     }
 
     public Long getId() {
@@ -88,6 +89,8 @@ public class Order {
             if (amount < volume.doubleValue())
                 throw new RuntimeException();
         }
+
+        this.user = user;
     }
 
     public void cancel(String market) {
@@ -109,6 +112,7 @@ public class Order {
         } else {
             ask();
         }
+
         this.state = OrderState.COMPLETED;
     }
 
@@ -121,7 +125,7 @@ public class Order {
                     asset.bid(volume, price);
                 }, () -> { // else
                     CryptoAsset newCryptoAsset = new CryptoAsset(market, volume, price);
-                    user.getAssets().add(newCryptoAsset);
+                    newCryptoAsset.setUser(user);
                 });
     }
 

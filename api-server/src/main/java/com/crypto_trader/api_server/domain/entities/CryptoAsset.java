@@ -34,6 +34,7 @@ public class CryptoAsset {
 
     public void setUser(UserEntity user) {
         this.user = user;
+        user.getAssets().add(this);
     }
 
     public void unlock(Number volume) {

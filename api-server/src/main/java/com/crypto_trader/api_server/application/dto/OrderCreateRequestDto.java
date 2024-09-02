@@ -25,6 +25,16 @@ public class OrderCreateRequestDto {
         return price;
     }
 
+    @Override
+    public String toString() {
+        return "OrderCreateRequestDto{" +
+                "market='" + market + '\'' +
+                ", side='" + side + '\'' +
+                ", volume=" + volume +
+                ", price=" + price +
+                '}';
+    }
+
     public Order toEntity() {
         return new Order(market, OrderSide.valueOf(side), volume, price);
     }

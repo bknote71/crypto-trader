@@ -2,6 +2,7 @@ package com.crypto_trader.api_server.application;
 
 import com.crypto_trader.api_server.application.dto.OrderCancelRequestDto;
 import com.crypto_trader.api_server.auth.PrincipalUser;
+import com.crypto_trader.api_server.domain.entities.CryptoAsset;
 import com.crypto_trader.api_server.domain.entities.Order;
 import com.crypto_trader.api_server.domain.entities.OrderState;
 import com.crypto_trader.api_server.domain.entities.UserEntity;
@@ -37,7 +38,7 @@ public class OrderService {
         user.getAccount().lock(order.totalPrice());
         orderRepository.save(order);
 
-        return new OrderResponseDto();
+        return OrderResponseDto.toDto(order);
     }
 
     @Transactional(readOnly = true)
