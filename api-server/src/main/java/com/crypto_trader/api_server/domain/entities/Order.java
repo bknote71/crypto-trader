@@ -22,6 +22,12 @@ public class Order {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
+    // 주문 타입에는
+    // - limit: 지정가 주문 (현재는 이것만, 나머지는 TODO)
+    // - price: 시장가 주문(매수)
+    // - market: 시장가 주문(매도)
+    // - best: 최유리 주문
+
     public Order() {}
 
     public Order(String market, OrderSide side, Number volume, Number price) {
@@ -94,9 +100,42 @@ public class Order {
         }
     }
 
-    // 주문 타입에는
-    // - limit: 지정가 주문 (현재는 이것만, 나머지는 TODO)
-    // - price: 시장가 주문(매수)
-    // - market: 시장가 주문(매도)
-    // - best: 최유리 주문
+    /**
+     * This method must be called within a transactional context.
+     */
+    public void execution() {
+        if (side == OrderSide.BID) { // 매수 체결
+            bid();
+        } else {
+            ask();
+        }
+        this.state = OrderState.COMPLETED;
+    }
+
+    private void bid() {
+        user.getAccount().decreaseLocked(totalPrice());
+        user.getAssets().stream()
+                .filter(asset -> market.equals(asset.getMarket()))
+                .findFirst()
+                .ifPresentOrElse(asset -> { //
+                    asset.bid(volume, price);
+                }, () -> { // else
+                    CryptoAsset newCryptoAsset = new CryptoAsset(market, volume, price);
+                    user.getAssets().add(newCryptoAsset);
+                });
+    }
+
+    private void ask() {
+        user.getAccount().increaseBalance(totalPrice());
+        CryptoAsset cryptoAsset = user.getAssets().stream()
+                .filter(asset -> market.equals(asset.getMarket()))
+                .findFirst()
+                .orElseThrow(IllegalStateException::new);
+
+        cryptoAsset.ask(volume);
+
+        if (cryptoAsset.isEmpty()) {
+            user.getAssets().remove(cryptoAsset);
+        }
+    }
 }

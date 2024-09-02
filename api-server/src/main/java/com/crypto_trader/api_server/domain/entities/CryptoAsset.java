@@ -16,6 +16,14 @@ public class CryptoAsset {
     @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity user;
 
+    public CryptoAsset() {}
+
+    public CryptoAsset(String market, Number amount, Number avgPrice) {
+        this.market = market;
+        this.amount = amount;
+        this.avgPrice = avgPrice;
+    }
+
     public String getMarket() {
         return market;
     }
@@ -24,7 +32,40 @@ public class CryptoAsset {
         return amount;
     }
 
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
+
     public void unlock(Number volume) {
         amount = volume.doubleValue() + amount.doubleValue();
+    }
+
+    public void bid(Number volume, Number price) {
+        double avgPriceValue = avgPrice.doubleValue();
+        double amountValue = amount.doubleValue();
+        double volumeValue = volume.doubleValue();
+        double priceValue = price.doubleValue();
+
+        this.avgPrice = ((avgPriceValue * amountValue) + (volumeValue * priceValue)) / (amountValue + volumeValue);
+        this.amount = amountValue + volumeValue;
+    }
+
+    public void ask(Number volume) {
+        double avgPriceValue = avgPrice.doubleValue();
+        double amountValue = amount.doubleValue();
+        double volumeValue = volume.doubleValue();
+
+        assert amountValue >= volumeValue;
+
+        double currentTotalCost = avgPriceValue * amountValue;
+        double newAmount = amountValue - volumeValue;
+        double newAvgPrice = newAmount > 0 ? (currentTotalCost - (volumeValue * avgPriceValue)) / newAmount : 0;
+
+        this.avgPrice = newAvgPrice;
+        this.amount = amountValue - volumeValue;
+    }
+
+    public boolean isEmpty() {
+        return amount.doubleValue() == 0;
     }
 }

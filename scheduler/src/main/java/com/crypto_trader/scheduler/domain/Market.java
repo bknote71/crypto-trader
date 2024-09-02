@@ -5,13 +5,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 
 public class Market {
-    private final String market;
+    private String market;
 
     @JsonProperty("korean_name")
-    private final String krName;
+    private String krName;
 
     @JsonProperty("english_name")
-    private final String enName;
+    private String enName;
+
+    public Market() {}
 
     public Market(String market, String krName, String enName) {
         this.market = market;

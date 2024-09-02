@@ -58,4 +58,8 @@ public class Account {
     public void increaseBalance(Number number) {
         balance = balance.doubleValue() + number.doubleValue();
     }
+
+    public void decreaseLocked(Number number) {
+        locked = locked.doubleValue() - number.doubleValue();
+    }
 }

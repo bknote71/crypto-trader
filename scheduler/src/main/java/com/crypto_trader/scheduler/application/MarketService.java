@@ -8,6 +8,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.yaml.snakeyaml.error.Mark;
 
 import java.util.List;
 
@@ -31,7 +32,8 @@ public class MarketService {
                 MARKET_URL,
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<>() {}
+                new ParameterizedTypeReference<>() {
+                }
         );
 
         List<Market> newMarketList = responseEntity.getBody();

@@ -2,24 +2,38 @@ package com.crypto_trader.scheduler.infra;
 
 import com.crypto_trader.scheduler.domain.Market;
 import com.crypto_trader.scheduler.domain.event.MarketsUpdateEvent;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.crypto_trader.scheduler.global.constant.RedisConst.MARKET;
+
 @Repository
 public class SimpleMarketRepository {
+
+    private final ReactiveRedisTemplate<String, String> redisTemplate;
+    private final ApplicationEventPublisher publisher;
+    private final ObjectMapper objectMapper;
+
     private final Map<String, Market> markets = new HashMap<>();
-    private final ApplicationEventPublisher eventPublisher;
 
     @Autowired
-    public SimpleMarketRepository(ApplicationEventPublisher eventPublisher) {
-        this.eventPublisher = eventPublisher;
+    public SimpleMarketRepository(ReactiveRedisTemplate<String, String> redisTemplate,
+                                  ApplicationEventPublisher publisher,
+                                  ObjectMapper objectMapper) {
+        this.redisTemplate = redisTemplate;
+        this.publisher = publisher;
+        this.objectMapper = objectMapper;
     }
 
     public synchronized void saveMarkets(List<Market> newMarketList) {
+        // market 변경 신호 to redis
         Map<String, Market> newMarkets = newMarketList.stream()
                 .collect(Collectors.toMap(Market::getMarket, market -> market));
 
@@ -29,7 +43,14 @@ public class SimpleMarketRepository {
         markets.putAll(newMarkets);
 
         if (isModified) {
-            eventPublisher.publishEvent(new MarketsUpdateEvent(this));
+            try {
+                redisTemplate.opsForValue()
+                        .set(MARKET, objectMapper.writeValueAsString(markets.keySet()))
+                        .subscribe();
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            publisher.publishEvent(new MarketsUpdateEvent(this));
         }
     }
 
