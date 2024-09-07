@@ -8,12 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		95FDD0402C8C5534003F9FBF /* crypto_trader_macosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD03F2C8C5534003F9FBF /* crypto_trader_macosApp.swift */; };
-		95FDD0422C8C5534003F9FBF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD0412C8C5534003F9FBF /* ContentView.swift */; };
 		95FDD0442C8C5535003F9FBF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 95FDD0432C8C5535003F9FBF /* Assets.xcassets */; };
 		95FDD0472C8C5535003F9FBF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 95FDD0462C8C5535003F9FBF /* Preview Assets.xcassets */; };
 		95FDD0522C8C5535003F9FBF /* crypto_trader_macosTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD0512C8C5535003F9FBF /* crypto_trader_macosTests.swift */; };
 		95FDD05C2C8C5535003F9FBF /* crypto_trader_macosUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD05B2C8C5535003F9FBF /* crypto_trader_macosUITests.swift */; };
 		95FDD05E2C8C5535003F9FBF /* crypto_trader_macosUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD05D2C8C5535003F9FBF /* crypto_trader_macosUITestsLaunchTests.swift */; };
+		95FDD06D2C8C5801003F9FBF /* Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD06C2C8C5801003F9FBF /* Crypto.swift */; };
+		95FDD0702C8C5834003F9FBF /* CryptoListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD06F2C8C5834003F9FBF /* CryptoListViewModel.swift */; };
+		95FDD0732C8C58B2003F9FBF /* TradingPriceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD0722C8C58B2003F9FBF /* TradingPriceView.swift */; };
+		95FDD0762C8C58C7003F9FBF /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = 95FDD0752C8C58C7003F9FBF /* DGCharts */; };
+		95FDD0782C8C58DF003F9FBF /* CandleStickChartViewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD0772C8C58DF003F9FBF /* CandleStickChartViewWrapper.swift */; };
+		95FDD07A2C8C598B003F9FBF /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD0792C8C598B003F9FBF /* MainView.swift */; };
+		95FDD07C2C8C599D003F9FBF /* CryptoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD07B2C8C599D003F9FBF /* CryptoListView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,7 +42,6 @@
 /* Begin PBXFileReference section */
 		95FDD03C2C8C5534003F9FBF /* crypto-trader-macos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "crypto-trader-macos.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		95FDD03F2C8C5534003F9FBF /* crypto_trader_macosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = crypto_trader_macosApp.swift; sourceTree = "<group>"; };
-		95FDD0412C8C5534003F9FBF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		95FDD0432C8C5535003F9FBF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		95FDD0462C8C5535003F9FBF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		95FDD0482C8C5535003F9FBF /* crypto_trader_macos.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = crypto_trader_macos.entitlements; sourceTree = "<group>"; };
@@ -45,6 +50,12 @@
 		95FDD0572C8C5535003F9FBF /* crypto-trader-macosUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "crypto-trader-macosUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		95FDD05B2C8C5535003F9FBF /* crypto_trader_macosUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = crypto_trader_macosUITests.swift; sourceTree = "<group>"; };
 		95FDD05D2C8C5535003F9FBF /* crypto_trader_macosUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = crypto_trader_macosUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		95FDD06C2C8C5801003F9FBF /* Crypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Crypto.swift; sourceTree = "<group>"; };
+		95FDD06F2C8C5834003F9FBF /* CryptoListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoListViewModel.swift; sourceTree = "<group>"; };
+		95FDD0722C8C58B2003F9FBF /* TradingPriceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradingPriceView.swift; sourceTree = "<group>"; };
+		95FDD0772C8C58DF003F9FBF /* CandleStickChartViewWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleStickChartViewWrapper.swift; sourceTree = "<group>"; };
+		95FDD0792C8C598B003F9FBF /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		95FDD07B2C8C599D003F9FBF /* CryptoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				95FDD0762C8C58C7003F9FBF /* DGCharts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,10 +87,11 @@
 		95FDD0332C8C5534003F9FBF = {
 			isa = PBXGroup;
 			children = (
-				95FDD03E2C8C5534003F9FBF /* crypto-trader-macos */,
 				95FDD0502C8C5535003F9FBF /* crypto-trader-macosTests */,
 				95FDD05A2C8C5535003F9FBF /* crypto-trader-macosUITests */,
 				95FDD03D2C8C5534003F9FBF /* Products */,
+				95FDD06A2C8C5690003F9FBF /* Resources */,
+				95FDD03E2C8C5534003F9FBF /* Sources */,
 			);
 			sourceTree = "<group>";
 		};
@@ -92,16 +105,16 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		95FDD03E2C8C5534003F9FBF /* crypto-trader-macos */ = {
+		95FDD03E2C8C5534003F9FBF /* Sources */ = {
 			isa = PBXGroup;
 			children = (
 				95FDD03F2C8C5534003F9FBF /* crypto_trader_macosApp.swift */,
-				95FDD0412C8C5534003F9FBF /* ContentView.swift */,
-				95FDD0432C8C5535003F9FBF /* Assets.xcassets */,
-				95FDD0482C8C5535003F9FBF /* crypto_trader_macos.entitlements */,
+				95FDD06B2C8C57EE003F9FBF /* Model */,
 				95FDD0452C8C5535003F9FBF /* Preview Content */,
+				95FDD06E2C8C5820003F9FBF /* ViewModel */,
+				95FDD0712C8C58A2003F9FBF /* Views */,
 			);
-			path = "crypto-trader-macos";
+			path = Sources;
 			sourceTree = "<group>";
 		};
 		95FDD0452C8C5535003F9FBF /* Preview Content */ = {
@@ -129,6 +142,42 @@
 			path = "crypto-trader-macosUITests";
 			sourceTree = "<group>";
 		};
+		95FDD06A2C8C5690003F9FBF /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				95FDD0432C8C5535003F9FBF /* Assets.xcassets */,
+				95FDD0482C8C5535003F9FBF /* crypto_trader_macos.entitlements */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		95FDD06B2C8C57EE003F9FBF /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				95FDD06C2C8C5801003F9FBF /* Crypto.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		95FDD06E2C8C5820003F9FBF /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				95FDD06F2C8C5834003F9FBF /* CryptoListViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		95FDD0712C8C58A2003F9FBF /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				95FDD0722C8C58B2003F9FBF /* TradingPriceView.swift */,
+				95FDD0772C8C58DF003F9FBF /* CandleStickChartViewWrapper.swift */,
+				95FDD0792C8C598B003F9FBF /* MainView.swift */,
+				95FDD07B2C8C599D003F9FBF /* CryptoListView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -145,6 +194,9 @@
 			dependencies = (
 			);
 			name = "crypto-trader-macos";
+			packageProductDependencies = (
+				95FDD0752C8C58C7003F9FBF /* DGCharts */,
+			);
 			productName = "crypto-trader-macos";
 			productReference = 95FDD03C2C8C5534003F9FBF /* crypto-trader-macos.app */;
 			productType = "com.apple.product-type.application";
@@ -217,6 +269,9 @@
 				Base,
 			);
 			mainGroup = 95FDD0332C8C5534003F9FBF;
+			packageReferences = (
+				95FDD0742C8C58C7003F9FBF /* XCRemoteSwiftPackageReference "Charts" */,
+			);
 			productRefGroup = 95FDD03D2C8C5534003F9FBF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -259,8 +314,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				95FDD0422C8C5534003F9FBF /* ContentView.swift in Sources */,
+				95FDD06D2C8C5801003F9FBF /* Crypto.swift in Sources */,
+				95FDD07A2C8C598B003F9FBF /* MainView.swift in Sources */,
+				95FDD0732C8C58B2003F9FBF /* TradingPriceView.swift in Sources */,
+				95FDD0702C8C5834003F9FBF /* CryptoListViewModel.swift in Sources */,
+				95FDD0782C8C58DF003F9FBF /* CandleStickChartViewWrapper.swift in Sources */,
 				95FDD0402C8C5534003F9FBF /* crypto_trader_macosApp.swift in Sources */,
+				95FDD07C2C8C599D003F9FBF /* CryptoListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -420,11 +480,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "crypto-trader-macos/crypto_trader_macos.entitlements";
+				CODE_SIGN_ENTITLEMENTS = Resources/crypto_trader_macos.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"crypto-trader-macos/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Sources/Preview Content\"";
 				DEVELOPMENT_TEAM = 86U3H5TA68;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -447,11 +507,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "crypto-trader-macos/crypto_trader_macos.entitlements";
+				CODE_SIGN_ENTITLEMENTS = Resources/crypto_trader_macos.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"crypto-trader-macos/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Sources/Preview Content\"";
 				DEVELOPMENT_TEAM = 86U3H5TA68;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -581,6 +641,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		95FDD0742C8C58C7003F9FBF /* XCRemoteSwiftPackageReference "Charts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/danielgindi/Charts.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		95FDD0752C8C58C7003F9FBF /* DGCharts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 95FDD0742C8C58C7003F9FBF /* XCRemoteSwiftPackageReference "Charts" */;
+			productName = DGCharts;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 95FDD0342C8C5534003F9FBF /* Project object */;
 }

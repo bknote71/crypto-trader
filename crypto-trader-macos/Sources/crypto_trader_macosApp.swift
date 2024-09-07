@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct crypto_trader_macosApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
+  var body: some Scene {
+    WindowGroup {
+      MainView()
+        .fixedSize()
     }
+    .windowResizability(.contentSize)
+  }
 }
