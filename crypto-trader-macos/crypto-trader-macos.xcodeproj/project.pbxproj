@@ -1,0 +1,586 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		95FDD0402C8C5534003F9FBF /* crypto_trader_macosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD03F2C8C5534003F9FBF /* crypto_trader_macosApp.swift */; };
+		95FDD0422C8C5534003F9FBF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD0412C8C5534003F9FBF /* ContentView.swift */; };
+		95FDD0442C8C5535003F9FBF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 95FDD0432C8C5535003F9FBF /* Assets.xcassets */; };
+		95FDD0472C8C5535003F9FBF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 95FDD0462C8C5535003F9FBF /* Preview Assets.xcassets */; };
+		95FDD0522C8C5535003F9FBF /* crypto_trader_macosTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD0512C8C5535003F9FBF /* crypto_trader_macosTests.swift */; };
+		95FDD05C2C8C5535003F9FBF /* crypto_trader_macosUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD05B2C8C5535003F9FBF /* crypto_trader_macosUITests.swift */; };
+		95FDD05E2C8C5535003F9FBF /* crypto_trader_macosUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD05D2C8C5535003F9FBF /* crypto_trader_macosUITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		95FDD04E2C8C5535003F9FBF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 95FDD0342C8C5534003F9FBF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 95FDD03B2C8C5534003F9FBF;
+			remoteInfo = "crypto-trader-macos";
+		};
+		95FDD0582C8C5535003F9FBF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 95FDD0342C8C5534003F9FBF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 95FDD03B2C8C5534003F9FBF;
+			remoteInfo = "crypto-trader-macos";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		95FDD03C2C8C5534003F9FBF /* crypto-trader-macos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "crypto-trader-macos.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		95FDD03F2C8C5534003F9FBF /* crypto_trader_macosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = crypto_trader_macosApp.swift; sourceTree = "<group>"; };
+		95FDD0412C8C5534003F9FBF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		95FDD0432C8C5535003F9FBF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		95FDD0462C8C5535003F9FBF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		95FDD0482C8C5535003F9FBF /* crypto_trader_macos.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = crypto_trader_macos.entitlements; sourceTree = "<group>"; };
+		95FDD04D2C8C5535003F9FBF /* crypto-trader-macosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "crypto-trader-macosTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		95FDD0512C8C5535003F9FBF /* crypto_trader_macosTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = crypto_trader_macosTests.swift; sourceTree = "<group>"; };
+		95FDD0572C8C5535003F9FBF /* crypto-trader-macosUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "crypto-trader-macosUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		95FDD05B2C8C5535003F9FBF /* crypto_trader_macosUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = crypto_trader_macosUITests.swift; sourceTree = "<group>"; };
+		95FDD05D2C8C5535003F9FBF /* crypto_trader_macosUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = crypto_trader_macosUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		95FDD0392C8C5534003F9FBF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		95FDD04A2C8C5535003F9FBF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		95FDD0542C8C5535003F9FBF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		95FDD0332C8C5534003F9FBF = {
+			isa = PBXGroup;
+			children = (
+				95FDD03E2C8C5534003F9FBF /* crypto-trader-macos */,
+				95FDD0502C8C5535003F9FBF /* crypto-trader-macosTests */,
+				95FDD05A2C8C5535003F9FBF /* crypto-trader-macosUITests */,
+				95FDD03D2C8C5534003F9FBF /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		95FDD03D2C8C5534003F9FBF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				95FDD03C2C8C5534003F9FBF /* crypto-trader-macos.app */,
+				95FDD04D2C8C5535003F9FBF /* crypto-trader-macosTests.xctest */,
+				95FDD0572C8C5535003F9FBF /* crypto-trader-macosUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		95FDD03E2C8C5534003F9FBF /* crypto-trader-macos */ = {
+			isa = PBXGroup;
+			children = (
+				95FDD03F2C8C5534003F9FBF /* crypto_trader_macosApp.swift */,
+				95FDD0412C8C5534003F9FBF /* ContentView.swift */,
+				95FDD0432C8C5535003F9FBF /* Assets.xcassets */,
+				95FDD0482C8C5535003F9FBF /* crypto_trader_macos.entitlements */,
+				95FDD0452C8C5535003F9FBF /* Preview Content */,
+			);
+			path = "crypto-trader-macos";
+			sourceTree = "<group>";
+		};
+		95FDD0452C8C5535003F9FBF /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				95FDD0462C8C5535003F9FBF /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		95FDD0502C8C5535003F9FBF /* crypto-trader-macosTests */ = {
+			isa = PBXGroup;
+			children = (
+				95FDD0512C8C5535003F9FBF /* crypto_trader_macosTests.swift */,
+			);
+			path = "crypto-trader-macosTests";
+			sourceTree = "<group>";
+		};
+		95FDD05A2C8C5535003F9FBF /* crypto-trader-macosUITests */ = {
+			isa = PBXGroup;
+			children = (
+				95FDD05B2C8C5535003F9FBF /* crypto_trader_macosUITests.swift */,
+				95FDD05D2C8C5535003F9FBF /* crypto_trader_macosUITestsLaunchTests.swift */,
+			);
+			path = "crypto-trader-macosUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		95FDD03B2C8C5534003F9FBF /* crypto-trader-macos */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 95FDD0612C8C5535003F9FBF /* Build configuration list for PBXNativeTarget "crypto-trader-macos" */;
+			buildPhases = (
+				95FDD0382C8C5534003F9FBF /* Sources */,
+				95FDD0392C8C5534003F9FBF /* Frameworks */,
+				95FDD03A2C8C5534003F9FBF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "crypto-trader-macos";
+			productName = "crypto-trader-macos";
+			productReference = 95FDD03C2C8C5534003F9FBF /* crypto-trader-macos.app */;
+			productType = "com.apple.product-type.application";
+		};
+		95FDD04C2C8C5535003F9FBF /* crypto-trader-macosTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 95FDD0642C8C5535003F9FBF /* Build configuration list for PBXNativeTarget "crypto-trader-macosTests" */;
+			buildPhases = (
+				95FDD0492C8C5535003F9FBF /* Sources */,
+				95FDD04A2C8C5535003F9FBF /* Frameworks */,
+				95FDD04B2C8C5535003F9FBF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				95FDD04F2C8C5535003F9FBF /* PBXTargetDependency */,
+			);
+			name = "crypto-trader-macosTests";
+			productName = "crypto-trader-macosTests";
+			productReference = 95FDD04D2C8C5535003F9FBF /* crypto-trader-macosTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		95FDD0562C8C5535003F9FBF /* crypto-trader-macosUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 95FDD0672C8C5535003F9FBF /* Build configuration list for PBXNativeTarget "crypto-trader-macosUITests" */;
+			buildPhases = (
+				95FDD0532C8C5535003F9FBF /* Sources */,
+				95FDD0542C8C5535003F9FBF /* Frameworks */,
+				95FDD0552C8C5535003F9FBF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				95FDD0592C8C5535003F9FBF /* PBXTargetDependency */,
+			);
+			name = "crypto-trader-macosUITests";
+			productName = "crypto-trader-macosUITests";
+			productReference = 95FDD0572C8C5535003F9FBF /* crypto-trader-macosUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		95FDD0342C8C5534003F9FBF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1540;
+				LastUpgradeCheck = 1540;
+				TargetAttributes = {
+					95FDD03B2C8C5534003F9FBF = {
+						CreatedOnToolsVersion = 15.4;
+					};
+					95FDD04C2C8C5535003F9FBF = {
+						CreatedOnToolsVersion = 15.4;
+						TestTargetID = 95FDD03B2C8C5534003F9FBF;
+					};
+					95FDD0562C8C5535003F9FBF = {
+						CreatedOnToolsVersion = 15.4;
+						TestTargetID = 95FDD03B2C8C5534003F9FBF;
+					};
+				};
+			};
+			buildConfigurationList = 95FDD0372C8C5534003F9FBF /* Build configuration list for PBXProject "crypto-trader-macos" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 95FDD0332C8C5534003F9FBF;
+			productRefGroup = 95FDD03D2C8C5534003F9FBF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				95FDD03B2C8C5534003F9FBF /* crypto-trader-macos */,
+				95FDD04C2C8C5535003F9FBF /* crypto-trader-macosTests */,
+				95FDD0562C8C5535003F9FBF /* crypto-trader-macosUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		95FDD03A2C8C5534003F9FBF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				95FDD0472C8C5535003F9FBF /* Preview Assets.xcassets in Resources */,
+				95FDD0442C8C5535003F9FBF /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		95FDD04B2C8C5535003F9FBF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		95FDD0552C8C5535003F9FBF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		95FDD0382C8C5534003F9FBF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				95FDD0422C8C5534003F9FBF /* ContentView.swift in Sources */,
+				95FDD0402C8C5534003F9FBF /* crypto_trader_macosApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		95FDD0492C8C5535003F9FBF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				95FDD0522C8C5535003F9FBF /* crypto_trader_macosTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		95FDD0532C8C5535003F9FBF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				95FDD05C2C8C5535003F9FBF /* crypto_trader_macosUITests.swift in Sources */,
+				95FDD05E2C8C5535003F9FBF /* crypto_trader_macosUITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		95FDD04F2C8C5535003F9FBF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 95FDD03B2C8C5534003F9FBF /* crypto-trader-macos */;
+			targetProxy = 95FDD04E2C8C5535003F9FBF /* PBXContainerItemProxy */;
+		};
+		95FDD0592C8C5535003F9FBF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 95FDD03B2C8C5534003F9FBF /* crypto-trader-macos */;
+			targetProxy = 95FDD0582C8C5535003F9FBF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		95FDD05F2C8C5535003F9FBF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		95FDD0602C8C5535003F9FBF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		95FDD0622C8C5535003F9FBF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "crypto-trader-macos/crypto_trader_macos.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"crypto-trader-macos/Preview Content\"";
+				DEVELOPMENT_TEAM = 86U3H5TA68;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "bk.crypto-trader-macos";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		95FDD0632C8C5535003F9FBF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "crypto-trader-macos/crypto_trader_macos.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"crypto-trader-macos/Preview Content\"";
+				DEVELOPMENT_TEAM = 86U3H5TA68;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "bk.crypto-trader-macos";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		95FDD0652C8C5535003F9FBF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 86U3H5TA68;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "bk.crypto-trader-macosTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/crypto-trader-macos.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/crypto-trader-macos";
+			};
+			name = Debug;
+		};
+		95FDD0662C8C5535003F9FBF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 86U3H5TA68;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "bk.crypto-trader-macosTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/crypto-trader-macos.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/crypto-trader-macos";
+			};
+			name = Release;
+		};
+		95FDD0682C8C5535003F9FBF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 86U3H5TA68;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "bk.crypto-trader-macosUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = "crypto-trader-macos";
+			};
+			name = Debug;
+		};
+		95FDD0692C8C5535003F9FBF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 86U3H5TA68;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "bk.crypto-trader-macosUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = "crypto-trader-macos";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		95FDD0372C8C5534003F9FBF /* Build configuration list for PBXProject "crypto-trader-macos" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				95FDD05F2C8C5535003F9FBF /* Debug */,
+				95FDD0602C8C5535003F9FBF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		95FDD0612C8C5535003F9FBF /* Build configuration list for PBXNativeTarget "crypto-trader-macos" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				95FDD0622C8C5535003F9FBF /* Debug */,
+				95FDD0632C8C5535003F9FBF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		95FDD0642C8C5535003F9FBF /* Build configuration list for PBXNativeTarget "crypto-trader-macosTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				95FDD0652C8C5535003F9FBF /* Debug */,
+				95FDD0662C8C5535003F9FBF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		95FDD0672C8C5535003F9FBF /* Build configuration list for PBXNativeTarget "crypto-trader-macosUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				95FDD0682C8C5535003F9FBF /* Debug */,
+				95FDD0692C8C5535003F9FBF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 95FDD0342C8C5534003F9FBF /* Project object */;
+}
