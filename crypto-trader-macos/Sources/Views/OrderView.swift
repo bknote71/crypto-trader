@@ -29,15 +29,16 @@ struct OrderView: View {
     return VStack(spacing: 12) {
       Text(title)
         .foregroundColor(isSelected ? .red : .black)
+        .padding(.top, 12)
       Rectangle()
         .frame(height: 3)
         .foregroundColor(isSelected ? .red : .clear)
     }
-    .padding(.top, 12)
     .contentShape(Rectangle())
     .onTapGesture {
       selectedTab.wrappedValue = title
     }
+//    .frame(height: 45)
   }
 }
 

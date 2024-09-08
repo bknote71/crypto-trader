@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9586779D2C8D825B002C83F4 /* AskPriceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9586779C2C8D825B002C83F4 /* AskPriceView.swift */; };
 		95FDD0402C8C5534003F9FBF /* crypto_trader_macosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD03F2C8C5534003F9FBF /* crypto_trader_macosApp.swift */; };
 		95FDD0442C8C5535003F9FBF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 95FDD0432C8C5535003F9FBF /* Assets.xcassets */; };
 		95FDD0472C8C5535003F9FBF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 95FDD0462C8C5535003F9FBF /* Preview Assets.xcassets */; };
@@ -42,6 +43,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9586779C2C8D825B002C83F4 /* AskPriceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskPriceView.swift; sourceTree = "<group>"; };
 		95FDD03C2C8C5534003F9FBF /* crypto-trader-macos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "crypto-trader-macos.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		95FDD03F2C8C5534003F9FBF /* crypto_trader_macosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = crypto_trader_macosApp.swift; sourceTree = "<group>"; };
 		95FDD0432C8C5535003F9FBF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -180,6 +182,7 @@
 				95FDD0792C8C598B003F9FBF /* MainView.swift */,
 				95FDD07D2C8C69FC003F9FBF /* OrderView.swift */,
 				95FDD0722C8C58B2003F9FBF /* TradingPriceView.swift */,
+				9586779C2C8D825B002C83F4 /* AskPriceView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -330,6 +333,7 @@
 			files = (
 				95FDD06D2C8C5801003F9FBF /* Crypto.swift in Sources */,
 				95FDD07E2C8C69FC003F9FBF /* OrderView.swift in Sources */,
+				9586779D2C8D825B002C83F4 /* AskPriceView.swift in Sources */,
 				95FDD07A2C8C598B003F9FBF /* MainView.swift in Sources */,
 				95FDD0732C8C58B2003F9FBF /* TradingPriceView.swift in Sources */,
 				95FDD0702C8C5834003F9FBF /* CryptoListViewModel.swift in Sources */,

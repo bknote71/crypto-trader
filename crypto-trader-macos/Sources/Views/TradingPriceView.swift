@@ -61,10 +61,11 @@ struct TradingPriceView: View {
   }
   
   func tabButton(title: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
-    VStack(alignment: .center, spacing: 14) {
+    VStack(alignment: .center, spacing: 8) {
       Text(title)
         .font(.title3)
         .foregroundColor(isSelected ? .blue : .black)
+        .padding(.top, 8)
       Rectangle()
         .frame(height: 3)
         .foregroundColor(isSelected ? .blue : .clear)

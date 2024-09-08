@@ -6,7 +6,7 @@ struct MainView: View {
       VStack(spacing: 8) {
         TradingPriceView()
         HStack(spacing: 8) {
-          Spacer()
+          AskPriceView()
           OrderView()
         }
       }
