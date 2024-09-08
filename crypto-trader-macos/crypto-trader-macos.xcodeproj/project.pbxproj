@@ -20,6 +20,8 @@
 		95FDD0782C8C58DF003F9FBF /* CandleStickChartViewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD0772C8C58DF003F9FBF /* CandleStickChartViewWrapper.swift */; };
 		95FDD07A2C8C598B003F9FBF /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD0792C8C598B003F9FBF /* MainView.swift */; };
 		95FDD07C2C8C599D003F9FBF /* CryptoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD07B2C8C599D003F9FBF /* CryptoListView.swift */; };
+		95FDD07E2C8C69FC003F9FBF /* OrderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD07D2C8C69FC003F9FBF /* OrderView.swift */; };
+		95FDD0812C8C8BEE003F9FBF /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD0802C8C8BEE003F9FBF /* Color.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +58,8 @@
 		95FDD0772C8C58DF003F9FBF /* CandleStickChartViewWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleStickChartViewWrapper.swift; sourceTree = "<group>"; };
 		95FDD0792C8C598B003F9FBF /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		95FDD07B2C8C599D003F9FBF /* CryptoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoListView.swift; sourceTree = "<group>"; };
+		95FDD07D2C8C69FC003F9FBF /* OrderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderView.swift; sourceTree = "<group>"; };
+		95FDD0802C8C8BEE003F9FBF /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +113,7 @@
 			isa = PBXGroup;
 			children = (
 				95FDD03F2C8C5534003F9FBF /* crypto_trader_macosApp.swift */,
+				95FDD07F2C8C8BE4003F9FBF /* Extensions */,
 				95FDD06B2C8C57EE003F9FBF /* Model */,
 				95FDD0452C8C5535003F9FBF /* Preview Content */,
 				95FDD06E2C8C5820003F9FBF /* ViewModel */,
@@ -170,12 +175,21 @@
 		95FDD0712C8C58A2003F9FBF /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				95FDD0722C8C58B2003F9FBF /* TradingPriceView.swift */,
 				95FDD0772C8C58DF003F9FBF /* CandleStickChartViewWrapper.swift */,
-				95FDD0792C8C598B003F9FBF /* MainView.swift */,
 				95FDD07B2C8C599D003F9FBF /* CryptoListView.swift */,
+				95FDD0792C8C598B003F9FBF /* MainView.swift */,
+				95FDD07D2C8C69FC003F9FBF /* OrderView.swift */,
+				95FDD0722C8C58B2003F9FBF /* TradingPriceView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		95FDD07F2C8C8BE4003F9FBF /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				95FDD0802C8C8BEE003F9FBF /* Color.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -315,12 +329,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				95FDD06D2C8C5801003F9FBF /* Crypto.swift in Sources */,
+				95FDD07E2C8C69FC003F9FBF /* OrderView.swift in Sources */,
 				95FDD07A2C8C598B003F9FBF /* MainView.swift in Sources */,
 				95FDD0732C8C58B2003F9FBF /* TradingPriceView.swift in Sources */,
 				95FDD0702C8C5834003F9FBF /* CryptoListViewModel.swift in Sources */,
 				95FDD0782C8C58DF003F9FBF /* CandleStickChartViewWrapper.swift in Sources */,
 				95FDD0402C8C5534003F9FBF /* crypto_trader_macosApp.swift in Sources */,
 				95FDD07C2C8C599D003F9FBF /* CryptoListView.swift in Sources */,
+				95FDD0812C8C8BEE003F9FBF /* Color.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
