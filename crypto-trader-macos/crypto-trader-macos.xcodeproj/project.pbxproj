@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		9586779D2C8D825B002C83F4 /* AskPriceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9586779C2C8D825B002C83F4 /* AskPriceView.swift */; };
+		9586779F2C8D9139002C83F4 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9586779E2C8D9139002C83F4 /* WebSocketManager.swift */; };
+		958677A22C8D9C6D002C83F4 /* Ticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 958677A12C8D9C6D002C83F4 /* Ticker.swift */; };
+		958677A52C8D9D9A002C83F4 /* SortedArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 958677A42C8D9D9A002C83F4 /* SortedArray.swift */; };
+		958677A72C8DAD8D002C83F4 /* CryptoDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 958677A62C8DAD8D002C83F4 /* CryptoDto.swift */; };
 		95FDD0402C8C5534003F9FBF /* crypto_trader_macosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD03F2C8C5534003F9FBF /* crypto_trader_macosApp.swift */; };
 		95FDD0442C8C5535003F9FBF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 95FDD0432C8C5535003F9FBF /* Assets.xcassets */; };
 		95FDD0472C8C5535003F9FBF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 95FDD0462C8C5535003F9FBF /* Preview Assets.xcassets */; };
@@ -44,6 +48,11 @@
 
 /* Begin PBXFileReference section */
 		9586779C2C8D825B002C83F4 /* AskPriceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskPriceView.swift; sourceTree = "<group>"; };
+		9586779E2C8D9139002C83F4 /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
+		958677A02C8D9538002C83F4 /* crypto-trader-macos-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "crypto-trader-macos-Info.plist"; sourceTree = "<group>"; };
+		958677A12C8D9C6D002C83F4 /* Ticker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ticker.swift; sourceTree = "<group>"; };
+		958677A42C8D9D9A002C83F4 /* SortedArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortedArray.swift; sourceTree = "<group>"; };
+		958677A62C8DAD8D002C83F4 /* CryptoDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoDto.swift; sourceTree = "<group>"; };
 		95FDD03C2C8C5534003F9FBF /* crypto-trader-macos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "crypto-trader-macos.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		95FDD03F2C8C5534003F9FBF /* crypto_trader_macosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = crypto_trader_macosApp.swift; sourceTree = "<group>"; };
 		95FDD0432C8C5535003F9FBF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -90,9 +99,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		958677A32C8D9D8B002C83F4 /* Share */ = {
+			isa = PBXGroup;
+			children = (
+				958677A42C8D9D9A002C83F4 /* SortedArray.swift */,
+			);
+			path = Share;
+			sourceTree = "<group>";
+		};
 		95FDD0332C8C5534003F9FBF = {
 			isa = PBXGroup;
 			children = (
+				958677A02C8D9538002C83F4 /* crypto-trader-macos-Info.plist */,
 				95FDD0502C8C5535003F9FBF /* crypto-trader-macosTests */,
 				95FDD05A2C8C5535003F9FBF /* crypto-trader-macosUITests */,
 				95FDD03D2C8C5534003F9FBF /* Products */,
@@ -115,9 +133,11 @@
 			isa = PBXGroup;
 			children = (
 				95FDD03F2C8C5534003F9FBF /* crypto_trader_macosApp.swift */,
+				9586779E2C8D9139002C83F4 /* WebSocketManager.swift */,
 				95FDD07F2C8C8BE4003F9FBF /* Extensions */,
 				95FDD06B2C8C57EE003F9FBF /* Model */,
 				95FDD0452C8C5535003F9FBF /* Preview Content */,
+				958677A32C8D9D8B002C83F4 /* Share */,
 				95FDD06E2C8C5820003F9FBF /* ViewModel */,
 				95FDD0712C8C58A2003F9FBF /* Views */,
 			);
@@ -162,6 +182,8 @@
 			isa = PBXGroup;
 			children = (
 				95FDD06C2C8C5801003F9FBF /* Crypto.swift */,
+				958677A62C8DAD8D002C83F4 /* CryptoDto.swift */,
+				958677A12C8D9C6D002C83F4 /* Ticker.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -332,13 +354,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				95FDD06D2C8C5801003F9FBF /* Crypto.swift in Sources */,
+				958677A22C8D9C6D002C83F4 /* Ticker.swift in Sources */,
 				95FDD07E2C8C69FC003F9FBF /* OrderView.swift in Sources */,
 				9586779D2C8D825B002C83F4 /* AskPriceView.swift in Sources */,
 				95FDD07A2C8C598B003F9FBF /* MainView.swift in Sources */,
 				95FDD0732C8C58B2003F9FBF /* TradingPriceView.swift in Sources */,
 				95FDD0702C8C5834003F9FBF /* CryptoListViewModel.swift in Sources */,
 				95FDD0782C8C58DF003F9FBF /* CandleStickChartViewWrapper.swift in Sources */,
+				958677A72C8DAD8D002C83F4 /* CryptoDto.swift in Sources */,
+				958677A52C8D9D9A002C83F4 /* SortedArray.swift in Sources */,
 				95FDD0402C8C5534003F9FBF /* crypto_trader_macosApp.swift in Sources */,
+				9586779F2C8D9139002C83F4 /* WebSocketManager.swift in Sources */,
 				95FDD07C2C8C599D003F9FBF /* CryptoListView.swift in Sources */,
 				95FDD0812C8C8BEE003F9FBF /* Color.swift in Sources */,
 			);
@@ -509,6 +535,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "crypto-trader-macos-Info.plist";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -536,6 +563,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "crypto-trader-macos-Info.plist";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

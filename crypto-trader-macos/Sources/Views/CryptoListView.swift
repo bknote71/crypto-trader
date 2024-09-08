@@ -11,8 +11,7 @@ struct CryptoListView: View {
       
       ScrollView {
         LazyVStack(spacing: 0) {
-          ForEach(viewModel.items.indices, id: \.self) { index in
-            let item = viewModel.items[index]
+          ForEach(viewModel.items.allElements(), id: \.code) { item in
             CryptoListItemView(item: item)
             divider
           }
@@ -21,6 +20,9 @@ struct CryptoListView: View {
     }
     .frame(width: 400)
     .background(.white)
+    .onAppear {
+      viewModel.fetchTicker()
+    }
   }
   
   var searchBar: some View {
@@ -79,20 +81,20 @@ struct CryptoListItemView: View {
       }
       .frame(width: 140)
         
-      Text(String(format: "%.2f", item.tradingPrice))
+      Text(String(format: "%.2f", item.ticker.tradePrice))
         .frame(width: 100, alignment: .trailing)
-        .foregroundColor(item.change > 0 ? .red : .blue)
+        .foregroundColor(item.ticker.changePrice > 0 ? .red : .blue)
         
       VStack(alignment: .trailing, spacing: 0) {
-        Text("\(item.change > 0 ? "+" : "-")\(item.change, specifier: "%.2f")%")
-          .foregroundColor(item.change > 0 ? .red : .blue)
-        Text("\(item.changeValue, specifier: "%.2f")")
-          .foregroundColor(item.change > 0 ? .red : .blue)
+        Text("\(item.ticker.changeRate > 0 ? "+" : "-")\(item.ticker.changeRate, specifier: "%.2f")%")
+          .foregroundColor(item.ticker.changeRate > 0 ? .red : .blue)
+        Text("\(item.ticker.changePrice, specifier: "%.2f")")
+          .foregroundColor(item.ticker.changePrice > 0 ? .red : .blue)
           .font(.system(size: 12))
       }
       .frame(width: 75, alignment: .trailing)
       
-      Text(item.volume)
+      Text("\(Int(item.ticker.accTradePrice24h / 1_000_000)) 백만")
         .frame(width: 75, alignment: .trailing)
         .padding(.trailing, 10)
     }

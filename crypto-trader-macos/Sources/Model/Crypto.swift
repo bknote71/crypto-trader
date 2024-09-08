@@ -1,11 +1,17 @@
 import Foundation
 
-struct Crypto: Identifiable {
-    let id = UUID()
-    let nameKr: String
-    let nameEn: String
-    let tradingPrice: Double
-    let change: Double
-    let changeValue: Double
-    let volume: String
+struct Crypto: Comparable, Equatable {
+  let code: String
+  let nameKr: String
+  let nameEn: String
+  let ticker: Ticker
+  
+  
+  static func < (lhs: Crypto, rhs: Crypto) -> Bool {
+    return lhs.ticker.accTradePrice24h > rhs.ticker.accTradePrice24h
+  }
+  
+  static func == (lhs: Crypto, rhs: Crypto) -> Bool {
+    return lhs.code == rhs.code && lhs.ticker == rhs.ticker
+  }
 }
