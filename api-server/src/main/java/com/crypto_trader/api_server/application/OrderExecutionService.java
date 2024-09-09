@@ -60,24 +60,6 @@ public class OrderExecutionService {
 
     @PostConstruct
     public void init() {
-        tickerRepository.getChannel()
-                .subscribe(value -> {
-                    try {
-                        Ticker ticker = objectMapper.readValue(value.getMessage(), Ticker.class);
-                        tickerRepository.save(ticker);
-
-                        Sinks.Many<Ticker> sink = sinkMap.get(ticker.getCode());
-                        if (sink == null) {
-                            throw new RuntimeException();
-                        }
-
-                        sink.tryEmitNext(ticker).orThrow();
-
-                    } catch (JsonProcessingException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
-
         marketRepository.marketCodesUpdates()
                 .subscribe(codes -> {
                     subscriptionMap.values().forEach(Disposable::dispose);
@@ -95,6 +77,24 @@ public class OrderExecutionService {
                         subscriptionMap.put(code, subscription);
                     }
                 });
+
+        tickerRepository.getChannel()
+                .subscribe(value -> {
+                    try {
+                        Ticker ticker = objectMapper.readValue(value.getMessage(), Ticker.class);
+                        tickerRepository.save(ticker);
+
+                        Sinks.Many<Ticker> sink = sinkMap.get(ticker.getMarket());
+                        if (sink == null) {
+                            throw new RuntimeException();
+                        }
+
+                        sink.tryEmitNext(ticker).orThrow();
+
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
     }
 
     @EventListener
@@ -102,7 +102,7 @@ public class OrderExecutionService {
     @Lock(value = LockModeType.PESSIMISTIC_WRITE)
     public void processTicker(TickerProcessingEvent event) {
         Ticker ticker = event.getTicker();
-        String market = ticker.getCode();
+        String market = ticker.getMarket();
         double tradePrice = ticker.getTradePrice();
 
         orderRepository.findByMarket(market).stream()

@@ -2,9 +2,6 @@ package com.crypto_trader.api_server.infra;
 
 import com.crypto_trader.api_server.domain.Ticker;
 import com.crypto_trader.api_server.domain.events.TickerChangeEvent;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.redis.connection.ReactiveSubscription;
@@ -24,18 +21,21 @@ public class TickerRepository {
 
     private final ReactiveRedisTemplate<String, String> redisTemplate;
     private final ApplicationEventPublisher publisher;
+    private final SimpleMarketRepository simpleMarketRepository;
 
     private final Map<String, Ticker> tickers = new ConcurrentHashMap<>();
 
     @Autowired
     public TickerRepository(ReactiveRedisTemplate<String, String> redisTemplate,
-                            ApplicationEventPublisher publisher) {
+                            ApplicationEventPublisher publisher,
+                            SimpleMarketRepository simpleMarketRepository) {
         this.redisTemplate = redisTemplate;
         this.publisher = publisher;
+        this.simpleMarketRepository = simpleMarketRepository;
     }
 
     public void save(Ticker ticker) {
-        tickers.put(ticker.getCode(), ticker);
+        tickers.put(ticker.getMarket(), ticker);
         publisher.publishEvent(new TickerChangeEvent(this, ticker));
     }
 
@@ -50,5 +50,16 @@ public class TickerRepository {
     public Flux<? extends ReactiveSubscription.Message<String, String>> getChannel() {
         return redisTemplate
                 .listenToChannel(TICKER);
+    }
+
+    public void initTickers() {
+        simpleMarketRepository.marketCodesUpdates()
+                .doOnNext(marketCodes -> {
+                    for (String marketCode : marketCodes) {
+                        Ticker ticker = new Ticker(marketCode, 0.0, 0.0);
+                        tickers.put(marketCode, ticker);
+                    }
+                })
+                .subscribe();
     }
 }

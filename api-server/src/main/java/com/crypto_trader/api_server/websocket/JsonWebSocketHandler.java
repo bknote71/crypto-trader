@@ -21,7 +21,6 @@ public abstract class JsonWebSocketHandler<T, V> extends TextWebSocketHandler {
         this.objectMapper = objectMapper;
     }
 
-
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         super.afterConnectionEstablished(session);
