@@ -2,6 +2,7 @@ package com.crypto_trader.api_server.infra;
 
 import com.crypto_trader.api_server.domain.Ticker;
 import com.crypto_trader.api_server.domain.events.TickerChangeEvent;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.redis.connection.ReactiveSubscription;
@@ -24,6 +25,11 @@ public class TickerRepository {
     private final SimpleMarketRepository simpleMarketRepository;
 
     private final Map<String, Ticker> tickers = new ConcurrentHashMap<>();
+
+    @PostConstruct
+    public void init() {
+        initTickers();
+    }
 
     @Autowired
     public TickerRepository(ReactiveRedisTemplate<String, String> redisTemplate,
@@ -52,7 +58,7 @@ public class TickerRepository {
                 .listenToChannel(TICKER);
     }
 
-    public void initTickers() {
+    private void initTickers() {
         simpleMarketRepository.marketCodesUpdates()
                 .doOnNext(marketCodes -> {
                     for (String marketCode : marketCodes) {
