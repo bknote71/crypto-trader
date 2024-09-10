@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.BulkOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -37,12 +38,8 @@ public class SimpleCandleRepository {
         candleState.update(value);
     }
 
-
-
     public void saveAllState() {
         if (candleStates.isEmpty())
             return;
-
-
     }
 }
