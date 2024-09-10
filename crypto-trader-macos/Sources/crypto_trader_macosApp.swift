@@ -13,6 +13,8 @@ struct crypto_trader_macosApp: App {
     WindowGroup {
       MainView()
         .fixedSize()
+        .environmentObject(TickerViewModel())
+        .environmentObject(CandleViewModel())
     }
     .windowResizability(.contentSize)
   }

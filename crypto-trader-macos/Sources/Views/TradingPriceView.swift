@@ -2,23 +2,30 @@ import SwiftUI
 import DGCharts
 
 struct TradingPriceView: View {
+  @EnvironmentObject private var candleViewModel: CandleViewModel
+  @EnvironmentObject private var tickerViewModel: TickerViewModel
+  
   @State private var selectedTab: String = "시세"
   
   var body: some View {
     VStack(spacing: 0) {
-      header
-      divider
-      if selectedTab == "시세" {
-        chartView
+      if tickerViewModel.crypto != nil {
+        header
+        divider
+        if selectedTab == "시세" {
+          chartView
+        } else {
+          Text("정보 뷰")
+        }
       } else {
-        Text("정보 뷰")
+        Text("데이터가 없습니다.")
       }
     }
     .frame(width: 950, height: 500)
   }
   
-  var header : some View {
-    HStack(spacing: 0) {
+  var header: some View {
+    return HStack(spacing: 0) {
       HStack(spacing: 0) {
         Image(systemName: "bitcoinsign.circle.fill")
           .resizable()
@@ -26,11 +33,11 @@ struct TradingPriceView: View {
           .padding(.trailing, 4)
           .foregroundStyle(.orange)
         
-        Text("비트코인")
+        Text(tickerViewModel.crypto!.nameKr)
           .font(.title3)
           .padding(.trailing, 2)
         
-        Text("BTC/KRW")
+        Text(tickerViewModel.crypto!.nameEn)
           .font(.system(size: 8))
       }
       .padding(.bottom, 8)
@@ -88,7 +95,7 @@ struct TradingPriceView: View {
     HStack {
       // 왼쪽 시세 정보
       VStack(alignment: .leading, spacing: 4) {
-        Text("73,244,000 KRW")
+        Text("\(String(tickerViewModel.crypto!.ticker.tradePrice)) KRW")
           .font(.title)
           .foregroundColor(.blue)
         HStack {
@@ -124,7 +131,7 @@ struct TradingPriceView: View {
           HStack {
             Text("거래량(24h)")
             Spacer()
-            Text("5,830.751 BTC")
+            Text(String(tickerViewModel.crypto!.ticker.accTradePrice24h))
           }
           divider
           HStack {
@@ -142,37 +149,11 @@ struct TradingPriceView: View {
   }
   
   var chartMainView: some View {
-    CandleStickChartViewWrapper(entries: dummyData())
-  }
-  
-  func dummyData() -> [CandleChartDataEntry] {
-    var dummy = [CandleChartDataEntry]()
-    var previousClose: Double = 100.0
-    let emptyIndices: Set<Int> = Set(75...80)
-    
-    for i in 1...80 {
-      if emptyIndices.contains(i) {
-        let emptyEntry = CandleChartDataEntry(x: Double(i), shadowH: 0, shadowL: 0, open: 0, close: 0)
-        dummy.append(emptyEntry)
-        continue
+    CandleStickChartViewWrapper(entries: candleViewModel.items)
+      .id(UUID())
+      .onAppear {
+        candleViewModel.fetchCandle(market: "KRW-BTC", unit: .one_minute)
       }
-      
-      let high = previousClose + Double.random(in: 0...30)
-      let low = previousClose - Double.random(in: 0...30)
-      let close = Double.random(in: low...high)
-      let open = previousClose // open은 이전 close 값
-      
-      // 새로운 CandleChartDataEntry 생성
-      let entry = CandleChartDataEntry(x: Double(i), shadowH: high, shadowL: low, open: open, close: close)
-      
-      // 엔트리를 배열에 추가
-      dummy.append(entry)
-      
-      // 현재 close 값을 다음 루프에서 사용할 수 있도록 저장
-      previousClose = close
-    }
-    
-    return dummy
   }
 }
 

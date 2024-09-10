@@ -1,16 +1,19 @@
 import Combine
 import Foundation
 
-class CryptoListViewModel: ObservableObject {
+class TickerViewModel: ObservableObject {
   @Published var items = SortedArray<Crypto>()
+  @Published var crypto: Crypto?
+  private var code: String = "KRW-BTC"
   
   private let decoder = JSONDecoder()
   private var cancellableBag = Set<AnyCancellable>()
   
-  private let tickerWebSocketManager = WebSocketManager()
+  private let tickerWebSocketManager = JsonWebSocketManager<Ticker>()
   
   init() {
-//    fetchCrypto()
+    // crypto 최초 입력 필요..
+    self.crypto = Crypto(code: "KRW-BTC", nameKr: "비트코인", nameEn: "bitcoin", ticker: Ticker())
   }
   
   public func fetchTicker() {
@@ -18,27 +21,13 @@ class CryptoListViewModel: ObservableObject {
     
     // fetch ticker
     let tickerUrl = "ws://127.0.0.1:8090/ticker"
-    tickerWebSocketManager.connect(url: tickerUrl) { [weak self] result in
-      switch result {
-      case .success(let message):
-        switch message {
-        case .string(let json): // 이거?
-          guard let data = json.data(using: .utf8),
-                let ticker = try self?.decoder.decode(Ticker.self, from: data) else {
-            print("decode failure")
-            return
-          }
-          DispatchQueue.main.async {
-            self?.updateItem(ticker)
-          }
-        default:
-          break
+    tickerWebSocketManager.connect(url: tickerUrl)
+      .sink { [weak self] ticker in
+        DispatchQueue.main.async {
+          self?.updateItem(ticker)
         }
-      case .failure(let error):
-        print("error? \(error)")
-        // TODO: throw err
       }
-    }
+      .store(in: &cancellableBag)
   }
   
   private func fetchCrypto() {
@@ -72,6 +61,10 @@ class CryptoListViewModel: ObservableObject {
       nameEn: ticker.code,
       ticker: ticker
     )
+    
+    if newCrypto.code == code {
+      self.crypto = newCrypto
+    }
     
     if items.allElements().contains(where: { $0.code == ticker.code }) {
        items.update(where: { $0.code == ticker.code }, with: newCrypto)

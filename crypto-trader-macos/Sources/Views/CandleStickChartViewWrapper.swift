@@ -62,7 +62,7 @@ struct CandleStickChartViewWrapper: NSViewRepresentable {
   }
   
   func onCick(_ point: CGPoint) {
-    print("on click")
+//    print("on click")
   }
 
   

@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct CryptoListView: View {
-  @StateObject private var viewModel = CryptoListViewModel()
+  @EnvironmentObject private var tickerViewMode: TickerViewModel
   
   var body: some View {
     VStack(spacing: 0) {
@@ -11,7 +11,7 @@ struct CryptoListView: View {
       
       ScrollView {
         LazyVStack(spacing: 0) {
-          ForEach(viewModel.items.allElements(), id: \.code) { item in
+          ForEach(tickerViewMode.items.allElements(), id: \.code) { item in
             CryptoListItemView(item: item)
             divider
           }
@@ -21,7 +21,7 @@ struct CryptoListView: View {
     .frame(width: 400)
     .background(.white)
     .onAppear {
-      viewModel.fetchTicker()
+      tickerViewMode.fetchTicker()
     }
   }
   
