@@ -1,5 +1,6 @@
 package com.crypto_trader.scheduler.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -15,7 +16,6 @@ public class Candle {
     private double close;
     private double high;
     private double low;
-
     private LocalDateTime time;
     private double volume;
 
