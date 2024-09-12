@@ -4,9 +4,7 @@ import Foundation
 
 class CandleViewModel: ObservableObject {
   
-  @Published var items: [CandleChartDataEntry]
-  
-  private var entries = [CandleChartDataEntry]()
+  @Published var items: [Candle]
   
   private let encoder = JSONEncoder()
   private var cancellableBag = Set<AnyCancellable>()
@@ -14,8 +12,7 @@ class CandleViewModel: ObservableObject {
   private let candleWebSocketManager = JsonWebSocketManager<Candle>()
   
   init() {
-    items = [CandleChartDataEntry]()
-    self.items = emptyData()
+    self.items = Self.dummyData()
     // TODO: 1. fetch all candle data(KRW-BTC)
   }
   
@@ -28,17 +25,10 @@ class CandleViewModel: ObservableObject {
         .sink { [weak self] candle in
           guard let self else { return }
           
-          let entry = CandleChartDataEntry(
-            x: Double(entries.count + 1),
-            shadowH: candle.high,
-            shadowL: candle.low,
-            open: candle.open,
-            close: candle.close
-          )
+          let adjustment: Double = candle.open == candle.close ? 100: 0
+          print("adjust \(adjustment)")
           
-          print("append new candle entry \(entry)")
-          entries.append(entry)
-          items = entries
+          items.append(candle)
         }
         .store(in: &cancellableBag)
     }
@@ -57,35 +47,18 @@ class CandleViewModel: ObservableObject {
     }
   }
   
-  func emptyData() -> [CandleChartDataEntry] {
-    let lastX = entries.last?.x ?? 0
-    var dummy = [CandleChartDataEntry]()
-    for i in 1...5 {
-      let emptyEntry = CandleChartDataEntry(x: lastX + Double(i), shadowH: 0, shadowL: 0, open: 0, close: 0)
-      dummy.append(emptyEntry)
-    }
-    return dummy
-  }
-  
-  static func dummyData() -> [CandleChartDataEntry] {
-    var dummy = [CandleChartDataEntry]()
+  static func dummyData() -> [Candle] {
+    var dummy = [Candle]()
     var previousClose: Double = 100.0
-    let emptyIndices: Set<Int> = Set(75...80)
     
-    for i in 1...80 {
-      if emptyIndices.contains(i) {
-        let emptyEntry = CandleChartDataEntry(x: Double(i), shadowH: 0, shadowL: 0, open: 0, close: 0)
-        dummy.append(emptyEntry)
-        continue
-      }
-      
+    for i in 0..<100 {
       let high = previousClose + Double.random(in: 0...30)
       let low = previousClose - Double.random(in: 0...30)
       let close = Double.random(in: low...high)
       let open = previousClose // open은 이전 close 값
       
       // 새로운 CandleChartDataEntry 생성
-      let entry = CandleChartDataEntry(x: Double(i), shadowH: high, shadowL: low, open: open, close: close)
+      let entry = Candle(open: open, close: close, high: high, low: low, time: Date.now + TimeInterval(10*i))
       
       // 엔트리를 배열에 추가
       dummy.append(entry)

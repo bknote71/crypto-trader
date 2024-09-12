@@ -16,6 +16,8 @@
 		958677A22C8D9C6D002C83F4 /* Ticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 958677A12C8D9C6D002C83F4 /* Ticker.swift */; };
 		958677A52C8D9D9A002C83F4 /* SortedArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 958677A42C8D9D9A002C83F4 /* SortedArray.swift */; };
 		958677A72C8DAD8D002C83F4 /* CryptoDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 958677A62C8DAD8D002C83F4 /* CryptoDto.swift */; };
+		95B16F592C926C8B0009672C /* CandleChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95B16F582C926C8B0009672C /* CandleChartView.swift */; };
+		95DD18682C92A8FD0083F531 /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95DD18672C92A8FD0083F531 /* Comparable.swift */; };
 		95FDD0402C8C5534003F9FBF /* crypto_trader_macosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD03F2C8C5534003F9FBF /* crypto_trader_macosApp.swift */; };
 		95FDD0442C8C5535003F9FBF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 95FDD0432C8C5535003F9FBF /* Assets.xcassets */; };
 		95FDD0472C8C5535003F9FBF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 95FDD0462C8C5535003F9FBF /* Preview Assets.xcassets */; };
@@ -25,8 +27,6 @@
 		95FDD06D2C8C5801003F9FBF /* Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD06C2C8C5801003F9FBF /* Crypto.swift */; };
 		95FDD0702C8C5834003F9FBF /* TickerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD06F2C8C5834003F9FBF /* TickerViewModel.swift */; };
 		95FDD0732C8C58B2003F9FBF /* TradingPriceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD0722C8C58B2003F9FBF /* TradingPriceView.swift */; };
-		95FDD0762C8C58C7003F9FBF /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = 95FDD0752C8C58C7003F9FBF /* DGCharts */; };
-		95FDD0782C8C58DF003F9FBF /* CandleStickChartViewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD0772C8C58DF003F9FBF /* CandleStickChartViewWrapper.swift */; };
 		95FDD07A2C8C598B003F9FBF /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD0792C8C598B003F9FBF /* MainView.swift */; };
 		95FDD07C2C8C599D003F9FBF /* CryptoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD07B2C8C599D003F9FBF /* CryptoListView.swift */; };
 		95FDD07E2C8C69FC003F9FBF /* OrderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD07D2C8C69FC003F9FBF /* OrderView.swift */; };
@@ -61,6 +61,8 @@
 		958677A12C8D9C6D002C83F4 /* Ticker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ticker.swift; sourceTree = "<group>"; };
 		958677A42C8D9D9A002C83F4 /* SortedArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortedArray.swift; sourceTree = "<group>"; };
 		958677A62C8DAD8D002C83F4 /* CryptoDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoDto.swift; sourceTree = "<group>"; };
+		95B16F582C926C8B0009672C /* CandleChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleChartView.swift; sourceTree = "<group>"; };
+		95DD18672C92A8FD0083F531 /* Comparable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comparable.swift; sourceTree = "<group>"; };
 		95FDD03C2C8C5534003F9FBF /* crypto-trader-macos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "crypto-trader-macos.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		95FDD03F2C8C5534003F9FBF /* crypto_trader_macosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = crypto_trader_macosApp.swift; sourceTree = "<group>"; };
 		95FDD0432C8C5535003F9FBF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -74,7 +76,6 @@
 		95FDD06C2C8C5801003F9FBF /* Crypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Crypto.swift; sourceTree = "<group>"; };
 		95FDD06F2C8C5834003F9FBF /* TickerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TickerViewModel.swift; sourceTree = "<group>"; };
 		95FDD0722C8C58B2003F9FBF /* TradingPriceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradingPriceView.swift; sourceTree = "<group>"; };
-		95FDD0772C8C58DF003F9FBF /* CandleStickChartViewWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleStickChartViewWrapper.swift; sourceTree = "<group>"; };
 		95FDD0792C8C598B003F9FBF /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		95FDD07B2C8C599D003F9FBF /* CryptoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoListView.swift; sourceTree = "<group>"; };
 		95FDD07D2C8C69FC003F9FBF /* OrderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderView.swift; sourceTree = "<group>"; };
@@ -86,7 +87,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				95FDD0762C8C58C7003F9FBF /* DGCharts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -219,12 +219,12 @@
 		95FDD0712C8C58A2003F9FBF /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				95FDD0772C8C58DF003F9FBF /* CandleStickChartViewWrapper.swift */,
 				95FDD07B2C8C599D003F9FBF /* CryptoListView.swift */,
 				95FDD0792C8C598B003F9FBF /* MainView.swift */,
 				95FDD07D2C8C69FC003F9FBF /* OrderView.swift */,
 				95FDD0722C8C58B2003F9FBF /* TradingPriceView.swift */,
 				9586779C2C8D825B002C83F4 /* AskPriceView.swift */,
+				95B16F582C926C8B0009672C /* CandleChartView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -233,6 +233,7 @@
 			isa = PBXGroup;
 			children = (
 				95FDD0802C8C8BEE003F9FBF /* Color.swift */,
+				95DD18672C92A8FD0083F531 /* Comparable.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -254,7 +255,6 @@
 			);
 			name = "crypto-trader-macos";
 			packageProductDependencies = (
-				95FDD0752C8C58C7003F9FBF /* DGCharts */,
 			);
 			productName = "crypto-trader-macos";
 			productReference = 95FDD03C2C8C5534003F9FBF /* crypto-trader-macos.app */;
@@ -329,7 +329,6 @@
 			);
 			mainGroup = 95FDD0332C8C5534003F9FBF;
 			packageReferences = (
-				95FDD0742C8C58C7003F9FBF /* XCRemoteSwiftPackageReference "Charts" */,
 			);
 			productRefGroup = 95FDD03D2C8C5534003F9FBF /* Products */;
 			projectDirPath = "";
@@ -382,13 +381,14 @@
 				95FDD0732C8C58B2003F9FBF /* TradingPriceView.swift in Sources */,
 				95FDD0702C8C5834003F9FBF /* TickerViewModel.swift in Sources */,
 				956EC9AE2C8EE4AC00165FC5 /* CandleUnit.swift in Sources */,
-				95FDD0782C8C58DF003F9FBF /* CandleStickChartViewWrapper.swift in Sources */,
 				958677A72C8DAD8D002C83F4 /* CryptoDto.swift in Sources */,
 				958677A52C8D9D9A002C83F4 /* SortedArray.swift in Sources */,
 				95FDD0402C8C5534003F9FBF /* crypto_trader_macosApp.swift in Sources */,
+				95DD18682C92A8FD0083F531 /* Comparable.swift in Sources */,
 				956EC9AB2C8EE47C00165FC5 /* CandleRequestDto.swift in Sources */,
 				9586779F2C8D9139002C83F4 /* WebSocketManager.swift in Sources */,
 				95FDD07C2C8C599D003F9FBF /* CryptoListView.swift in Sources */,
+				95B16F592C926C8B0009672C /* CandleChartView.swift in Sources */,
 				956EC9A92C8EE38000165FC5 /* Candle.swift in Sources */,
 				95FDD0812C8C8BEE003F9FBF /* Color.swift in Sources */,
 			);
@@ -713,25 +713,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		95FDD0742C8C58C7003F9FBF /* XCRemoteSwiftPackageReference "Charts" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/danielgindi/Charts.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.1.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		95FDD0752C8C58C7003F9FBF /* DGCharts */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 95FDD0742C8C58C7003F9FBF /* XCRemoteSwiftPackageReference "Charts" */;
-			productName = DGCharts;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 95FDD0342C8C5534003F9FBF /* Project object */;
 }

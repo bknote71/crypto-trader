@@ -149,11 +149,7 @@ struct TradingPriceView: View {
   }
   
   var chartMainView: some View {
-    CandleStickChartViewWrapper(entries: candleViewModel.items)
-      .id(UUID())
-      .onAppear {
-        candleViewModel.fetchCandle(market: "KRW-BTC", unit: .one_minute)
-      }
+    CandleChartView()
   }
 }
 

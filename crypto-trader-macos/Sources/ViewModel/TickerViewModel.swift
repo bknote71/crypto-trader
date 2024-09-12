@@ -22,10 +22,9 @@ class TickerViewModel: ObservableObject {
     // fetch ticker
     let tickerUrl = "ws://127.0.0.1:8090/ticker"
     tickerWebSocketManager.connect(url: tickerUrl)
+      .receive(on: RunLoop.main)
       .sink { [weak self] ticker in
-        DispatchQueue.main.async {
-          self?.updateItem(ticker)
-        }
+        self?.updateItem(ticker)
       }
       .store(in: &cancellableBag)
   }
