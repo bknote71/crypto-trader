@@ -88,7 +88,13 @@ public class OrderService {
     @Transactional
     @Lock(value = LockModeType.PESSIMISTIC_WRITE)
     public void processOrderWithLock(Order order) {
-        // 3. 실제로 주문을 실행할 때만 락을 걸어 상태를 업데이트
-        order.execution();
+        Order currentOrder = orderRepository.findById(order.getId()).orElseThrow(() -> new RuntimeException("Order not found"));
+
+        // 상태가 변경되었는지 재검사
+        if (currentOrder.getState() == OrderState.CREATED) {
+            currentOrder.execution();
+        } else {
+            throw new RuntimeException("Order already processed or invalid state");
+        }
     }
 }

@@ -50,31 +50,33 @@ public class OrderExecutionService {
 
     @PostConstruct
     public void init() {
-        subscribeToMarketCodes();
-        subscribeToTickerChannel();
+        // 시장 코드 업데이트에 따른 구독 설정
+        marketRepository.marketCodesUpdates().subscribe(this::updateMarketSubscriptions);
+
+        // Ticker 채널 구독 설정
+        tickerRepository.getChannel().subscribe(value -> handleTickerMessage(value.getMessage()));
     }
 
     /**
-     * 시장 코드에 대한 구독을 처리하고, 새로운 시장 코드에 따라 Sink 및 구독을 설정한다.
+     * 시장 코드 업데이트에 따라 구독과 Sink를 재설정
      */
-    private void subscribeToMarketCodes() {
-        marketRepository.marketCodesUpdates()
-                .subscribe(codes -> {
-                    clearSubscriptionsAndSinks();
-                    initializeSinksAndSubscriptions(codes);
-                });
+    private void updateMarketSubscriptions(List<String> codes) {
+        clearSubscriptionsAndSinks();
+
+        for (String code : codes) {
+            Sinks.Many<Ticker> sink = Sinks.many().unicast().onBackpressureBuffer();
+            sinkMap.put(code, sink);
+
+            Disposable subscription = sink.asFlux()
+                    .sampleFirst(Duration.ofSeconds(1))  // 1초에 한 번 처리
+                    .subscribe(ticker -> eventPublisher.publishEvent(new TickerProcessingEvent(this, ticker)));
+
+            subscriptionMap.put(code, subscription);
+        }
     }
 
     /**
-     * Redis Ticker 채널에 구독하여 실시간으로 Ticker 데이터를 받아서 처리한다.
-     */
-    private void subscribeToTickerChannel() {
-        tickerRepository.getChannel()
-                .subscribe(value -> processIncomingTickerMessage(value.getMessage()));
-    }
-
-    /**
-     * 기존의 구독과 Sink를 정리한다.
+     * 기존의 구독과 Sink를 정리
      */
     private void clearSubscriptionsAndSinks() {
         subscriptionMap.values().forEach(Disposable::dispose);
@@ -83,74 +85,32 @@ public class OrderExecutionService {
     }
 
     /**
-     * 새로운 시장 코드 리스트에 따라 각 시장에 대한 Sink 및 구독을 설정한다.
-     *
-     * @param codes 시장 코드 리스트
+     * Redis에서 받은 Ticker 메시지를 처리하여 적절한 Sink에 발행
      */
-    private void initializeSinksAndSubscriptions(List<String> codes) {
-        for (String code : codes) {
-            Sinks.Many<Ticker> sink = createSinkForMarket();
-            sinkMap.put(code, sink);
-
-            Disposable subscription = createSubscriptionForMarket(sink, code);
-            subscriptionMap.put(code, subscription);
-        }
-    }
-
-    /**
-     * 특정 시장에 대한 Sink를 생성한다.
-     *
-     * @return 생성된 Sink
-     */
-    private Sinks.Many<Ticker> createSinkForMarket() {
-        return Sinks.many().unicast().onBackpressureBuffer();
-    }
-
-    /**
-     * 특정 시장에 대한 구독을 설정한다. 이 구독은 1초에 한 번씩만 데이터를 처리한다.
-     *
-     * @param sink  시장에 대한 Sink
-     * @param code  시장 코드
-     * @return 생성된 구독
-     */
-    private Disposable createSubscriptionForMarket(Sinks.Many<Ticker> sink, String code) {
-        return sink.asFlux()
-                .sampleFirst(Duration.ofSeconds(1)) // 1초에 한 번씩 처리
-                .subscribe(ticker -> eventPublisher.publishEvent(new TickerProcessingEvent(this, ticker)));
-    }
-
-    /**
-     * Redis에서 받아온 Ticker 메시지를 처리하여 적절한 Sink에 발행한다.
-     *
-     * @param message Ticker 메시지
-     */
-    private void processIncomingTickerMessage(String message) {
+    private void handleTickerMessage(String message) {
         try {
             Ticker ticker = objectMapper.readValue(message, Ticker.class);
             tickerRepository.save(ticker);
 
             Sinks.Many<Ticker> sink = sinkMap.get(ticker.getMarket());
-            if (sink == null) {
+            if (sink != null) {
+                sink.tryEmitNext(ticker).orThrow();
+            } else {
                 throw new RuntimeException("Sink not found for market: " + ticker.getMarket());
             }
-
-            sink.tryEmitNext(ticker).orThrow();
 
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to process Ticker message", e);
         }
     }
 
+    /**
+     * TickerProcessingEvent 를 처리하여 주문 실행
+     */
     @EventListener
     public void processTicker(TickerProcessingEvent event) {
         Ticker ticker = event.getTicker();
-        String market = ticker.getMarket();
-        double tradePrice = ticker.getTradePrice();
-
-        // 1. 비동기적으로 해당 시장의 주문들을 먼저 조회
-        List<Order> ordersToProcess = orderService.getOrderToProcess(market, tradePrice);
-
-        // 2. 락을 개별 주문 실행에만 적용
+        List<Order> ordersToProcess = orderService.getOrderToProcess(ticker.getMarket(), ticker.getTradePrice());
         ordersToProcess.forEach(orderService::processOrderWithLock);
     }
 }
