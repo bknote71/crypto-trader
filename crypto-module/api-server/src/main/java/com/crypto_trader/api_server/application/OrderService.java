@@ -2,6 +2,7 @@ package com.crypto_trader.api_server.application;
 
 import com.crypto_trader.api_server.application.dto.OrderCancelRequestDto;
 import com.crypto_trader.api_server.auth.PrincipalUser;
+import com.crypto_trader.api_server.domain.OrderSide;
 import com.crypto_trader.api_server.domain.entities.CryptoAsset;
 import com.crypto_trader.api_server.domain.entities.Order;
 import com.crypto_trader.api_server.domain.entities.OrderState;
@@ -71,5 +72,23 @@ public class OrderService {
         // orderRepository.delete(order);
 
         return new OrderResponseDto();
+    }
+
+    @Transactional
+    public List<Order> getOrderToProcess(String market, double tradePrice) {
+        return orderRepository.findByMarket(market).stream()
+                .filter(order -> {
+                    double price = order.getPrice().doubleValue();
+                    return order.getState() == OrderState.CREATED &&
+                            ((order.getSide() == OrderSide.BID) ? tradePrice <= price : tradePrice >= price);
+                })
+                .toList();
+    }
+
+    @Transactional
+    @Lock(value = LockModeType.PESSIMISTIC_WRITE)
+    public void processOrderWithLock(Order order) {
+        // 3. 실제로 주문을 실행할 때만 락을 걸어 상태를 업데이트
+        order.execution();
     }
 }

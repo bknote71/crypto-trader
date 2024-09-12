@@ -1,5 +1,7 @@
-package com.crypto_trader.api_server.auth;
+package com.crypto_trader.api_server.presentation;
 
+import com.crypto_trader.api_server.application.AuthService;
+import com.crypto_trader.api_server.auth.PrincipalUser;
 import com.crypto_trader.api_server.domain.entities.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

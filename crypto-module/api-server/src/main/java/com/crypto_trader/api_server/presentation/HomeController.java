@@ -17,7 +17,6 @@ public class HomeController {
     private final SimpleMarketService marketService;
     private final TickerService tickerService;
 
-    @Autowired
     public HomeController(SimpleMarketService marketService, TickerService tickerService) {
         this.marketService = marketService;
         this.tickerService = tickerService;
@@ -31,15 +30,5 @@ public class HomeController {
     @GetMapping("/api/tickers")
     public List<TickerRequestDto> getAllTickers() {
         return tickerService.getTickers();
-    }
-
-    @GetMapping("/api/*")
-    public String home() {
-        return "api home!";
-    }
-
-    @GetMapping("home")
-    public String homePage() {
-        return "this is home!";
     }
 }
