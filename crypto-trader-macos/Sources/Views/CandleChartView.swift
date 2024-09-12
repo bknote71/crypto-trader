@@ -9,6 +9,7 @@ struct CandleChartView: View {
   
   // 뷰 모델로 빼기
   @State private var visibleCandles: [Candle] = []
+  @State private var lastCount: Int = 0
   
   // 쓰로틀링
   @State private var lastDragTime = Date()
@@ -69,6 +70,7 @@ struct CandleChartView: View {
     .onAppear {
       // 뷰가 나타날 때 초기 보이는 캔들 업데이트
       updateVisibleCandles(geo: nil)
+      candleViewModel.fetchCandle(market: "KRW-BTC", unit: .one_minute)
     }
   }
   
@@ -81,11 +83,16 @@ struct CandleChartView: View {
         high: .value("High", candle.high),
         low: .value("Low", candle.low),
         close: .value("Close", candle.close),
-        color: (index == 0 || index == 5 || index == 10 || index == candleViewModel.items.count - 1 ? .red : .blue)
+        color: .blue
       )
     }
     .chartXAxis(.hidden)
     .chartYAxis(.hidden)
+    .onReceive(candleViewModel.$items) { value in
+      if value.count != lastCount {
+        totalDragOffset -= candleTotalWidth
+      }
+    }
   }
   
   // 현재 보이는 캔들을 업데이트하는 함수

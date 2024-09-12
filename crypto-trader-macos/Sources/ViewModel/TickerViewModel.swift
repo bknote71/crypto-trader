@@ -16,6 +16,8 @@ class TickerViewModel: ObservableObject {
     self.crypto = Crypto(code: "KRW-BTC", nameKr: "비트코인", nameEn: "bitcoin", ticker: Ticker())
   }
   
+  // MARK: - Public
+  
   public func fetchTicker() {
     // crypto 정보가 없다면, 다시 fetch
     
@@ -28,6 +30,21 @@ class TickerViewModel: ObservableObject {
       }
       .store(in: &cancellableBag)
   }
+  
+  public func findByText(_ text: String) -> [Crypto] {
+    guard !text.isEmpty else { return items.allElements() }
+    
+    return items.allElements().filter { crypto in
+      crypto.code.contains(text) ||
+      text.contains(crypto.code) ||
+      crypto.nameKr.contains(text) ||
+      text.contains(crypto.nameKr) ||
+      crypto.nameEn.contains(text) ||
+      text.contains(crypto.nameEn)
+    }
+  }
+  
+  // MARK: - Privacy
   
   private func fetchCrypto() {
     guard let url = URL(string: "http://localhost:8090/api/cryptos") else { return }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		952E241B2C92C5DD00B8EAC1 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952E241A2C92C5DD00B8EAC1 /* SearchViewModel.swift */; };
 		956EC9A72C8EDD3900165FC5 /* CandleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 956EC9A62C8EDD3900165FC5 /* CandleViewModel.swift */; };
 		956EC9A92C8EE38000165FC5 /* Candle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 956EC9A82C8EE38000165FC5 /* Candle.swift */; };
 		956EC9AB2C8EE47C00165FC5 /* CandleRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 956EC9AA2C8EE47C00165FC5 /* CandleRequestDto.swift */; };
@@ -51,6 +52,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		952E241A2C92C5DD00B8EAC1 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		956EC9A62C8EDD3900165FC5 /* CandleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleViewModel.swift; sourceTree = "<group>"; };
 		956EC9A82C8EE38000165FC5 /* Candle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Candle.swift; sourceTree = "<group>"; };
 		956EC9AA2C8EE47C00165FC5 /* CandleRequestDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleRequestDto.swift; sourceTree = "<group>"; };
@@ -212,6 +214,7 @@
 			children = (
 				95FDD06F2C8C5834003F9FBF /* TickerViewModel.swift */,
 				956EC9A62C8EDD3900165FC5 /* CandleViewModel.swift */,
+				952E241A2C92C5DD00B8EAC1 /* SearchViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -378,6 +381,7 @@
 				956EC9A72C8EDD3900165FC5 /* CandleViewModel.swift in Sources */,
 				9586779D2C8D825B002C83F4 /* AskPriceView.swift in Sources */,
 				95FDD07A2C8C598B003F9FBF /* MainView.swift in Sources */,
+				952E241B2C92C5DD00B8EAC1 /* SearchViewModel.swift in Sources */,
 				95FDD0732C8C58B2003F9FBF /* TradingPriceView.swift in Sources */,
 				95FDD0702C8C5834003F9FBF /* TickerViewModel.swift in Sources */,
 				956EC9AE2C8EE4AC00165FC5 /* CandleUnit.swift in Sources */,
