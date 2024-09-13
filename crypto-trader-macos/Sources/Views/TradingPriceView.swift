@@ -1,5 +1,4 @@
 import SwiftUI
-import DGCharts
 
 struct TradingPriceView: View {
   @EnvironmentObject private var candleViewModel: CandleViewModel

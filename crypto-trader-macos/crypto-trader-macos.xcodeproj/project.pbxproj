@@ -245,14 +245,14 @@
 		95FDD0712C8C58A2003F9FBF /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				952E24202C92D88200B8EAC1 /* Component */,
-				95FDD07B2C8C599D003F9FBF /* CryptoListView.swift */,
-				95FDD0792C8C598B003F9FBF /* MainView.swift */,
-				95FDD07D2C8C69FC003F9FBF /* OrderView.swift */,
-				95FDD0722C8C58B2003F9FBF /* TradingPriceView.swift */,
 				9586779C2C8D825B002C83F4 /* AskPriceView.swift */,
 				95B16F582C926C8B0009672C /* CandleChartView.swift */,
+				95FDD07B2C8C599D003F9FBF /* CryptoListView.swift */,
+				95FDD0792C8C598B003F9FBF /* MainView.swift */,
 				952E24232C92D91900B8EAC1 /* OrderSideView.swift */,
+				95FDD07D2C8C69FC003F9FBF /* OrderView.swift */,
+				95FDD0722C8C58B2003F9FBF /* TradingPriceView.swift */,
+				952E24202C92D88200B8EAC1 /* Component */,
 			);
 			path = Views;
 			sourceTree = "<group>";

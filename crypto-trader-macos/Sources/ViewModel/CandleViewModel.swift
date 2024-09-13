@@ -1,5 +1,4 @@
 import Combine
-import DGCharts
 import Foundation
 
 class CandleViewModel: ObservableObject {
