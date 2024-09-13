@@ -2,7 +2,12 @@ package com.crypto_trader.api_server.domain.entities;
 
 import com.crypto_trader.api_server.domain.OrderSide;
 import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity(name = "Orders")
 public class Order {
 
@@ -28,42 +33,15 @@ public class Order {
     // - market: 시장가 주문(매도)
     // - best: 최유리 주문
 
-    public Order() {}
+    protected Order() {}
 
+    @Builder
     public Order(String market, OrderSide side, Number volume, Number price) {
         this.market = market;
         this.side = side;
         this.volume = volume;
         this.price = price;
         this.state = OrderState.CREATED;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getMarket() {
-        return market;
-    }
-
-    public OrderSide getSide() {
-        return side;
-    }
-
-    public Number getVolume() {
-        return volume;
-    }
-
-    public Number getPrice() {
-        return price;
-    }
-
-    public OrderState getState() {
-        return state;
-    }
-
-    public UserEntity getUser() {
-        return user;
     }
 
     public Number totalPrice() {
@@ -110,7 +88,7 @@ public class Order {
         if (side == OrderSide.BID) { // 매수 체결
             bid();
         } else {
-            ask();
+            ask(); // 매도 체결
         }
 
         this.state = OrderState.COMPLETED;

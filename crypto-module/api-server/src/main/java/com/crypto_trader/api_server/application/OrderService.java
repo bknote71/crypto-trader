@@ -98,4 +98,18 @@ public class OrderService {
             throw new RuntimeException("Order already processed or invalid state");
         }
     }
+
+    @Transactional
+    @Lock(value = LockModeType.PESSIMISTIC_READ)
+    public void processOrderWithReadLock(Order order) throws InterruptedException {
+        Order currentOrder = orderRepository.findById(order.getId()).orElseThrow(() -> new RuntimeException("Order not found"));
+
+        Thread.sleep(1000);
+        // 상태가 변경되었는지 재검사
+        if (currentOrder.getState() == OrderState.CREATED) {
+            currentOrder.execution();
+        } else {
+            throw new RuntimeException("Order already processed or invalid state");
+        }
+    }
 }

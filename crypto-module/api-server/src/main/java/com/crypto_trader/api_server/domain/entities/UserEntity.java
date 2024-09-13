@@ -2,10 +2,12 @@ package com.crypto_trader.api_server.domain.entities;
 
 import com.crypto_trader.api_server.domain.Account;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 @Entity(name = "Users")
 public class UserEntity {
 
@@ -25,24 +27,6 @@ public class UserEntity {
     public UserEntity(String username) {
         this.username = username;
         this.account = initAccount();
-    }
-
-    // getter
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public Account getAccount() {
-        return account;
-    }
-
-    public List<CryptoAsset> getAssets() {
-        return assets;
     }
 
     public CryptoAsset findCryptoAssetByMarket(String market) {
