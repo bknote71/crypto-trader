@@ -38,7 +38,7 @@ public class CandleWebSocketHandler extends JsonWebSocketHandler<CandleRequestDt
         String key = instance.makeKey();
         redisTemplate.opsForList()
                 .range(key, 0, -1) // 1. 최초에는 다 가져온다.
-                .doOnNext(value -> sendJsonMessage(value, session))
+//                .doOnNext(value -> sendJsonMessage(value, session))
                 .doOnComplete(() -> subscribeLast(key, session)) // 2. 이후에 마지막 데이터만 가져오도록 한다.
                 .subscribe();
     }
