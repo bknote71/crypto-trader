@@ -1,7 +1,9 @@
-package com.crypto_trader.api_server.domain;
+package com.crypto_trader.api_server.domain.entities;
 
 import jakarta.persistence.Embeddable;
+import lombok.Getter;
 
+@Getter
 @Embeddable
 public class Account {
     private String number; // 계좌번호
@@ -19,26 +21,6 @@ public class Account {
         this.balance = 10_000_000_000.0;
         this.locked = 0;
         this.avgBuyPrice = 0;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public Number getBalance() {
-        return balance;
-    }
-
-    public Number getLocked() {
-        return locked;
-    }
-
-    public Number getAvgBuyPrice() {
-        return avgBuyPrice;
-    }
-
-    public String getUnitCurrency() {
-        return unitCurrency;
     }
 
     public void unlock(Number number) {

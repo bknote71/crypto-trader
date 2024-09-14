@@ -1,7 +1,9 @@
 import Combine
 import Foundation
 
-class TickerViewModel: ObservableObject {
+class CryptoViewModel: ObservableObject {
+  static let shared = CryptoViewModel()
+  
   @Published var items = SortedArray<Crypto>()
   @Published var crypto: Crypto?
   private var code: String = "KRW-BTC"
@@ -13,7 +15,7 @@ class TickerViewModel: ObservableObject {
   
   init() {
     // crypto 최초 입력 필요..
-    self.crypto = Crypto(code: "KRW-BTC", nameKr: "비트코인", nameEn: "bitcoin", ticker: Ticker())
+    self.crypto = Crypto(market: "KRW-BTC", nameKr: "비트코인", nameEn: "bitcoin", ticker: Ticker())
   }
   
   // MARK: - Public
@@ -35,13 +37,21 @@ class TickerViewModel: ObservableObject {
     guard !text.isEmpty else { return items.allElements() }
     
     return items.allElements().filter { crypto in
-      crypto.code.contains(text) ||
-      text.contains(crypto.code) ||
+      crypto.market.contains(text) ||
+      text.contains(crypto.market) ||
       crypto.nameKr.contains(text) ||
       text.contains(crypto.nameKr) ||
       crypto.nameEn.contains(text) ||
       text.contains(crypto.nameEn)
     }
+  }
+  
+  public func findByMarket(_ market: String) -> Crypto? {
+    guard let index = items.firstIndex(where: { $0.market == market }) else {
+      return nil
+    }
+    
+    return items.allElements()[index]
   }
   
   // MARK: - Privacy
@@ -72,18 +82,18 @@ class TickerViewModel: ObservableObject {
   
   private func updateItem(_ ticker: Ticker) {
     let newCrypto = Crypto(
-      code: ticker.code,
-      nameKr: ticker.code,
-      nameEn: ticker.code,
+      market: ticker.market,
+      nameKr: ticker.market,
+      nameEn: ticker.market,
       ticker: ticker
     )
     
-    if newCrypto.code == code {
+    if newCrypto.market == code {
       self.crypto = newCrypto
     }
     
-    if items.allElements().contains(where: { $0.code == ticker.code }) {
-       items.update(where: { $0.code == ticker.code }, with: newCrypto)
+    if items.allElements().contains(where: { $0.market == ticker.market }) {
+       items.update(where: { $0.market == ticker.market }, with: newCrypto)
     } else {
       items.insert(newCrypto)
     }

@@ -3,13 +3,14 @@ import SwiftUI
 struct MainView: View {
   var body: some View {
     HStack(alignment: .top, spacing: 8) {
-      VStack(spacing: 8) {
-        TradingPriceView()
-        HStack(spacing: 8) {
-          AskPriceView()
-          OrderView()
-        }
-      }
+//      VStack(spacing: 8) {
+//        TradingPriceView()
+//        HStack(spacing: 8) {
+//          AskPriceView()
+//          OrderView()
+//        }
+//      }
+      PortfolioView()
       CryptoListView()
     }
     .background(Color.gray100)

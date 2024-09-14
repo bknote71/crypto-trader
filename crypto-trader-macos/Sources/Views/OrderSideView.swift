@@ -2,6 +2,7 @@ import SwiftUI
 
 struct OrderSideView: View {
   @EnvironmentObject private var orderViewModel: OrderViewModel
+  @EnvironmentObject private var userViewModel: UserViewModel
   
   @Binding var side: OrderSide
   
@@ -110,7 +111,7 @@ struct OrderSideView: View {
       .padding(.bottom, 8)
       
       Button {
-        orderViewModel.order(market: "KRW-BTC", price: 0, amount: 0)
+        orderViewModel.order(account: userViewModel.user!.account)
       } label: {
         Text("주문하기")
           .foregroundStyle(.white)

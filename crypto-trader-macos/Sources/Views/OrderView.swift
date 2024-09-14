@@ -6,13 +6,13 @@ struct OrderView: View {
   var body: some View {
     VStack(spacing: 0) {
       HStack(spacing: 0) {
-        tabButton(side: .bid, selectedSide: $orderViewModel.selectedSide)
-        tabButton(side: .ask, selectedSide: $orderViewModel.selectedSide)
-        tabButton(side: .other, selectedSide: $orderViewModel.selectedSide)
-        tabButton(side: .other, selectedSide: $orderViewModel.selectedSide)
+        tabButton(side: .bid, selectedSide: $orderViewModel.currentSide)
+        tabButton(side: .ask, selectedSide: $orderViewModel.currentSide)
+        tabButton(side: .other, selectedSide: $orderViewModel.currentSide)
+        tabButton(side: .other, selectedSide: $orderViewModel.currentSide)
       }
       
-      OrderSideView(side: $orderViewModel.selectedSide)
+      OrderSideView(side: $orderViewModel.currentSide)
     }
     .frame(width: 460, height: 360)
     .padding(0)

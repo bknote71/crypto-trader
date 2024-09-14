@@ -6,9 +6,10 @@ struct crypto_trader_macosApp: App {
     WindowGroup {
       MainView()
         .fixedSize()
-        .environmentObject(TickerViewModel())
+        .environmentObject(CryptoViewModel.shared)
         .environmentObject(CandleViewModel())
         .environmentObject(OrderViewModel())
+        .environmentObject(UserViewModel())
     }
     .windowResizability(.contentSize)
   }

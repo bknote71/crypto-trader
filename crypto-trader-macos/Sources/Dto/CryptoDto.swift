@@ -4,6 +4,6 @@ struct CryptoDto: Decodable {
   let nameEn: String
   
   func toCrypto() -> Crypto {
-    Crypto(code: market, nameKr: nameKr, nameEn: nameEn, ticker: Ticker())
+    Crypto(market: market, nameKr: nameKr, nameEn: nameEn, ticker: Ticker())
   }
 }

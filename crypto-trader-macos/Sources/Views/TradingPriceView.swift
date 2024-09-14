@@ -2,7 +2,7 @@ import SwiftUI
 
 struct TradingPriceView: View {
   @EnvironmentObject private var candleViewModel: CandleViewModel
-  @EnvironmentObject private var tickerViewModel: TickerViewModel
+  @EnvironmentObject private var tickerViewModel: CryptoViewModel
   
   @State private var selectedTab: String = "시세"
   

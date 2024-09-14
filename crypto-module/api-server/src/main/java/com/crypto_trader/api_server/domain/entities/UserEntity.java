@@ -1,6 +1,5 @@
 package com.crypto_trader.api_server.domain.entities;
 
-import com.crypto_trader.api_server.domain.Account;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;

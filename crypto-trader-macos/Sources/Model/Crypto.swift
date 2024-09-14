@@ -1,10 +1,14 @@
 import Foundation
 
-struct Crypto: Comparable, Equatable {
-  let code: String
+struct Crypto: Comparable, Equatable, Decodable {
+  let market: String
   let nameKr: String
   let nameEn: String
   let ticker: Ticker
+  
+  var currentPrice: Double {
+    ticker.tradePrice
+  }
   
   
   static func < (lhs: Crypto, rhs: Crypto) -> Bool {
@@ -12,6 +16,6 @@ struct Crypto: Comparable, Equatable {
   }
   
   static func == (lhs: Crypto, rhs: Crypto) -> Bool {
-    return lhs.code == rhs.code && lhs.ticker == rhs.ticker
+    return lhs.market == rhs.market && lhs.ticker == rhs.ticker
   }
 }

@@ -19,6 +19,7 @@ struct SortedArray<Element: Comparable> {
   
   mutating func insertAll(_ values: [Element]) {
     for value in values {
+      print(value)
       insert(value)
     }
   }

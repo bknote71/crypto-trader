@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct CryptoListView: View {
-  @EnvironmentObject private var tickerViewModel: TickerViewModel
+  @EnvironmentObject private var tickerViewModel: CryptoViewModel
   @EnvironmentObject private var candleViewModel: CandleViewModel
   @StateObject private var searchViewModel = SearchViewModel()
   
@@ -13,7 +13,7 @@ struct CryptoListView: View {
       
       ScrollView {
         LazyVStack(spacing: 0) {
-          ForEach(tickerViewModel.findByText(searchViewModel.debouncedText), id: \.code) { item in
+          ForEach(tickerViewModel.findByText(searchViewModel.debouncedText), id: \.market) { item in
             CryptoListItemView(item: item)
               .onTapGesture {
                 // TODO: candleViewModel.fetch ...
