@@ -57,7 +57,8 @@ public class SimpleMarketRepository {
                 .get(MARKET)
                 .subscribe(markets -> {
                     try {
-                        this.marketCodes = objectMapper.readValue(markets, new TypeReference<List<String>>() {});
+                        this.marketCodes = objectMapper.readValue(markets, new TypeReference<List<String>>() {
+                        });
                         sink.tryEmitNext(this.marketCodes);
                     } catch (JsonProcessingException e) {
                         throw new RuntimeException(e);

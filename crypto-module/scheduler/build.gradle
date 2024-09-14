@@ -17,6 +17,10 @@ dependencies {
     // mongodb
     implementation 'org.springframework.data:spring-data-mongodb'
     implementation 'org.mongodb:mongodb-driver-sync:5.1.2'
+
+    // lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
 }
 
 test {

@@ -1,6 +1,6 @@
 package com.crypto_trader.scheduler.scheduler;
 
-import com.crypto_trader.scheduler.domain.Candle;
+import com.crypto_trader.scheduler.domain.entity.Candle;
 import com.crypto_trader.scheduler.domain.CandleState;
 import com.crypto_trader.scheduler.domain.CandleUnit;
 import com.crypto_trader.scheduler.infra.CandleMongoRepository;
