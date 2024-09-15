@@ -13,6 +13,14 @@ struct Ticker: Decodable, Equatable {
     accTradePrice24h = 0
   }
   
+  init(market: String, tradePrice: Double, changePrice: Double, changeRate: Double, accTradePrice24h: Double) {
+    self.code = market
+    self.tradePrice = tradePrice
+    self.changePrice = changePrice
+    self.changeRate = changeRate
+    self.accTradePrice24h = accTradePrice24h
+  }
+  
   enum CodingKeys: String, CodingKey {
     case code
     case tradePrice = "trade_price"

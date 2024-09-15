@@ -33,7 +33,7 @@ public class CandleGenerationScheduler {
         this.marketRepository = marketRepository;
     }
 
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "*/3 * * * * *")
     private void generateOneMinuteCandle() {
         Map<String, CandleState> candleStates = simpleCandleRepository.getCandleStates();
         if (candleStates.isEmpty())
@@ -60,7 +60,7 @@ public class CandleGenerationScheduler {
 
     }
 
-    @Scheduled(cron = "*/5 * * * * *")
+    @Scheduled(cron = "0 */5 * * * *")
     public void generateFiveMinuteCandles() {
         aggregateAndStoreCandles(CandleUnit.FIVEMINUTE);
     }

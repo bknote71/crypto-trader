@@ -1,6 +1,10 @@
 struct SortedArray<Element: Comparable> {
   private var elements: [Element] = []
 
+  init(_ elements: [Element]? = nil) {
+    self.elements = elements ?? []
+  }
+  
   mutating func insert(_ newElement: Element) {
     let index = elements.binarySearch { $0 < newElement }
     elements.insert(newElement, at: index)
@@ -15,6 +19,7 @@ struct SortedArray<Element: Comparable> {
   
   mutating func insertAll(_ values: [Element]) {
     for value in values {
+      print(value)
       insert(value)
     }
   }

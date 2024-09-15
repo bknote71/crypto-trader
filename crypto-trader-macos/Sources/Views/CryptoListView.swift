@@ -1,7 +1,9 @@
 import SwiftUI
 
 struct CryptoListView: View {
-  @EnvironmentObject private var tickerViewMode: TickerViewModel
+  @EnvironmentObject private var cryptoViewModel: CryptoViewModel
+  @EnvironmentObject private var candleViewModel: CandleViewModel
+  @StateObject private var searchViewModel = SearchViewModel()
   
   var body: some View {
     VStack(spacing: 0) {
@@ -11,8 +13,11 @@ struct CryptoListView: View {
       
       ScrollView {
         LazyVStack(spacing: 0) {
-          ForEach(tickerViewMode.items.allElements(), id: \.code) { item in
+          ForEach(cryptoViewModel.findByText(searchViewModel.debouncedText), id: \.market) { item in
             CryptoListItemView(item: item)
+              .onTapGesture {
+                // TODO: candleViewModel.fetch ...
+              }
             divider
           }
         }
@@ -20,14 +25,11 @@ struct CryptoListView: View {
     }
     .frame(width: 400)
     .background(.white)
-    .onAppear {
-      tickerViewMode.fetchTicker()
-    }
   }
   
   var searchBar: some View {
     HStack(spacing: 0) {
-      TextField("코인명/심볼검색", text: .constant(""))
+      TextField("코인명/심볼검색", text: $searchViewModel.searchText)
         .padding(8)
         .textFieldStyle(PlainTextFieldStyle())
       Image(systemName: "magnifyingglass")

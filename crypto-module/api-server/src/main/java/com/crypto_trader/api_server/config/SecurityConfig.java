@@ -3,6 +3,8 @@ package com.crypto_trader.api_server.config;
 import com.crypto_trader.api_server.auth.JwtRequestFilter;
 import com.crypto_trader.api_server.auth.JwtUtil;
 import com.crypto_trader.api_server.auth.UserDetailsDBService;
+import com.crypto_trader.api_server.domain.entities.CryptoAsset;
+import com.crypto_trader.api_server.domain.entities.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -12,10 +14,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -48,7 +51,15 @@ public class SecurityConfig {
                 .anyRequest().permitAll()
         );
 
+        // for anonymous
+//        http.anonymous(anon -> anon.principal(createAnonymousPrincipal()));
+
         return http.build();
+    }
+
+    private PrincipalUser createAnonymousPrincipal() {
+        var user = new UserEntity("anonymous");
+        return new PrincipalUser(user);
     }
 
     // for h2
