@@ -12,7 +12,7 @@ class CandleViewModel: ObservableObject {
   
   init() {
     // TODO: 1. fetch all candle data(KRW-BTC)
-    self.items = Self.dummyData()
+//    self.items = Self.dummyData()
   }
   
   public func fetchCandle(market: String, unit: CandleUnit) {
@@ -26,18 +26,16 @@ class CandleViewModel: ObservableObject {
           
           // TODO: - process candle data
           
-          let adjustment: Double = candle.open == candle.close ? 100: 0
+          let adjustment: Double = candle.open == candle.close ? 10000000: 0
           
-          guard let last = items.last else { return }
-          let high = last.close + Double.random(in: 0...30)
-          let low = last.close - Double.random(in: 0...30)
+          let lasttime = items.last?.time ?? Date.now
           
           let newCandle = Candle(
-            open: last.close,
-            close: Double.random(in: low...high),
-            high: high,
-            low: low,
-            time: last.time + TimeInterval(60)
+            open: candle.open,
+            close: candle.close,
+            high: candle.high,
+            low: candle.low,
+            time: lasttime + TimeInterval(60)
           )
           
           items.append(newCandle)

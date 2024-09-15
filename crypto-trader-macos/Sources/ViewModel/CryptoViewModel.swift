@@ -6,7 +6,6 @@ class CryptoViewModel: ObservableObject {
   
   @Published var items = SortedArray<Crypto>()
   @Published var crypto: Crypto?
-  private var code: String = "KRW-BTC"
   
   private let decoder = JSONDecoder()
   private var cancellableBag = Set<AnyCancellable>()
@@ -14,24 +13,10 @@ class CryptoViewModel: ObservableObject {
   private let tickerWebSocketManager = JsonWebSocketManager<Ticker>()
   
   init() {
-    // crypto 최초 입력 필요..
-    self.crypto = Crypto(market: "KRW-BTC", nameKr: "비트코인", nameEn: "bitcoin", ticker: Ticker())
+    fetchAllTickers()
   }
   
   // MARK: - Public
-  
-  public func fetchTicker() {
-    // crypto 정보가 없다면, 다시 fetch
-    
-    // fetch ticker
-    let tickerUrl = "ws://127.0.0.1:8090/ticker"
-    tickerWebSocketManager.connect(url: tickerUrl)
-      .receive(on: RunLoop.main)
-      .sink { [weak self] ticker in
-        self?.updateItem(ticker)
-      }
-      .store(in: &cancellableBag)
-  }
   
   public func findByText(_ text: String) -> [Crypto] {
     guard !text.isEmpty else { return items.allElements() }
@@ -55,6 +40,47 @@ class CryptoViewModel: ObservableObject {
   }
   
   // MARK: - Privacy
+  
+  private func fetchAllTickers() {
+    guard let url = APIEndpoint.tickers.url else { return }
+    
+    APIClient.shared.request(url: url)
+      .receive(on: RunLoop.main)
+      .sink { completion in
+        switch completion {
+        case .finished:
+          break
+        case .failure(let error):
+          print("Failed with error: \(error)")
+        }
+      } receiveValue: { [weak self] data in
+        guard let self else { return }
+        do {
+          let tickers = try decoder.decode([Ticker].self, from: data)
+          tickers.forEach { self.updateItem($0) }
+          
+          // success handler
+          crypto = items.allElements().first(where: {$0.market == "KRW-BTC" })
+          fetchRealtimeTicker()
+        } catch {
+          // TODO: decode error handling (?)
+        }
+      }
+      .store(in: &cancellableBag)
+  }
+  
+  private func fetchRealtimeTicker() {
+    // crypto 정보가 없다면, 다시 fetch
+    
+    // fetch ticker
+    let tickerUrl = "ws://127.0.0.1:8090/ticker"
+    tickerWebSocketManager.connect(url: tickerUrl)
+      .receive(on: RunLoop.main)
+      .sink { [weak self] ticker in
+        self?.updateItem(ticker)
+      }
+      .store(in: &cancellableBag)
+  }
   
   private func fetchCrypto() {
     guard let url = URL(string: "http://localhost:8090/api/cryptos") else { return }
@@ -88,7 +114,7 @@ class CryptoViewModel: ObservableObject {
       ticker: ticker
     )
     
-    if newCrypto.market == code {
+    if crypto?.market == newCrypto.market {
       self.crypto = newCrypto
     }
     

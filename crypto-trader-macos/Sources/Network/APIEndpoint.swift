@@ -6,6 +6,7 @@ enum APIEndpoint {
   case userInfo
   case orderCreate
   case login
+  case tickers
     
   var url: URL? {
     switch self {
@@ -15,6 +16,8 @@ enum APIEndpoint {
       return URL(string: url("/api/orders/create"))
     case .login:
       return URL(string:  url("/login"))
+    case .tickers:
+      return URL(string: url("/api/tickers"))
     }
   }
   

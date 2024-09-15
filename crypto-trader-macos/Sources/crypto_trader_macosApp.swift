@@ -25,6 +25,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   }
   
   private func initConfiguration() {
-    CryptoViewModel.shared.fetchTicker()
+//    CryptoViewModel.shared.fetchRealtimeTicker()
   }
 }

@@ -75,27 +75,26 @@ struct CandleChartView: View {
   }
   
   var chart: some View {
-    GeometryReader { geo in
+    let minPrice = candleViewModel.items.map { $0.low }.min() ?? 0
+    let maxPrice = candleViewModel.items.map { $0.high }.max() ?? 100
+    let adjustment: Double = 10 // 조정값
+    
+    return GeometryReader { geo in
       Chart(candleViewModel.items.indices, id: \.self) { index in
         let candle = candleViewModel.items[index]
-        if visibleCandles.first?.time == candle.time || visibleCandles.last?.time == candle.time {
-          CandleStickMark(
-            timestamp: .value("Date", candle.time),
-            open: candle.open,
-            close: candle.close,
-            high: .value("High", candle.high),
-            low: .value("Low", candle.low),
-            color: .purple
-          )
-        } else {
-          CandleStickMark(
-            timestamp: .value("Date", candle.time),
-            open: candle.open,
-            close: candle.close,
-            high: .value("High", candle.high),
-            low: .value("Low", candle.low)
-          )
-        }
+        let normalizedOpen = ((candle.open - minPrice) / (maxPrice - minPrice)) * 100
+        let normalizedClose = ((candle.close - minPrice) / (maxPrice - minPrice)) * 100 + (candle.open == candle.close ? adjustment: 0)
+        let normalizedHigh = ((candle.high - minPrice) / (maxPrice - minPrice)) * 100
+        let normalizedLow = ((candle.low - minPrice) / (maxPrice - minPrice)) * 100
+        
+        CandleStickMark(
+          timestamp: .value("Date", candle.time),
+          open: normalizedOpen,
+          close: normalizedClose,
+          high: .value("High", normalizedHigh),
+          low: .value("Low", normalizedLow),
+          red: candle.open >= candle.close
+        )
       }
       .chartXAxis(.hidden)
       .chartYAxis(.hidden)
@@ -105,8 +104,12 @@ struct CandleChartView: View {
       .onReceive(candleViewModel.$items) { value in
         if value.count != lastCount {
           totalDragOffset -= candleTotalWidth
+          lastCount = value.count
+          
+          print("last count: \(lastCount)")
         }
       }
+      .id(lastCount)
     }
   }
   
@@ -140,7 +143,7 @@ struct CandleStickMark: ChartContent {
   let close: Double
   let high: PlottableValue<Double>
   let low: PlottableValue<Double>
-  var color: Color? = nil
+  let red: Bool
     
   var body: some ChartContent {
     Plot {
@@ -160,7 +163,7 @@ struct CandleStickMark: ChartContent {
         width: 10
       )
       .cornerRadius(0)
-      .foregroundStyle(color != nil ? color! : (open >= close ? .red : .blue))
+      .foregroundStyle(red ? .red : .blue)
     }
   }
 }
