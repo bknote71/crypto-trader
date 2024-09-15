@@ -37,7 +37,7 @@ public class SimpleMarketRepository {
         Map<String, Market> newMarkets = newMarketList.stream()
                 .collect(Collectors.toMap(Market::getMarket, market -> market));
 
-        boolean isModified = !markets.keySet().equals(newMarkets.keySet()) || !markets.equals(newMarkets);
+        boolean isModified = !markets.keySet().equals(newMarkets.keySet()) || !markets.equals(newMarkets) || markets.isEmpty();
 
         markets.keySet().retainAll(newMarkets.keySet());
         markets.putAll(newMarkets);
@@ -46,11 +46,11 @@ public class SimpleMarketRepository {
             try {
                 redisTemplate.opsForValue()
                         .set(MARKET, objectMapper.writeValueAsString(markets.keySet()))
-                        .subscribe();
+                        .block();
+                publisher.publishEvent(new MarketsUpdateEvent(this));
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
-            publisher.publishEvent(new MarketsUpdateEvent(this));
         }
     }
 

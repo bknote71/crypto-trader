@@ -34,7 +34,7 @@ public class Ticker {
         this.accTradeVolume24h = accTradeVolume24h;
     }
 
-    public String getCode() {
+    public String getMarket() {
         return market;
     }
 

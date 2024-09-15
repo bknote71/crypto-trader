@@ -21,7 +21,8 @@ public class Ticker {
     @JsonProperty("acc_trade_volume_24h")
     private double accTradeVolume24h; // 24시간 누적 거래량
 
-    public Ticker() {}
+    public Ticker() {
+    }
 
     public Ticker(final String market, final double tradePrice, final double accTradePrice24h, final double signedChangePrice, final double signedChangeRate, final double highPrice, final double lowPrice, final double accTradeVolume24h) {
         this.market = market;
@@ -58,7 +59,12 @@ public class Ticker {
         return highPrice;
     }
 
+    public double getLowPrice() {
+        return lowPrice;
+    }
+
     public double getAccTradeVolume24h() {
         return accTradeVolume24h;
     }
+
 }
