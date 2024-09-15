@@ -54,9 +54,10 @@ public class CandleGenerationScheduler {
                 .toList();
 
         candleMongoRepository.saveAll(candles);
-
         candleStates.forEach((market, candleState) -> candleRedisRepository.saveMinuteCandle(market, candleState, CandleUnit.ONEMINUTE));
         candleStates.values().forEach(CandleState::reset); // 후처리
+
+
     }
 
     @Scheduled(cron = "*/5 * * * * *")

@@ -37,8 +37,8 @@ public class CandleMongoRepository {
     }
 
     public List<Candle> findCandlesByMarketAndTime(String market, LocalDateTime startTime) {
-        Query query = new Query(Criteria.where("market").is(market).and("time").lt(startTime));
-//        query.limit(100);  // 필요에 따라 조회할 캔들의 개수 제한 가능
+        Query query = new Query(Criteria.where("market").is(market)
+                .and("time").gte(startTime));  // 48시간 이내의 데이터
         return mongoTemplate.find(query, Candle.class);
     }
 }

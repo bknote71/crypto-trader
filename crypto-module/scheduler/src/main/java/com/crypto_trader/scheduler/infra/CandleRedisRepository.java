@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
+import org.springframework.data.redis.listener.PatternTopic;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
@@ -40,6 +41,8 @@ public class CandleRedisRepository {
                     .flatMap(result -> {
                         // 2. TTL 설정 (48시간)
                         return redisTemplate.expire(key, Duration.ofHours(48));  // 48시간 TTL 설정
+                    })
+                    .doOnSuccess(success -> {
                     })
                     .doOnError(error -> {log.debug(error.getMessage());})
                     .subscribe();
