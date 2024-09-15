@@ -2,6 +2,7 @@ package com.crypto_trader.api_server.config;
 
 import com.crypto_trader.api_server.auth.JwtRequestFilter;
 import com.crypto_trader.api_server.auth.JwtUtil;
+import com.crypto_trader.api_server.auth.PrincipalUser;
 import com.crypto_trader.api_server.auth.UserDetailsDBService;
 import com.crypto_trader.api_server.domain.entities.CryptoAsset;
 import com.crypto_trader.api_server.domain.entities.UserEntity;
