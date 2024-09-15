@@ -1,6 +1,6 @@
 package com.crypto_trader.api_server.application;
 
-import com.crypto_trader.api_server.application.dto.TickerRequestDto;
+import com.crypto_trader.api_server.application.dto.TickerResponseDto;
 import com.crypto_trader.api_server.infra.TickerRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +15,9 @@ public class TickerService {
         this.tickerRepository = tickerRepository;
     }
 
-    public List<TickerRequestDto> getTickers() {
+    public List<TickerResponseDto> getTickers() {
          return tickerRepository.findAllTickers().stream()
-                 .map(TickerRequestDto::from)
+                 .map(TickerResponseDto::from)
                  .toList();
     }
 }

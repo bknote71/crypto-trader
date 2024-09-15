@@ -56,7 +56,6 @@ public class SimpleMarketRepository {
                 .opsForValue()
                 .get(MARKET)
                 .subscribe(markets -> {
-                    System.out.println("markets: "+markets);
                     try {
                         this.marketCodes = objectMapper.readValue(markets, new TypeReference<List<String>>() {
                         });

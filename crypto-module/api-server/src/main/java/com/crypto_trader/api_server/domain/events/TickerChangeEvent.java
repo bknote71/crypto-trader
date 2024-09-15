@@ -10,7 +10,6 @@ public class TickerChangeEvent extends ApplicationEvent {
 
     public TickerChangeEvent(Object source, Ticker ticker) {
         super(source);
-        System.out.println("TickerChangeEvent: "+ticker.getMarket());
         this.ticker = ticker;
     }
 
