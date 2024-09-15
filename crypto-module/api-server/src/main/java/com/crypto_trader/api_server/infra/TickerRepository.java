@@ -62,7 +62,7 @@ public class TickerRepository {
         simpleMarketRepository.marketCodesUpdates()
                 .doOnNext(marketCodes -> {
                     for (String marketCode : marketCodes) {
-                        Ticker ticker = new Ticker(marketCode, 0.0, 0.0, 0.0, 0.0,0.0,0.0);
+                        Ticker ticker = new Ticker(marketCode, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
                         tickers.put(marketCode, ticker);
                     }
                 })

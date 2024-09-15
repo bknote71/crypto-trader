@@ -9,6 +9,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -44,15 +46,15 @@ public class CandleService {
         this.marketService = marketService;
     }
 
-    @PostConstruct
+    @EventListener(ApplicationReadyEvent.class)
     public void init() {
-        marketService.renewalMarkets();
-
         // cleanRedisDB가 완료된 후에만 initRedisCandleFromMongo 실행
         cleanRedisDB()
                 .then(Mono.fromRunnable(this::initRedisCandleFromMongo))  // DB 클리어 후에 Mongo 데이터를 Redis에 초기화
                 .subscribe(success -> log.debug("Redis initialized with Mongo data."),
                         error -> log.debug("Error initializing Redis: {}", error.getMessage()));
+
+        marketService.renewalMarkets();
 
         // Redis Ticker 구독 설정
         redisTemplate

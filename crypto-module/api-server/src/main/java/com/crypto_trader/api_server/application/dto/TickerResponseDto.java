@@ -1,9 +1,13 @@
-package com.crypto_trader.scheduler.domain;
+package com.crypto_trader.api_server.application.dto;
 
+import com.crypto_trader.api_server.domain.Ticker;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
 import lombok.Getter;
 
-public class Ticker {
+@Getter
+public class TickerResponseDto {
+
     @JsonProperty("code")
     private String market; // 마켓 코드
     @JsonProperty("trade_price")
@@ -21,10 +25,8 @@ public class Ticker {
     @JsonProperty("acc_trade_volume_24h")
     private double accTradeVolume24h; // 24시간 누적 거래량
 
-    public Ticker() {
-    }
-
-    public Ticker(final String market, final double tradePrice, final double accTradePrice24h, final double signedChangePrice, final double signedChangeRate, final double highPrice, final double lowPrice, final double accTradeVolume24h) {
+    @Builder
+    public TickerResponseDto(final String market, final double tradePrice, final double accTradePrice24h, final double signedChangePrice, final double signedChangeRate, final double highPrice, final double lowPrice, final double accTradeVolume24h) {
         this.market = market;
         this.tradePrice = tradePrice;
         this.accTradePrice24h = accTradePrice24h;
@@ -35,36 +37,16 @@ public class Ticker {
         this.accTradeVolume24h = accTradeVolume24h;
     }
 
-    public String getCode() {
-        return market;
+    public static TickerResponseDto from(Ticker ticker) {
+        return TickerResponseDto.builder()
+                .market(ticker.getMarket())
+                .tradePrice(ticker.getTradePrice())
+                .accTradePrice24h(ticker.getAccTradePrice24h())
+                .signedChangePrice(ticker.getSignedChangePrice())
+                .signedChangeRate(ticker.getSignedChangeRate())
+                .highPrice(ticker.getHighPrice())
+                .lowPrice(ticker.getLowPrice())
+                .accTradeVolume24h(ticker.getAccTradeVolume24h())
+                .build();
     }
-
-    public double getTradePrice() {
-        return tradePrice;
-    }
-
-    public double getAccTradePrice24h() {
-        return accTradePrice24h;
-    }
-
-    public double getSignedChangePrice() {
-        return signedChangePrice;
-    }
-
-    public double getSignedChangeRate() {
-        return signedChangeRate;
-    }
-
-    public double getHighPrice() {
-        return highPrice;
-    }
-
-    public double getLowPrice() {
-        return lowPrice;
-    }
-
-    public double getAccTradeVolume24h() {
-        return accTradeVolume24h;
-    }
-
 }

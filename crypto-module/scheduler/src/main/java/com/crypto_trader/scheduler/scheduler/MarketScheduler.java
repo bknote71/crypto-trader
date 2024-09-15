@@ -16,7 +16,7 @@ public class MarketScheduler {
     }
 
     // 초 분 시 일 월 (0 0 9 * * ?)
-    @Scheduled(cron = "* * * * * ?")
+    @Scheduled(cron = "0 0 9 * * ?")
     public void renewalMarkets() {
         marketService.renewalMarkets();
     }

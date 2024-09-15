@@ -16,18 +16,21 @@ public class Ticker {
     private double signedChangeRate; // 전일 대비 등락율
     @JsonProperty("high_price")
     private double highPrice; // 고가
+    @JsonProperty("low_price")
+    private double lowPrice; // 저가
     @JsonProperty("acc_trade_volume_24h")
     private double accTradeVolume24h; // 24시간 누적 거래량
 
     public Ticker() {}
 
-    public Ticker(final String market, final double tradePrice, final double accTradePrice24h, final double signedChangePrice, final double signedChangeRate, final double highPrice, final double accTradeVolume24h) {
+    public Ticker(final String market, final double tradePrice, final double accTradePrice24h, final double signedChangePrice, final double signedChangeRate, final double highPrice, final double lowPrice, final double accTradeVolume24h) {
         this.market = market;
         this.tradePrice = tradePrice;
         this.accTradePrice24h = accTradePrice24h;
         this.signedChangePrice = signedChangePrice;
         this.signedChangeRate = signedChangeRate;
         this.highPrice = highPrice;
+        this.lowPrice = lowPrice;
         this.accTradeVolume24h = accTradeVolume24h;
     }
 
@@ -53,6 +56,10 @@ public class Ticker {
 
     public double getHighPrice() {
         return highPrice;
+    }
+
+    public double getLowPrice() {
+        return lowPrice;
     }
 
     public double getAccTradeVolume24h() {

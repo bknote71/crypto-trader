@@ -14,7 +14,6 @@ public class TickerScheduler {
     private final MarketService marketService;
     private final TickerService tickerService;
 
-    @Autowired
     public TickerScheduler(MarketService marketService, TickerService tickerService) {
         this.marketService = marketService;
         this.tickerService = tickerService;
@@ -22,7 +21,11 @@ public class TickerScheduler {
 
     @EventListener(MarketsUpdateEvent.class)
     public void handleMarketsUpdatedEvent(MarketsUpdateEvent event) {
-        List<String> allMarketCodes = marketService.getAllMarketCodes();
-        tickerService.fetchAllTickers(allMarketCodes);
+        try{
+            List<String> allMarketCodes = marketService.getAllMarketCodes();
+            tickerService.fetchAllTickers(allMarketCodes);
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 }
