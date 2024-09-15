@@ -2,45 +2,49 @@ import Combine
 import Foundation
 
 class UserViewModel: ObservableObject {
+  static let shared = UserViewModel()
+  
   @Published var user: User? // temp anon user
   
   private let decoder = JSONDecoder()
   private var cancellableBag = Set<AnyCancellable>()
   
   init() {
-    let btc = Crypto(market: "KRW-BTC", nameKr: "비트코인", nameEn: "bitcoin", ticker: Ticker(
-      market: "KRW-BTC",
-      tradePrice: 70000,
-      changePrice: 10,
-      changeRate: 1.0,
-      accTradePrice24h: 800
-    ))
-    
-    let xrp = Crypto(market: "KRW-XRP", nameKr: "리플", nameEn: "xripple", ticker: Ticker(
-      market: "KRW-XRP",
-      tradePrice: 60000,
-      changePrice: 100,
-      changeRate: 1.0,
-      accTradePrice24h: 800
-    ))
-    
-    let cryptoAssetList = [
-      CryptoAsset(crypto: btc, amount: 10, avgPrice: 710),
-      CryptoAsset(crypto: xrp, amount: 110, avgPrice: 1000),
-    ]
-    
+    // anon user
     user = User(
-      account: Account(number: "123", currency: "KRW", balance: 1000000000, locked: 0, avgBuyPrice: 1000000), assets: cryptoAssetList
+      account: Account(number: "123", currency: "KRW", balance: 1000000000, locked: 0, avgBidPrice: 1000000), 
+      assets: []
     )
+    
+    // real user
+    login()
+  }
+  
+  func login(_ username: String = "user1") {
+    guard let url = APIEndpoint.login.url else { return }
+    
+    APIClient.shared.request(url: url, post: true, param: ["username": username])
+      .receive(on: RunLoop.main)
+      .sink { completion in
+        switch completion {
+        case .finished:
+          break
+        case .failure(let error):
+          print("Failed with error: \(error)")
+        }
+      } receiveValue: { [weak self] data in
+        // TODO: - parse token
+        guard let token = String(data: data, encoding: .utf8) else { return }
+        APIClient.shared.setToken(token)
+        self?.fetchUserInfo()
+      }
+      .store(in: &cancellableBag)
   }
   
   func fetchUserInfo() {
-    let urlString = "http://localhost:8090/api/users/info"
-    guard let url = URL(string: urlString) else { return }
-    let request = URLRequest(url: url)
+    guard let url = APIEndpoint.userInfo.url else { return }
     
-    URLSession.shared.dataTaskPublisher(for: request)
-      .map(\.data)
+    APIClient.shared.request(url: url)
       .decode(type: UserInfo.self, decoder: decoder)
       .receive(on: RunLoop.main)
       .sink { completion in
@@ -53,7 +57,10 @@ class UserViewModel: ObservableObject {
       } receiveValue: { [weak self] user in
         
         let assets: [CryptoAsset] = user.assets.compactMap {
-          guard let crypto = CryptoViewModel.shared.findByMarket($0.market) else { return nil }
+          guard let crypto = CryptoViewModel.shared.findByMarket($0.market) else {
+            print("market에 대한 크립토를 찾을 수 없습니다.")
+            return nil
+          }
           return CryptoAsset(crypto: crypto, amount: $0.amount, avgPrice: $0.avgPrice)
         }
         

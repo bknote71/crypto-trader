@@ -82,9 +82,9 @@ class CryptoViewModel: ObservableObject {
   
   private func updateItem(_ ticker: Ticker) {
     let newCrypto = Crypto(
-      market: ticker.market,
-      nameKr: ticker.market,
-      nameEn: ticker.market,
+      market: ticker.code,
+      nameKr: ticker.code,
+      nameEn: ticker.code,
       ticker: ticker
     )
     
@@ -92,8 +92,8 @@ class CryptoViewModel: ObservableObject {
       self.crypto = newCrypto
     }
     
-    if items.allElements().contains(where: { $0.market == ticker.market }) {
-       items.update(where: { $0.market == ticker.market }, with: newCrypto)
+    if items.allElements().contains(where: { $0.market == ticker.code }) {
+       items.update(where: { $0.market == ticker.code }, with: newCrypto)
     } else {
       items.insert(newCrypto)
     }

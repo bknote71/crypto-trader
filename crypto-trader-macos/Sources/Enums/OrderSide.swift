@@ -1,15 +1,15 @@
 import SwiftUI
 
-enum OrderSide {
-  case bid
-  case ask
+enum OrderSide: String {
+  case BID
+  case ASK
   case other
   
   var title: String {
     switch self {
-    case .bid:
+    case .BID:
         "매수"
-    case .ask:
+    case .ASK:
         "매도"
     default:
      ""
@@ -18,9 +18,9 @@ enum OrderSide {
   
   var color: Color {
     switch self {
-    case .bid:
+    case .BID:
         .red
-    case .ask:
+    case .ASK:
         .blue
     default:
         .black

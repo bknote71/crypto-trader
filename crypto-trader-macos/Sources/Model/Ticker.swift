@@ -1,12 +1,12 @@
 struct Ticker: Decodable, Equatable {
-  let market: String
+  let code: String
   let tradePrice: Double
   let changePrice: Double
   let changeRate: Double
   let accTradePrice24h: Double
   
   init() {
-    market = ""
+    code = ""
     tradePrice = 0
     changePrice = 0
     changeRate = 0
@@ -14,7 +14,7 @@ struct Ticker: Decodable, Equatable {
   }
   
   init(market: String, tradePrice: Double, changePrice: Double, changeRate: Double, accTradePrice24h: Double) {
-    self.market = market
+    self.code = market
     self.tradePrice = tradePrice
     self.changePrice = changePrice
     self.changeRate = changeRate
@@ -22,7 +22,7 @@ struct Ticker: Decodable, Equatable {
   }
   
   enum CodingKeys: String, CodingKey {
-    case market
+    case code
     case tradePrice = "trade_price"
     case changePrice = "change_price"
     case changeRate = "change_rate"
@@ -32,7 +32,7 @@ struct Ticker: Decodable, Equatable {
   // 값이 없을 때의 처리
   init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
-    market = try container.decode(String.self, forKey: .market)
+    code = try container.decode(String.self, forKey: .code)
     tradePrice = try container.decode(Double.self, forKey: .tradePrice)
     changePrice = try container.decodeIfPresent(Double.self, forKey: .changePrice) ?? 0
     changeRate = try container.decodeIfPresent(Double.self, forKey: .changeRate) ?? 0
@@ -40,7 +40,7 @@ struct Ticker: Decodable, Equatable {
   }
   
   static func == (lhs: Ticker, rhs: Ticker) -> Bool {
-    return lhs.market == rhs.market &&
+    return lhs.code == rhs.code &&
     lhs.tradePrice == rhs.tradePrice &&
     lhs.changePrice == rhs.changePrice &&
     lhs.changeRate == rhs.changeRate &&

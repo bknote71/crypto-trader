@@ -24,7 +24,7 @@ struct TradingPriceView: View {
   }
   
   var header: some View {
-    return HStack(spacing: 0) {
+    return HStack(alignment: .center, spacing: 0) {
       HStack(spacing: 0) {
         Image(systemName: "bitcoinsign.circle.fill")
           .resizable()
@@ -39,13 +39,11 @@ struct TradingPriceView: View {
         Text(tickerViewModel.crypto!.nameEn)
           .font(.system(size: 8))
       }
-      .padding(.bottom, 8)
 
       Spacer()
       tabBar
     }
     .padding(.horizontal, 8)
-    .padding(.top, 8)
     .background(.white)
   }
   
@@ -67,16 +65,16 @@ struct TradingPriceView: View {
   }
   
   func tabButton(title: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
-    VStack(alignment: .center, spacing: 8) {
+    VStack(alignment: .center, spacing: 9) {
       Text(title)
         .font(.title3)
         .foregroundColor(isSelected ? .blue : .black)
-        .padding(.top, 8)
+        .padding(.top, 12)
       Rectangle()
         .frame(height: 3)
         .foregroundColor(isSelected ? .blue : .clear)
     }
-    .frame(width: 100)
+    .frame(width: 120)
     .contentShape(Rectangle())
     .onTapGesture {
       action()

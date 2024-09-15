@@ -1,5 +1,6 @@
 package com.crypto_trader.api_server.auth;
 
+import com.crypto_trader.api_server.application.dto.UserInfoDto;
 import com.crypto_trader.api_server.domain.entities.CryptoAsset;
 import com.crypto_trader.api_server.domain.entities.UserEntity;
 import com.crypto_trader.api_server.infra.UserEntityRepository;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -26,10 +28,16 @@ public class AuthService {
 
     @PostConstruct
     public void init() {
-        UserEntity user1 = new UserEntity("user1");
-        UserEntity user2 = new UserEntity("user2");
-        UserEntity user3 = new UserEntity("user3");
-        userEntityRepository.saveAll(List.of(user1, user2, user3));
+        UserEntity user = new UserEntity("user1");
+        // TODO: init anonymous user
+        // temp user
+        CryptoAsset btc = new CryptoAsset("KRW-BTC", 10, 70000000);
+        CryptoAsset xrp = new CryptoAsset("KRW-XRP", 1000, 6000);
+
+        btc.setUser(user);
+        xrp.setUser(user);
+
+        userEntityRepository.save(user);
     }
 
     @Transactional
@@ -49,5 +57,12 @@ public class AuthService {
 
         UserEntity user = new UserEntity(username);
         userEntityRepository.save(user);
+    }
+
+    @Transactional
+    public UserInfoDto findByUsername(String username) {
+        UserEntity userEntity = userEntityRepository.findByUsername(username)
+                .orElseThrow();
+        return UserInfoDto.from(userEntity);
     }
 }

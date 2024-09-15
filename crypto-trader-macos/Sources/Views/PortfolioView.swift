@@ -23,9 +23,11 @@ struct PortfolioView: View {
       }
       Spacer()
     }
-    .padding(0)
     .frame(width: 950)
     .background(.white)
+    .onAppear {
+      userViewModel.fetchUserInfo()
+    }
   }
   
   var tabBar: some View {
@@ -61,72 +63,74 @@ struct PortfolioView: View {
   
   var summaryView: some View {
     HStack(spacing: 0) {
-      // account
-      VStack(spacing: 0) {
-        HStack(spacing: 0) {
+      if let account = userViewModel.user?.account {
+        // account
+        VStack(spacing: 0) {
           HStack(spacing: 0) {
-            Text("보유 KRW")
-            Spacer()
-            Text("0 KRW")
+            HStack(spacing: 0) {
+              Text("보유 KRW")
+              Spacer()
+              Text("\(account.holdCash.formattedPrice()) KRW")
+            }
+            .padding(.trailing, 24)
+            
+            HStack(spacing: 0) {
+              Text("총보유자산")
+              Spacer()
+              Text("\(account.totalAsset.formattedPrice()) KRW")
+            }
           }
-          .padding(.trailing, 24)
+          .padding(.bottom, 24)
           
-          HStack(spacing: 0) {
-            Text("총보유자산")
-            Spacer()
-            Text("1,847,717 KRW")
-          }
-        }
-        .padding(.bottom, 24)
-        
-        Divider()
-        
-        HStack(alignment: .top, spacing: 0) {
-          VStack(spacing: 24) {
-            HStack(spacing: 0) {
-              Text("총 매수")
-              Spacer()
-              Text("100,000 KRW")
-            }
-            
-            HStack(spacing: 0) {
-              Text("총 평가")
-              Spacer()
-              Text("100,000 KRW")
-            }
-            
-            HStack(spacing: 0) {
-              Text("주문가능(baalnce)")
-              Spacer()
-              Text("100,000 KRW")
-            }
-          }
-          .padding(.trailing, 24)
+          Divider()
           
-          VStack(spacing: 24) {
-            HStack(spacing: 0) {
-              Text("총평가손익")
-              Spacer()
-              Text("-1억KRW")
+          HStack(alignment: .top, spacing: 0) {
+            VStack(spacing: 24) {
+              HStack(spacing: 0) {
+                Text("총 매수")
+                Spacer()
+                Text("\(account.totalBidAmount.formattedPrice()) KRW")
+              }
+              
+              HStack(spacing: 0) {
+                Text("총 평가")
+                Spacer()
+                Text("\(account.avgBidPrice.formattedPrice()) KRW")
+              }
+              
+              HStack(spacing: 0) {
+                Text("주문가능(baalnce)")
+                Spacer()
+                Text("\(account.balance.formattedPrice()) KRW")
+              }
             }
+            .padding(.trailing, 24)
             
-            HStack(spacing: 0) {
-              Text("총평가수익률")
-              Spacer()
-              Text("-1억 %")
+            VStack(spacing: 24) {
+              HStack(spacing: 0) {
+                Text("총평가손익")
+                Spacer()
+                Text("\(account.totalProfitLoss.formattedPrice()) KRW")
+              }
+              
+              HStack(spacing: 0) {
+                Text("총평가수익률")
+                Spacer()
+                Text("\(account.totalProfitLossRate.formattedPrice()) %")
+              }
             }
           }
+          .padding(.vertical, 24)
+          Spacer()
         }
-        .padding(.vertical, 24)
-        Spacer()
+        .padding(24)
+        
+        Color(Color.gray150)
+          .frame(width: 1)
+        
+        circleChart
+          .padding(.horizontal, 16)
       }
-      .padding(24)
-      
-      Color(Color.gray150)
-        .frame(width: 1)
-      
-      circleChart
-        .padding(.horizontal, 16)
     }
     .frame( height: 240)
   }
@@ -140,7 +144,7 @@ struct PortfolioView: View {
             ForEach(Array(assets.cryptoAssets.allElements().enumerated()), id: \.element.crypto.market) { index, asset in
               HStack(spacing: 0) {
                 Circle()
-                  .fill(randomColor())
+                  .fill(donutColor(index))
                   .frame(width: 10, height: 10)
                   .padding(.trailing, 8)
                 Text(asset.crypto.market)
@@ -161,7 +165,7 @@ struct PortfolioView: View {
                 startAngle: startAngle,
                 endAngle: animate ? endAngle : startAngle
               )
-              .fill(randomColor())
+              .fill(donutColor(index))
               .rotationEffect(.degrees(animate ? -90: -90 - startAngle.degrees / 4), anchor: .center)
               .animation(.easeOut(duration: 1.0), value: animate)
             }
@@ -183,13 +187,11 @@ struct PortfolioView: View {
     }
   }
   
-  // TEMP
-  func randomColor() -> Color {
-    return Color(
-      red: Double.random(in: 0...1),
-      green: Double.random(in: 0...1),
-      blue: Double.random(in: 0...1)
-    )
+  
+  let colors: [Color] = [.purple, Color.gray300, .brown, .indigo] // 초록, 보라, 회색, 와인
+  
+  func donutColor(_ index: Int) -> Color {
+    return colors[index % colors.count]
   }
   
   let headerColumns: [GridItem] = [

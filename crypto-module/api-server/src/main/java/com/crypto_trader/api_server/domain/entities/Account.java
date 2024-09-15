@@ -20,7 +20,7 @@ public class Account {
         this.currency = "KRW";
         this.balance = 10_000_000_000.0;
         this.locked = 0;
-        this.avgBuyPrice = 0;
+        this.avgBuyPrice = 1000000;
     }
 
     public void unlock(Number number) {

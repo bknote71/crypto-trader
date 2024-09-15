@@ -1,5 +1,6 @@
 package com.crypto_trader.api_server.auth;
 
+import com.crypto_trader.api_server.domain.entities.CryptoAsset;
 import com.crypto_trader.api_server.domain.entities.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -13,6 +14,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -46,15 +49,13 @@ public class SecurityConfig {
         );
 
         // for anonymous
-        http.anonymous(anon -> anon.principal(createAnonymousPrincipal()));
+//        http.anonymous(anon -> anon.principal(createAnonymousPrincipal()));
 
         return http.build();
     }
 
     private PrincipalUser createAnonymousPrincipal() {
         var user = new UserEntity("anonymous");
-        // TODO: init anonymous user
-
         return new PrincipalUser(user);
     }
 

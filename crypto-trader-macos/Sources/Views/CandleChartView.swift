@@ -75,22 +75,37 @@ struct CandleChartView: View {
   }
   
   var chart: some View {
-    Chart(candleViewModel.items.indices, id: \.self) { index in
-      let candle = candleViewModel.items[index]
-      CandleStickMark(
-        timestamp: .value("Date", candle.time),
-        open: .value("Open", candle.open),
-        high: .value("High", candle.high),
-        low: .value("Low", candle.low),
-        close: .value("Close", candle.close),
-        color: .blue
-      )
-    }
-    .chartXAxis(.hidden)
-    .chartYAxis(.hidden)
-    .onReceive(candleViewModel.$items) { value in
-      if value.count != lastCount {
-        totalDragOffset -= candleTotalWidth
+    GeometryReader { geo in
+      Chart(candleViewModel.items.indices, id: \.self) { index in
+        let candle = candleViewModel.items[index]
+        if visibleCandles.first?.time == candle.time || visibleCandles.last?.time == candle.time {
+          CandleStickMark(
+            timestamp: .value("Date", candle.time),
+            open: candle.open,
+            close: candle.close,
+            high: .value("High", candle.high),
+            low: .value("Low", candle.low),
+            color: .purple
+          )
+        } else {
+          CandleStickMark(
+            timestamp: .value("Date", candle.time),
+            open: candle.open,
+            close: candle.close,
+            high: .value("High", candle.high),
+            low: .value("Low", candle.low)
+          )
+        }
+      }
+      .chartXAxis(.hidden)
+      .chartYAxis(.hidden)
+      // TODO: 이거 두 개 조합하면 어떻게든 안될까?
+//      .chartYScale(range: <#T##PositionScaleRange#>)
+//      .chartYVisibleDomain(length: <#T##Plottable & Numeric#>)
+      .onReceive(candleViewModel.$items) { value in
+        if value.count != lastCount {
+          totalDragOffset -= candleTotalWidth
+        }
       }
     }
   }
@@ -107,21 +122,25 @@ struct CandleChartView: View {
     let startIndex = max(Int(startX / candleTotalWidth), 0)
     let endIndex = min(Int((endX / candleTotalWidth).rounded(.up)), candleViewModel.items.count - 1)
     
-    print(candleViewModel.items[endIndex])
-    
     // 현재 보이는 캔들들
+    // endIndex가. 마지막 - 2) 아래라면 - 2
     visibleCandles = Array(candleViewModel.items[startIndex...endIndex])
+  }
+  
+  func getYScaleRange(geo: GeometryProxy) -> ClosedRange<CGFloat> {
+    // 흠................................................
+    return 0...0
   }
 }
 
 
 struct CandleStickMark: ChartContent {
   let timestamp: PlottableValue<Date>
-  let open: PlottableValue<Double>
+  let open: Double
+  let close: Double
   let high: PlottableValue<Double>
   let low: PlottableValue<Double>
-  let close: PlottableValue<Double>
-  let color: Color
+  var color: Color? = nil
     
   var body: some ChartContent {
     Plot {
@@ -136,12 +155,12 @@ struct CandleStickMark: ChartContent {
       
       BarMark(
         x: timestamp,
-        yStart: open,
-        yEnd: close,
+        yStart: .value("Open", open),
+        yEnd: .value("Close", close),
         width: 10
       )
       .cornerRadius(0)
-      .foregroundStyle(color)
+      .foregroundStyle(color != nil ? color! : (open >= close ? .red : .blue))
     }
   }
 }

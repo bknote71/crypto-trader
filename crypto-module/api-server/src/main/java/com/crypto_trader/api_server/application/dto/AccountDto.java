@@ -9,14 +9,14 @@ public class AccountDto {
     private String currency; // 화폐 단위
     private Number balance; // 주문가능 금액
     private Number locked; // 주문 중 묶여있는 금액
-    private Number avgBuyPrice; // 매수 평균가
+    private Number avgBidPrice; // 매수 평균가
 
-    public AccountDto(String number, String currency, Number balance, Number locked, Number avgBuyPrice) {
+    public AccountDto(String number, String currency, Number balance, Number locked, Number avgBidPrice) {
         this.number = number;
         this.currency = currency;
         this.balance = balance;
         this.locked = locked;
-        this.avgBuyPrice = avgBuyPrice;
+        this.avgBidPrice = avgBidPrice;
     }
 
     public static AccountDto from(Account account) {

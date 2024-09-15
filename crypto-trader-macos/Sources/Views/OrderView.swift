@@ -6,15 +6,15 @@ struct OrderView: View {
   var body: some View {
     VStack(spacing: 0) {
       HStack(spacing: 0) {
-        tabButton(side: .bid, selectedSide: $orderViewModel.currentSide)
-        tabButton(side: .ask, selectedSide: $orderViewModel.currentSide)
+        tabButton(side: .BID, selectedSide: $orderViewModel.currentSide)
+        tabButton(side: .ASK, selectedSide: $orderViewModel.currentSide)
         tabButton(side: .other, selectedSide: $orderViewModel.currentSide)
         tabButton(side: .other, selectedSide: $orderViewModel.currentSide)
       }
       
-      OrderSideView(side: $orderViewModel.currentSide)
+      OrderDetailView(side: $orderViewModel.currentSide)
     }
-    .frame(width: 460, height: 360)
+    .frame(width: 452, height: 360)
     .padding(0)
     .background(.white)
   }
@@ -39,51 +39,6 @@ struct OrderView: View {
   }
 }
 
-struct PriceStepperView: View {
-  @Binding var price: Double
-  var title: String
-    
-  var body: some View {
-    HStack(spacing: 0) {
-      Text(title)
-      Spacer()
-      HStack(spacing: 0) {
-        Spacer()
-        Text(price.formattedPrice())
-          .padding(.trailing, 12)
-        
-        Button{
-          price -= 1
-        } label: {
-          Image(systemName: "minus")
-            .frame(width: 40, height: 40)
-            .background(Color.gray100)
-        }
-        .buttonStyle(BorderlessButtonStyle())
-        
-        Color(Color.gray200)
-          .frame(width: 1)
-        
-        Button {
-          price += 1
-        } label: {
-          Image(systemName: "plus")
-            .frame(width: 40, height: 40)
-            .background(Color.gray100)
-        }
-        .buttonStyle(BorderlessButtonStyle())
-        .padding(0)
-      }
-      .padding(0)
-      .frame(width: 320, height: 40)
-      .overlay(
-        Rectangle()
-          .stroke(Color.gray150, lineWidth: 1)
-      )
-    }
-  }
-}
-
-#Preview {
-  OrderView()
-}
+//#Preview {
+//  OrderView()
+//}

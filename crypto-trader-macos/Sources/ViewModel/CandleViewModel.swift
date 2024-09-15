@@ -27,19 +27,17 @@ class CandleViewModel: ObservableObject {
           // TODO: - process candle data
           
           let adjustment: Double = candle.open == candle.close ? 100: 0
-          print("adjust \(adjustment)")
           
           guard let last = items.last else { return }
           let high = last.close + Double.random(in: 0...30)
           let low = last.close - Double.random(in: 0...30)
           
-          print("append candle \(candle)")
           let newCandle = Candle(
             open: last.close,
             close: Double.random(in: low...high),
             high: high,
             low: low,
-            time: last.time + TimeInterval(10)
+            time: last.time + TimeInterval(60)
           )
           
           items.append(newCandle)
@@ -72,7 +70,7 @@ class CandleViewModel: ObservableObject {
       let open = previousClose // open은 이전 close 값
       
       // 새로운 CandleChartDataEntry 생성
-      let entry = Candle(open: open, close: close, high: high, low: low, time: Date.now + TimeInterval(100*i))
+      let entry = Candle(open: open, close: close, high: high, low: low, time: Date.now + TimeInterval(60*i))
       
       // 엔트리를 배열에 추가
       dummy.append(entry)

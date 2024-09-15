@@ -19,7 +19,7 @@
 		952E241D2C92D56400B8EAC1 /* OrderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952E241C2C92D56400B8EAC1 /* OrderViewModel.swift */; };
 		952E241F2C92D61E00B8EAC1 /* OrderSide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952E241E2C92D61E00B8EAC1 /* OrderSide.swift */; };
 		952E24222C92D89200B8EAC1 /* RadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952E24212C92D89200B8EAC1 /* RadioButton.swift */; };
-		952E24242C92D91900B8EAC1 /* OrderSideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952E24232C92D91900B8EAC1 /* OrderSideView.swift */; };
+		952E24242C92D91900B8EAC1 /* OrderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952E24232C92D91900B8EAC1 /* OrderDetailView.swift */; };
 		952E24262C92DB3C00B8EAC1 /* OrderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952E24252C92DB3C00B8EAC1 /* OrderType.swift */; };
 		952E242A2C92DC4000B8EAC1 /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952E24292C92DC4000B8EAC1 /* Double.swift */; };
 		956EC9A72C8EDD3900165FC5 /* CandleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 956EC9A62C8EDD3900165FC5 /* CandleViewModel.swift */; };
@@ -32,6 +32,11 @@
 		958677A52C8D9D9A002C83F4 /* SortedArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 958677A42C8D9D9A002C83F4 /* SortedArray.swift */; };
 		958677A72C8DAD8D002C83F4 /* CryptoDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 958677A62C8DAD8D002C83F4 /* CryptoDto.swift */; };
 		95B16F592C926C8B0009672C /* CandleChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95B16F582C926C8B0009672C /* CandleChartView.swift */; };
+		95D308952C9596D000AB3F99 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D308942C9596D000AB3F99 /* APIClient.swift */; };
+		95D308972C95978A00AB3F99 /* APIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D308962C95978A00AB3F99 /* APIEndpoint.swift */; };
+		95D308992C95B0DD00AB3F99 /* DoubleTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D308982C95B0DD00AB3F99 /* DoubleTextField.swift */; };
+		95D3089B2C95B36E00AB3F99 /* PriceStepperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D3089A2C95B36E00AB3F99 /* PriceStepperView.swift */; };
+		95D3089D2C95B95800AB3F99 /* OrderCreateDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D3089C2C95B95800AB3F99 /* OrderCreateDto.swift */; };
 		95DD18682C92A8FD0083F531 /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95DD18672C92A8FD0083F531 /* Comparable.swift */; };
 		95FDD0402C8C5534003F9FBF /* crypto_trader_macosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FDD03F2C8C5534003F9FBF /* crypto_trader_macosApp.swift */; };
 		95FDD0442C8C5535003F9FBF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 95FDD0432C8C5535003F9FBF /* Assets.xcassets */; };
@@ -78,7 +83,7 @@
 		952E241C2C92D56400B8EAC1 /* OrderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderViewModel.swift; sourceTree = "<group>"; };
 		952E241E2C92D61E00B8EAC1 /* OrderSide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderSide.swift; sourceTree = "<group>"; };
 		952E24212C92D89200B8EAC1 /* RadioButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButton.swift; sourceTree = "<group>"; };
-		952E24232C92D91900B8EAC1 /* OrderSideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderSideView.swift; sourceTree = "<group>"; };
+		952E24232C92D91900B8EAC1 /* OrderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderDetailView.swift; sourceTree = "<group>"; };
 		952E24252C92DB3C00B8EAC1 /* OrderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderType.swift; sourceTree = "<group>"; };
 		952E24292C92DC4000B8EAC1 /* Double.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
 		956EC9A62C8EDD3900165FC5 /* CandleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleViewModel.swift; sourceTree = "<group>"; };
@@ -92,6 +97,11 @@
 		958677A42C8D9D9A002C83F4 /* SortedArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortedArray.swift; sourceTree = "<group>"; };
 		958677A62C8DAD8D002C83F4 /* CryptoDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoDto.swift; sourceTree = "<group>"; };
 		95B16F582C926C8B0009672C /* CandleChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleChartView.swift; sourceTree = "<group>"; };
+		95D308942C9596D000AB3F99 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		95D308962C95978A00AB3F99 /* APIEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIEndpoint.swift; sourceTree = "<group>"; };
+		95D308982C95B0DD00AB3F99 /* DoubleTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleTextField.swift; sourceTree = "<group>"; };
+		95D3089A2C95B36E00AB3F99 /* PriceStepperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceStepperView.swift; sourceTree = "<group>"; };
+		95D3089C2C95B95800AB3F99 /* OrderCreateDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCreateDto.swift; sourceTree = "<group>"; };
 		95DD18672C92A8FD0083F531 /* Comparable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comparable.swift; sourceTree = "<group>"; };
 		95FDD03C2C8C5534003F9FBF /* crypto-trader-macos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "crypto-trader-macos.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		95FDD03F2C8C5534003F9FBF /* crypto_trader_macosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = crypto_trader_macosApp.swift; sourceTree = "<group>"; };
@@ -141,9 +151,10 @@
 			isa = PBXGroup;
 			children = (
 				956EC9AA2C8EE47C00165FC5 /* CandleRequestDto.swift */,
-				958677A62C8DAD8D002C83F4 /* CryptoDto.swift */,
-				952B4C092C95527400D33FA6 /* UserInfo.swift */,
 				952B4C0B2C95536900D33FA6 /* CryptoAssetDto.swift */,
+				958677A62C8DAD8D002C83F4 /* CryptoDto.swift */,
+				95D3089C2C95B95800AB3F99 /* OrderCreateDto.swift */,
+				952B4C092C95527400D33FA6 /* UserInfo.swift */,
 			);
 			path = Dto;
 			sourceTree = "<group>";
@@ -152,6 +163,7 @@
 			isa = PBXGroup;
 			children = (
 				952E24212C92D89200B8EAC1 /* RadioButton.swift */,
+				95D308982C95B0DD00AB3F99 /* DoubleTextField.swift */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -172,6 +184,16 @@
 				958677A42C8D9D9A002C83F4 /* SortedArray.swift */,
 			);
 			path = Share;
+			sourceTree = "<group>";
+		};
+		95D308932C9596B600AB3F99 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				9586779E2C8D9139002C83F4 /* WebSocketManager.swift */,
+				95D308942C9596D000AB3F99 /* APIClient.swift */,
+				95D308962C95978A00AB3F99 /* APIEndpoint.swift */,
+			);
+			path = Network;
 			sourceTree = "<group>";
 		};
 		95FDD0332C8C5534003F9FBF = {
@@ -200,7 +222,7 @@
 			isa = PBXGroup;
 			children = (
 				95FDD03F2C8C5534003F9FBF /* crypto_trader_macosApp.swift */,
-				9586779E2C8D9139002C83F4 /* WebSocketManager.swift */,
+				95D308932C9596B600AB3F99 /* Network */,
 				951D6FAE2C93FD580043DFBB /* Dto */,
 				956EC9AC2C8EE4A100165FC5 /* Enums */,
 				95FDD07F2C8C8BE4003F9FBF /* Extensions */,
@@ -280,9 +302,10 @@
 				95FDD07B2C8C599D003F9FBF /* CryptoListView.swift */,
 				952B4C072C953EFD00D33FA6 /* DonutSlice.swift */,
 				95FDD0792C8C598B003F9FBF /* MainView.swift */,
-				952E24232C92D91900B8EAC1 /* OrderSideView.swift */,
+				952E24232C92D91900B8EAC1 /* OrderDetailView.swift */,
 				95FDD07D2C8C69FC003F9FBF /* OrderView.swift */,
 				951D6FB52C940C800043DFBB /* PortfolioView.swift */,
+				95D3089A2C95B36E00AB3F99 /* PriceStepperView.swift */,
 				95FDD0722C8C58B2003F9FBF /* TradingPriceView.swift */,
 				952E24202C92D88200B8EAC1 /* Component */,
 			);
@@ -434,13 +457,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				95FDD06D2C8C5801003F9FBF /* Crypto.swift in Sources */,
+				95D308992C95B0DD00AB3F99 /* DoubleTextField.swift in Sources */,
 				958677A22C8D9C6D002C83F4 /* Ticker.swift in Sources */,
-				952E24242C92D91900B8EAC1 /* OrderSideView.swift in Sources */,
+				952E24242C92D91900B8EAC1 /* OrderDetailView.swift in Sources */,
 				95FDD07E2C8C69FC003F9FBF /* OrderView.swift in Sources */,
 				951D6FB62C940C800043DFBB /* PortfolioView.swift in Sources */,
 				952B4C082C953EFD00D33FA6 /* DonutSlice.swift in Sources */,
 				952E242A2C92DC4000B8EAC1 /* Double.swift in Sources */,
 				956EC9A72C8EDD3900165FC5 /* CandleViewModel.swift in Sources */,
+				95D308952C9596D000AB3F99 /* APIClient.swift in Sources */,
 				9586779D2C8D825B002C83F4 /* AskPriceView.swift in Sources */,
 				95FDD07A2C8C598B003F9FBF /* MainView.swift in Sources */,
 				952E241B2C92C5DD00B8EAC1 /* SearchViewModel.swift in Sources */,
@@ -451,13 +476,16 @@
 				958677A72C8DAD8D002C83F4 /* CryptoDto.swift in Sources */,
 				958677A52C8D9D9A002C83F4 /* SortedArray.swift in Sources */,
 				952B4C0C2C95536900D33FA6 /* CryptoAssetDto.swift in Sources */,
+				95D308972C95978A00AB3F99 /* APIEndpoint.swift in Sources */,
 				952E241D2C92D56400B8EAC1 /* OrderViewModel.swift in Sources */,
+				95D3089D2C95B95800AB3F99 /* OrderCreateDto.swift in Sources */,
 				95FDD0402C8C5534003F9FBF /* crypto_trader_macosApp.swift in Sources */,
 				95DD18682C92A8FD0083F531 /* Comparable.swift in Sources */,
 				956EC9AB2C8EE47C00165FC5 /* CandleRequestDto.swift in Sources */,
 				951D6FB42C93FE6B0043DFBB /* CryptoAssets.swift in Sources */,
 				952E24222C92D89200B8EAC1 /* RadioButton.swift in Sources */,
 				9586779F2C8D9139002C83F4 /* WebSocketManager.swift in Sources */,
+				95D3089B2C95B36E00AB3F99 /* PriceStepperView.swift in Sources */,
 				952E24262C92DB3C00B8EAC1 /* OrderType.swift in Sources */,
 				951D6FB22C93FE640043DFBB /* Account.swift in Sources */,
 				95FDD07C2C8C599D003F9FBF /* CryptoListView.swift in Sources */,

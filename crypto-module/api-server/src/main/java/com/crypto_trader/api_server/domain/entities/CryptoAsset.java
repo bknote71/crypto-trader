@@ -1,7 +1,9 @@
 package com.crypto_trader.api_server.domain.entities;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
+@Getter
 @Entity
 public class CryptoAsset {
 
@@ -22,14 +24,6 @@ public class CryptoAsset {
         this.market = market;
         this.amount = amount;
         this.avgPrice = avgPrice;
-    }
-
-    public String getMarket() {
-        return market;
-    }
-
-    public Number getAmount() {
-        return amount;
     }
 
     public void setUser(UserEntity user) {

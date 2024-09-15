@@ -1,14 +1,13 @@
 import SwiftUI
 
-struct OrderSideView: View {
+struct OrderDetailView: View {
   @EnvironmentObject private var orderViewModel: OrderViewModel
   @EnvironmentObject private var userViewModel: UserViewModel
   
   @Binding var side: OrderSide
-  
   @State var selectedOrderType = "지정가"
-  @State var amount: Double = 1
-  @State var price: Double = 73800000
+  
+  @FocusState private var isEditing: Bool
 
   var body: some View {
     VStack(alignment: .leading, spacing: 0) {
@@ -35,21 +34,20 @@ struct OrderSideView: View {
       .padding(.top, 4)
       .padding(.bottom, 16)
       
-      PriceStepperView(price: $price, title: "\(side.title)가격 (KRW)")
+      PriceStepperView(price: $orderViewModel.price, title: "\(side.title)가격 (KRW)")
         .padding(.bottom, 8)
       
       HStack(alignment: .center, spacing: 0) {
         Text("주문수량 (BTC)")
         Spacer()
-        HStack {
-          Spacer()
-          Text(amount.formattedPrice())
+        HStack(spacing: 0) {
+          DoubleTextField(value: $orderViewModel.amount, isEditing: isEditing)
             .padding(.trailing, 12)
-        }
+            .focused($isEditing)        }
         .frame(width: 320, height: 40)
         .overlay(
           Rectangle()
-            .stroke(Color.gray150, lineWidth: 1)
+            .stroke(isEditing ? .blue : Color.gray150, lineWidth: 1)
         )
       }
       .padding(.bottom, 8)
@@ -98,7 +96,9 @@ struct OrderSideView: View {
         Spacer()
         HStack {
           Spacer()
-          Text("\((price * amount).formattedPrice())") // price * amount
+          Text(
+            "\((orderViewModel.total).formattedPrice())"
+          ) // price * amount
             .padding(.trailing, 12)
         }
         .frame(width: 320, height: 40)
