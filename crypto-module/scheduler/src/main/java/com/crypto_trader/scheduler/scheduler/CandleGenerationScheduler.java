@@ -1,6 +1,6 @@
 package com.crypto_trader.scheduler.scheduler;
 
-import com.crypto_trader.scheduler.domain.Candle;
+import com.crypto_trader.scheduler.domain.entity.Candle;
 import com.crypto_trader.scheduler.domain.CandleState;
 import com.crypto_trader.scheduler.domain.CandleUnit;
 import com.crypto_trader.scheduler.infra.CandleMongoRepository;
@@ -54,9 +54,10 @@ public class CandleGenerationScheduler {
                 .toList();
 
         candleMongoRepository.saveAll(candles);
-
         candleStates.forEach((market, candleState) -> candleRedisRepository.saveMinuteCandle(market, candleState, CandleUnit.ONEMINUTE));
         candleStates.values().forEach(CandleState::reset); // 후처리
+
+
     }
 
     @Scheduled(cron = "*/5 * * * * *")

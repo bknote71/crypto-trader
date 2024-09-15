@@ -2,6 +2,7 @@ package com.crypto_trader.api_server.websocket;
 
 import com.crypto_trader.api_server.application.dto.CandleRequestDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.data.redis.listener.PatternTopic;
@@ -15,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static io.lettuce.core.protocol.CommandType.RPUSH;
 
+@Slf4j
 @Component
 public class CandleWebSocketHandler extends JsonWebSocketHandler<CandleRequestDto, String> {
 
@@ -39,14 +41,17 @@ public class CandleWebSocketHandler extends JsonWebSocketHandler<CandleRequestDt
         redisTemplate.opsForList()
                 .range(key, 0, -1) // 1. 최초에는 다 가져온다.
                 .doOnNext(value -> sendJsonMessage(value, session))
-                .doOnComplete(() -> subscribeLast(key, session)) // 2. 이후에 마지막 데이터만 가져오도록 한다.
+                .doOnComplete(() -> subscribeLast(key, session)) // 2. 이후에 실시간 데이터만 가져오도록 한다.
                 .subscribe();
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         super.afterConnectionClosed(session, status);
-        sessionMap.remove(session.getId());
+        Disposable disposable = sessionMap.remove(session.getId());
+        if(disposable != null) {
+            disposable.dispose();
+        }
     }
 
     public void subscribeLast(String key, WebSocketSession session) {
@@ -54,9 +59,9 @@ public class CandleWebSocketHandler extends JsonWebSocketHandler<CandleRequestDt
         Disposable subscribe = redisTemplate
                 .listenTo(topic)
                 .subscribe(value -> {
+                    log.debug("Received event: {}", value.getMessage());
                     if (!value.getMessage().equals(RPUSH.name().toLowerCase()))
                         return;
-
                     String message = redisTemplate.opsForList()
                             .range(key, -1, -1)
                             .blockFirst();

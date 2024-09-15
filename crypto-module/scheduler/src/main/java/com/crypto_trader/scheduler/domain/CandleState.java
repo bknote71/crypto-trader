@@ -14,7 +14,7 @@ public class CandleState {
 
     private LocalDateTime time;
 
-    public CandleState() {}
+    protected CandleState() {}
 
     public CandleState(double value) {
         this.open = value;

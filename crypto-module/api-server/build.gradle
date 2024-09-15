@@ -37,6 +37,10 @@ dependencies {
     // Test dependencies
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    // mongodb
+    implementation 'org.springframework.data:spring-data-mongodb'
+    implementation 'org.mongodb:mongodb-driver-sync:5.1.2'
 }
 
 dependencyManagement {

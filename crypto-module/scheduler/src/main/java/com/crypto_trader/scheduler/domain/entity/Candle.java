@@ -1,12 +1,14 @@
-package com.crypto_trader.scheduler.domain;
+package com.crypto_trader.scheduler.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
-@Document(collation = "candles")
+@Getter
+@Document(collection = "candle")
 public class Candle {
 
     @Id
@@ -30,35 +32,4 @@ public class Candle {
         this.time = LocalDateTime.now().withSecond(0).withNano(0);
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getMarket() {
-        return market;
-    }
-
-    public double getOpen() {
-        return open;
-    }
-
-    public double getClose() {
-        return close;
-    }
-
-    public double getHigh() {
-        return high;
-    }
-
-    public double getLow() {
-        return low;
-    }
-
-    public LocalDateTime getTime() {
-        return time;
-    }
-
-    public double getVolume() {
-        return volume;
-    }
 }

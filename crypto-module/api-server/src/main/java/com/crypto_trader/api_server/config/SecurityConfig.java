@@ -1,5 +1,8 @@
-package com.crypto_trader.api_server.auth;
+package com.crypto_trader.api_server.config;
 
+import com.crypto_trader.api_server.auth.JwtRequestFilter;
+import com.crypto_trader.api_server.auth.JwtUtil;
+import com.crypto_trader.api_server.auth.UserDetailsDBService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;

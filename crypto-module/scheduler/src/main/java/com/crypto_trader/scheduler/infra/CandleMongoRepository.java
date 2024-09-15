@@ -1,7 +1,6 @@
 package com.crypto_trader.scheduler.infra;
 
-import com.crypto_trader.scheduler.domain.Candle;
-import jakarta.annotation.PostConstruct;
+import com.crypto_trader.scheduler.domain.entity.Candle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.BulkOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -9,6 +8,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -33,6 +33,12 @@ public class CandleMongoRepository {
 
     public List<Candle> findCandlesByMarket(String market) {
         Query query = new Query(Criteria.where("market").is(market));
+        return mongoTemplate.find(query, Candle.class);
+    }
+
+    public List<Candle> findCandlesByMarketAndTime(String market, LocalDateTime startTime) {
+        Query query = new Query(Criteria.where("market").is(market)
+                .and("time").gte(startTime));  // 48시간 이내의 데이터
         return mongoTemplate.find(query, Candle.class);
     }
 }

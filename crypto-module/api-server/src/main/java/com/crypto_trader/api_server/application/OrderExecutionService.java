@@ -11,47 +11,37 @@ import com.crypto_trader.api_server.infra.TickerRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.LockModeType;
-import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.Disposable;
 import reactor.core.publisher.Sinks;
 
 import java.time.Duration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
 public class OrderExecutionService {
 
-    private final OrderRepository orderRepository;
+    private final OrderService orderService;
     private final TickerRepository tickerRepository;
     private final SimpleMarketRepository marketRepository;
     private final ObjectMapper objectMapper;
-
     private final ApplicationEventPublisher eventPublisher;
-
-
-    @PersistenceContext
-    private EntityManager em;
 
     private final Map<String, Sinks.Many<Ticker>> sinkMap = new HashMap<>();
     private final Map<String, Disposable> subscriptionMap = new HashMap<>();
 
-
     @Autowired
-    public OrderExecutionService(OrderRepository orderRepository,
+    public OrderExecutionService(OrderService orderService,
                                  TickerRepository tickerRepository,
                                  SimpleMarketRepository marketRepository,
                                  ObjectMapper objectMapper,
                                  ApplicationEventPublisher eventPublisher) {
-        this.orderRepository = orderRepository;
+        this.orderService = orderService;
         this.tickerRepository = tickerRepository;
         this.marketRepository = marketRepository;
         this.objectMapper = objectMapper;
@@ -60,57 +50,67 @@ public class OrderExecutionService {
 
     @PostConstruct
     public void init() {
-        marketRepository.marketCodesUpdates()
-                .subscribe(codes -> {
-                    subscriptionMap.values().forEach(Disposable::dispose);
-                    subscriptionMap.clear();
-                    sinkMap.clear();
+        // 시장 코드 업데이트에 따른 구독 설정
+        marketRepository.marketCodesUpdates().subscribe(this::updateMarketSubscriptions);
 
-                    for (String code : codes) {
-                        Sinks.Many<Ticker> sink = Sinks.many().unicast().onBackpressureBuffer();
-                        sinkMap.put(code, sink);
-
-                        Disposable subscription = sink.asFlux()
-                                .sampleFirst(Duration.ofSeconds(1)) // 1초에 첫 번째만 받아서 처리 (sample은 마지막 값을 처리)
-                                .subscribe(ticker -> eventPublisher.publishEvent(new TickerProcessingEvent(this, ticker)));
-
-                        subscriptionMap.put(code, subscription);
-                    }
-                });
-
-        tickerRepository.getChannel()
-                .subscribe(value -> {
-                    try {
-                        Ticker ticker = objectMapper.readValue(value.getMessage(), Ticker.class);
-                        tickerRepository.save(ticker);
-
-                        Sinks.Many<Ticker> sink = sinkMap.get(ticker.getMarket());
-                        if (sink == null) {
-                            throw new RuntimeException();
-                        }
-
-                        sink.tryEmitNext(ticker).orThrow();
-
-                    } catch (JsonProcessingException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+        // Ticker 채널 구독 설정
+        tickerRepository.getChannel().subscribe(value -> handleTickerMessage(value.getMessage()));
     }
 
+    /**
+     * 시장 코드 업데이트에 따라 구독과 Sink를 재설정
+     */
+    private void updateMarketSubscriptions(List<String> codes) {
+        clearSubscriptionsAndSinks();
+
+        for (String code : codes) {
+            Sinks.Many<Ticker> sink = Sinks.many().unicast().onBackpressureBuffer();
+            sinkMap.put(code, sink);
+
+            Disposable subscription = sink.asFlux()
+                    .sampleFirst(Duration.ofSeconds(1))  // 1초에 한 번 처리
+                    .subscribe(ticker -> eventPublisher.publishEvent(new TickerProcessingEvent(this, ticker)));
+
+            subscriptionMap.put(code, subscription);
+        }
+    }
+
+    /**
+     * 기존의 구독과 Sink를 정리
+     */
+    private void clearSubscriptionsAndSinks() {
+        subscriptionMap.values().forEach(Disposable::dispose);
+        subscriptionMap.clear();
+        sinkMap.clear();
+    }
+
+    /**
+     * Redis에서 받은 Ticker 메시지를 처리하여 적절한 Sink에 발행
+     */
+    private void handleTickerMessage(String message) {
+        try {
+            Ticker ticker = objectMapper.readValue(message, Ticker.class);
+            tickerRepository.save(ticker);
+
+            Sinks.Many<Ticker> sink = sinkMap.get(ticker.getMarket());
+            if (sink != null) {
+                sink.tryEmitNext(ticker).orThrow();
+            } else {
+                throw new RuntimeException("Sink not found for market: " + ticker.getMarket());
+            }
+
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to process Ticker message", e);
+        }
+    }
+
+    /**
+     * TickerProcessingEvent 를 처리하여 주문 실행
+     */
     @EventListener
-    @Transactional
-    @Lock(value = LockModeType.PESSIMISTIC_WRITE)
     public void processTicker(TickerProcessingEvent event) {
         Ticker ticker = event.getTicker();
-        String market = ticker.getMarket();
-        double tradePrice = ticker.getTradePrice();
-
-        orderRepository.findByMarket(market).stream()
-                .filter(order -> {
-                    double price = order.getPrice().doubleValue();
-                    return order.getState() == OrderState.CREATED &&
-                            (order.getSide() == OrderSide.BID) ? tradePrice <= price : tradePrice >= price;
-                })
-                .forEach(Order::execution);
+        List<Order> ordersToProcess = orderService.getOrderToProcess(ticker.getMarket(), ticker.getTradePrice());
+        ordersToProcess.forEach(orderService::processOrderWithLock);
     }
 }
