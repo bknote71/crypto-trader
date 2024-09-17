@@ -2,7 +2,7 @@ import Combine
 import Foundation
 
 // 제네릭 프로토콜: associatedtype 사용
-protocol WebSocketManager {
+protocol WSClient {
   associatedtype Content
   associatedtype Failure: Error
   
@@ -10,13 +10,13 @@ protocol WebSocketManager {
   var webSocketTask: URLSessionWebSocketTask? { get }
   var urlSession: URLSession { get }
   
-  func connect(url: String) -> PassthroughSubject<Content, Failure>
+  func connect(url: URL) -> PassthroughSubject<Content, Failure>
   func disconnect()
   func sendMessage(_ message: String)
   func receiveMessage()
 }
 
-extension WebSocketManager {
+extension WSClient {
   func sendMessage(_ message: String) {
     let message = URLSessionWebSocketTask.Message.string(message)
     webSocketTask?.send(message) { error in
@@ -29,7 +29,7 @@ extension WebSocketManager {
   }
 }
 
-class JsonWebSocketManager<V: Decodable>: WebSocketManager {
+class JsonWSClient<V: Decodable>: WSClient {
   
   private(set) var publisher = PassthroughSubject<V, Never>()
   private(set) var webSocketTask: URLSessionWebSocketTask?
@@ -70,9 +70,7 @@ class JsonWebSocketManager<V: Decodable>: WebSocketManager {
     webSocketTask != nil
   }
   
-  func connect(url: String) ->  PassthroughSubject<V, Never> {
-    guard let url = URL(string: url) else { return publisher }
-    
+  func connect(url: URL) ->  PassthroughSubject<V, Never> {
     let webSocketTask = urlSession.webSocketTask(with: url)
     webSocketTask.resume()
     self.webSocketTask = webSocketTask

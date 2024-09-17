@@ -7,44 +7,46 @@
 
 import SwiftUI
 
+enum AskPriceItem {
+  case general
+  case cumulative
+  
+  var title: String {
+    switch self {
+    case .general:
+      "일반호가"
+    case .cumulative:
+      "누적호가"
+    }
+  }
+}
+
 struct AskPriceView: View {
-  @State private var selectedTab: String = "일반호가"
+  @State private var selectedItem: AskPriceItem = .general
       
   var body: some View {
     VStack(spacing: 0) {
       // 메뉴 탭
       HStack(spacing: 0) {
-        tabButton(title: "일반호가", selectedTab: $selectedTab)
-        tabButton(title: "누적호가", selectedTab: $selectedTab)
-        tabButton(title: "호가주문", selectedTab: $selectedTab)
+        TabButton(title: "일반호가", isSelected: selectedItem == .general, width: 100, spacing: 9) {
+            // TODO
+        }
+        
+        TabButton(title: "누적호가", isSelected: selectedItem == .cumulative, width: 100, spacing: 9) {
+            // TODO
+        }
         Spacer()
       }
       
-      // 선택된 탭에 따른 뷰
-      if selectedTab == "일반호가" {
+      switch selectedItem {
+      case .general:
         GeneralAskPriceView()
+      case .cumulative:
+        Text("누적호가")
       }
-      // 다른 탭에 대한 뷰는 필요 시 추가
     }
-    .frame(width: 490, height: 360)
+    .frame(width: AskPriceViewConst.width, height: AskPriceViewConst.height)
     .background(.white)
-  }
-  
-  func tabButton(title: String, selectedTab: Binding<String>) -> some View {
-    let isSelected = selectedTab.wrappedValue == title
-    return VStack(spacing: 12) {
-      Text(title)
-        .foregroundColor(isSelected ? .blue : .black)
-        .padding(.top, 12)
-      Rectangle()
-        .frame(height: 3)
-        .foregroundColor(isSelected ? .blue : .clear)
-    }
-    .contentShape(Rectangle())
-    .onTapGesture {
-      selectedTab.wrappedValue = title
-    }
-    .frame(width: 100)
   }
 }
 

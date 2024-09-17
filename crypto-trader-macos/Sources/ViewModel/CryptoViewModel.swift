@@ -10,7 +10,7 @@ class CryptoViewModel: ObservableObject {
   private let decoder = JSONDecoder()
   private var cancellableBag = Set<AnyCancellable>()
   
-  private let tickerWebSocketManager = JsonWebSocketManager<Ticker>()
+  private let tickerWSClient = JsonWSClient<Ticker>()
   
   init() {
     fetchAllTickers()
@@ -53,8 +53,8 @@ class CryptoViewModel: ObservableObject {
         case .failure(let error):
           print("Failed with error: \(error)")
         }
-      } receiveValue: { [weak self] data in
-        guard let self else { return }
+      } receiveValue: { [weak self] (data, response) in
+        guard response.statusCode < 300, let self else { return }
         do {
           let tickers = try decoder.decode([Ticker].self, from: data)
           tickers.forEach { self.updateItem($0) }
@@ -73,8 +73,9 @@ class CryptoViewModel: ObservableObject {
     // crypto 정보가 없다면, 다시 fetch
     
     // fetch ticker
-    let tickerUrl = "ws://127.0.0.1:8090/ticker"
-    tickerWebSocketManager.connect(url: tickerUrl)
+    guard let tickerUrl = WSEndpoint.ticker.url else { return }
+
+    tickerWSClient.connect(url: tickerUrl)
       .receive(on: RunLoop.main)
       .sink { [weak self] ticker in
         self?.updateItem(ticker)

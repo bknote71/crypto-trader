@@ -4,45 +4,98 @@ import Foundation
 class CandleViewModel: ObservableObject {
   
   @Published var items = [Candle]()
+  @Published var isFetched: Bool = false
   
   private let encoder = JSONEncoder()
+  private let decoder: JSONDecoder = { // TODO: move to APIClient
+    let decoder = JSONDecoder()
+    decoder.dateDecodingStrategy = .custom { decoder in
+      let container = try decoder.singleValueContainer()
+      let dateString = try container.decode(String.self)
+      
+      // 지원하는 날짜 형식 리스트
+      let dateFormats = [
+        "yyyy-MM-dd'T'HH:mm:ss.SSSSS", // 밀리초/마이크로초 포함
+        "yyyy-MM-dd'T'HH:mm:ss",
+        "yyyy-MM-dd'T'HH:mm:ssZ",
+        "yyyy-MM-dd'T'HH:mm:ssXXXXX"
+      ]
+      
+      for format in dateFormats {
+        let formatter = DateFormatter()
+        formatter.dateFormat = format
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        
+        if let date = formatter.date(from: dateString) {
+          return date
+        }
+      }
+      
+      // 날짜가 형식에 맞지 않으면 nil 반환
+      throw DecodingError.dataCorruptedError(in: container, debugDescription: "Date string does not match expected format.")
+    }
+    return decoder
+  }()
+  
   private var cancellableBag = Set<AnyCancellable>()
   
-  private let candleWebSocketManager = JsonWebSocketManager<Candle>()
+  private let candleWSClient = JsonWSClient<Candle>()
   
   init() {
     // TODO: 1. fetch all candle data(KRW-BTC)
-//    self.items = Self.dummyData()
+    // fetchAllCandles(market: "KRW-BTC", unit: .one_minute)
+    
+    // TODO: 2. connect
+    connect()
   }
   
-  public func fetchCandle(market: String, unit: CandleUnit) {
-    // unit: ONEMINUTE, FIVEMINUTE
-    if !candleWebSocketManager.isConnected {
-      let candleUrl = "ws://127.0.0.1:8090/candle"
-      candleWebSocketManager.connect(url: candleUrl)
-        .receive(on: RunLoop.main)
-        .sink { [weak self] candle in
-          guard let self else { return }
-          
-          // TODO: - process candle data
-          
-          let adjustment: Double = candle.open == candle.close ? 10000000: 0
-          
-          let lasttime = items.last?.time ?? Date.now
-          
-          let newCandle = Candle(
-            open: candle.open,
-            close: candle.close,
-            high: candle.high,
-            low: candle.low,
-            time: lasttime + TimeInterval(60)
-          )
-          
-          items.append(newCandle)
+  public func fetchAllCandles(market: String, unit: CandleUnit) {
+    guard let allCandlesUrl = APIEndpoint.allCandles.url else { return }
+    print("fetch all candles: \(market)")
+    APIClient.shared.request(url: allCandlesUrl, param: ["market": market])
+      .filter { (_, response) in response.statusCode < 300 }
+      .map(\.0)
+      .decode(type: [Candle].self, decoder: decoder)
+      .receive(on: RunLoop.main)
+      .sink { completion in
+        switch completion {
+        case .finished:
+          break
+        case .failure(let error):
+          print("Failed with error: \(error)")
         }
-        .store(in: &cancellableBag)
-    }
+      } receiveValue: { [weak self] candles in
+        guard let self else { return }
+        print("초기화!")
+        items = [Candle]() // 초기화
+        candles.forEach { self.appendCandle($0) }
+        
+        connect()
+        send(market: market, unit: unit)
+        
+        isFetched = true
+      }
+      .store(in: &cancellableBag)
     
+    
+  }
+  
+  private func connect() {
+    guard  !candleWSClient.isConnected,
+           let candleUrl = WSEndpoint.candle.url
+    else { return }
+    
+    candleWSClient.connect(url: candleUrl)
+      .receive(on: RunLoop.main)
+      .sink { [weak self] candle in
+        guard let self else { return }
+        appendCandle(candle)
+      }
+      .store(in: &cancellableBag)
+  }
+  
+  private func send(market: String, unit: CandleUnit) {
     let dto = CandleRequestDto(market: market, unit: unit)
     do {
       let data = try encoder.encode(dto)
@@ -51,32 +104,25 @@ class CandleViewModel: ObservableObject {
         return
       }
       
-      candleWebSocketManager.sendMessage(message)
+      candleWSClient.sendMessage(message)
     } catch {
       print("err: \(error)")
     }
   }
   
-  static func dummyData() -> [Candle] {
-    var dummy = [Candle]()
-    var previousClose: Double = 100.0
+  private func appendCandle(_ candle: Candle) {
+    guard candle.time != items.last?.time else { return }
     
-    for i in 0..<100 {
-      let high = previousClose + Double.random(in: 0...30)
-      let low = previousClose - Double.random(in: 0...30)
-      let close = Double.random(in: low...high)
-      let open = previousClose // open은 이전 close 값
-      
-      // 새로운 CandleChartDataEntry 생성
-      let entry = Candle(open: open, close: close, high: high, low: low, time: Date.now + TimeInterval(60*i))
-      
-      // 엔트리를 배열에 추가
-      dummy.append(entry)
-      
-      // 현재 close 값을 다음 루프에서 사용할 수 있도록 저장
-      previousClose = close
-    }
+    let lastX = items.last?.x ?? Date.now
+    let newCandle = Candle(
+      open: candle.open,
+      close: candle.close,
+      high: candle.high,
+      low: candle.low,
+      time: candle.time,
+      x: lastX + TimeInterval(60)
+    )
     
-    return dummy
+    items.append(newCandle)
   }
 }

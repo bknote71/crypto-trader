@@ -17,6 +17,7 @@ struct CryptoListView: View {
             CryptoListItemView(item: item)
               .onTapGesture {
                 // TODO: candleViewModel.fetch ...
+                cryptoViewModel.crypto = item
               }
             divider
           }
@@ -85,13 +86,13 @@ struct CryptoListItemView: View {
         
       Text(String(format: "%.2f", item.ticker.tradePrice))
         .frame(width: 100, alignment: .trailing)
-        .foregroundColor(item.ticker.changePrice > 0 ? .red : .blue)
+        .foregroundColor(item.ticker.signedChangePrice > 0 ? .red : .blue)
         
       VStack(alignment: .trailing, spacing: 0) {
-        Text("\(item.ticker.changeRate > 0 ? "+" : "-")\(item.ticker.changeRate, specifier: "%.2f")%")
-          .foregroundColor(item.ticker.changeRate > 0 ? .red : .blue)
-        Text("\(item.ticker.changePrice, specifier: "%.2f")")
-          .foregroundColor(item.ticker.changePrice > 0 ? .red : .blue)
+        Text("\(item.ticker.signedChangeRate > 0 ? "+" : "-")\(item.ticker.signedChangeRate, specifier: "%.2f")%")
+          .foregroundColor(item.ticker.signedChangeRate > 0 ? .red : .blue)
+        Text("\(item.ticker.signedChangePrice, specifier: "%.2f")")
+          .foregroundColor(item.ticker.signedChangePrice > 0 ? .red : .blue)
           .font(.system(size: 12))
       }
       .frame(width: 75, alignment: .trailing)

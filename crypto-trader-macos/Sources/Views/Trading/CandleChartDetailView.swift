@@ -1,15 +1,17 @@
 import SwiftUI
 import Charts
 
-struct CandleChartView: View {
+struct CandleChartDetailView: View {
   
   @EnvironmentObject var candleViewModel: CandleViewModel
+  @EnvironmentObject var cryptoViewModel: CryptoViewModel
+  
   @State private var dragOffset: CGFloat = 0
   @State private var totalDragOffset: CGFloat = 0
   
-  // 뷰 모델로 빼기
   @State private var visibleCandles: [Candle] = []
   @State private var lastCount: Int = 0
+  @State private var lastCrypto: Crypto?
   
   // 쓰로틀링
   @State private var lastDragTime = Date()
@@ -53,6 +55,22 @@ struct CandleChartView: View {
           )
           .frame(width: visibleWidth, height: geo.size.height)
           .clipped()
+          .onReceive(candleViewModel.$items) { value in
+            if value.count != lastCount {
+              totalDragOffset -= candleTotalWidth
+              if totalDragOffset > maxOffset {
+                totalDragOffset = maxOffset
+              } else if totalDragOffset < minOffset {
+                totalDragOffset = minOffset
+              }
+              lastCount = value.count
+              
+              if candleViewModel.isFetched {
+                // 최초에
+//                totalDragOffset = minOffset
+              }
+            }
+          }
         
         YAxisView(visibleCandles: $visibleCandles)
           .frame(width: 30) // 원하는 고정된 너비
@@ -70,7 +88,12 @@ struct CandleChartView: View {
     .onAppear {
       // 뷰가 나타날 때 초기 보이는 캔들 업데이트
       updateVisibleCandles(geo: nil)
-      candleViewModel.fetchCandle(market: "KRW-BTC", unit: .one_minute)
+//      candleViewModel.fetchCandle(market: "KRW-BTC", unit: .one_minute)
+    }
+    .onReceive(cryptoViewModel.$crypto) { crypto in
+      guard let crypto, crypto.market != lastCrypto?.market else { return }
+      lastCrypto = crypto
+      candleViewModel.fetchAllCandles(market: crypto.market, unit: .one_minute)
     }
   }
   
@@ -88,7 +111,7 @@ struct CandleChartView: View {
         let normalizedLow = ((candle.low - minPrice) / (maxPrice - minPrice)) * 100
         
         CandleStickMark(
-          timestamp: .value("Date", candle.time),
+          timestamp: .value("Date", candle.x),
           open: normalizedOpen,
           close: normalizedClose,
           high: .value("High", normalizedHigh),
@@ -99,16 +122,8 @@ struct CandleChartView: View {
       .chartXAxis(.hidden)
       .chartYAxis(.hidden)
       // TODO: 이거 두 개 조합하면 어떻게든 안될까?
-//      .chartYScale(range: <#T##PositionScaleRange#>)
+//      .chartYScale(range: getYScaleRange(geo: geo))
 //      .chartYVisibleDomain(length: <#T##Plottable & Numeric#>)
-      .onReceive(candleViewModel.$items) { value in
-        if value.count != lastCount {
-          totalDragOffset -= candleTotalWidth
-          lastCount = value.count
-          
-          print("last count: \(lastCount)")
-        }
-      }
       .id(lastCount)
     }
   }
@@ -128,11 +143,6 @@ struct CandleChartView: View {
     // 현재 보이는 캔들들
     // endIndex가. 마지막 - 2) 아래라면 - 2
     visibleCandles = Array(candleViewModel.items[startIndex...endIndex])
-  }
-  
-  func getYScaleRange(geo: GeometryProxy) -> ClosedRange<CGFloat> {
-    // 흠................................................
-    return 0...0
   }
 }
 
@@ -190,5 +200,5 @@ struct YAxisView: View {
 }
 
 #Preview {
-    CandleChartView()
+    CandleChartDetailView()
 }

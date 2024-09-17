@@ -14,7 +14,7 @@ struct OrderView: View {
       
       OrderDetailView(side: $orderViewModel.currentSide)
     }
-    .frame(width: 452, height: 360)
+    .frame(width: OrderViewConst.width, height: OrderViewConst.height)
     .padding(0)
     .background(.white)
   }
@@ -24,7 +24,7 @@ struct OrderView: View {
     let title = side.title
     let color = side.color
     
-    return VStack(spacing: 12) {
+    return VStack(spacing: 9) {
       Text(title)
         .foregroundColor(isSelected ? color : .black)
         .padding(.top, 12)

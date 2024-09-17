@@ -58,4 +58,19 @@ extension Array where Element: Comparable {
     }
     return low
   }
+  
+//  func binarySearch(_ isOrderedBefore: (Element) -> Bool) -> Index {
+//      var lo = startIndex - 1
+//      var hi = endIndex
+//      
+//      while lo + 1 < hi {
+//          let mid = (lo + hi) / 2
+//          if isOrderedBefore(self[mid]) {
+//              lo = mid
+//          } else {
+//              hi = mid
+//          }
+//      }
+//      return hi
+//  }
 }

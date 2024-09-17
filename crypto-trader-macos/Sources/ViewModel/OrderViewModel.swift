@@ -58,7 +58,8 @@ class OrderViewModel: ObservableObject {
           case .failure(let error):
             print("Order creation request failed with error: \(error)")
           }
-        }, receiveValue: { data in
+        }, receiveValue: { (data, response) in
+          guard response.statusCode < 300 else { return }
           print("Received response data: \(String(data: data, encoding: .utf8))")
         })
         .store(in: &cancellableBag)

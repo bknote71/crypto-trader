@@ -9,13 +9,13 @@ class APIClient {
     self.jwtToken = token
   }
   
-  // POST 요청 메서드
+  // http 요청 메서드
   func request(
     url: URL,
     post: Bool = false,
     param: [String: String]? = nil,
     body: Data? = nil
-  ) -> AnyPublisher<Data, URLError> {
+  ) -> AnyPublisher<(Data, HTTPURLResponse), URLError> {
     var request = URLRequest(url: url)
     
     if post {
@@ -44,7 +44,7 @@ class APIClient {
     
     // URLSession의 DataTaskPublisher 사용
     return URLSession.shared.dataTaskPublisher(for: request)
-      .map(\.data) // 응답에서 data만 추출
+      .map{ return ($0.data, $0.response as! HTTPURLResponse ) } // 응답에서 data만 추출
       .eraseToAnyPublisher() // AnyPublisher로 타입 지우기
   }
 }

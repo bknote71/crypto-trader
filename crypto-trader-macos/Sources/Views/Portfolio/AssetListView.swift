@@ -1,64 +1,15 @@
-import Charts
 import SwiftUI
 
-struct PortfolioView: View {
+
+struct AssetListView: View {
   @EnvironmentObject var userViewModel: UserViewModel
   
-  @State private var selectedTab = "보유자산"
   @State private var animate: Bool = false
   
   var body: some View {
-    VStack(spacing: 0) {
-      HStack {
-        tabBar
-        Spacer()
-      }
-      Color(Color.gray100)
-        .frame(height: 1)
-      
-      if selectedTab == "보유자산" {
-        summaryView
-        Divider()
-        assetListView
-      }
-      Spacer()
-    }
-    .frame(width: 950)
-    .background(.white)
-    .onAppear {
-      userViewModel.fetchUserInfo()
-    }
-  }
-  
-  var tabBar: some View {
-    HStack(spacing: 0) {
-      tabButton(title: "보유자산", isSelected: selectedTab == "보유자산") {
-        selectedTab = "보유자산"
-      }
-      tabButton(title: "거래내역", isSelected: selectedTab == "거래내역") {
-        selectedTab = "거래내역"
-      }
-      tabButton(title: "미체결", isSelected: selectedTab == "미체결") {
-        selectedTab = "미체결"
-      }
-    }
-  }
-  
-  func tabButton(title: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
-    VStack(alignment: .center, spacing: 9) {
-      Text(title)
-        .font(.title3)
-        .foregroundColor(isSelected ? .blue : .black)
-        .padding(.top, 12)
-      Rectangle()
-        .frame(height: 3)
-        .foregroundColor(isSelected ? .blue : .clear)
-    }
-    .frame(width: 150)
-    .contentShape(Rectangle())
-    .onTapGesture {
-      action()
-    }
+    summaryView
+    Divider()
+    assetListDetailView
   }
   
   var summaryView: some View {
@@ -212,7 +163,7 @@ struct PortfolioView: View {
     GridItem(.flexible(), spacing: 0, alignment: .trailing), // 평가손익
   ]
   
-  var assetListView: some View {
+  var assetListDetailView: some View {
     VStack(alignment: .leading, spacing: 0) {
       Text("보유자산 목록")
         .font(.title2)
@@ -288,13 +239,8 @@ struct PortfolioView: View {
       }
     }
   }
-  
-  var columnDivider: some View {
-    Color(Color.gray100)
-      .frame(width: 1)
-  }
 }
 
 #Preview {
-    PortfolioView()
+    AssetListView()
 }

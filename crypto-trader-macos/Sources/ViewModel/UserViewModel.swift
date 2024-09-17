@@ -32,9 +32,11 @@ class UserViewModel: ObservableObject {
         case .failure(let error):
           print("Failed with error: \(error)")
         }
-      } receiveValue: { [weak self] data in
-        // TODO: - parse token
-        guard let token = String(data: data, encoding: .utf8) else { return }
+      } receiveValue: { [weak self] (data, response) in
+        guard 
+          response.statusCode < 300,
+          let token = String(data: data, encoding: .utf8)
+        else { return }
         APIClient.shared.setToken(token)
         self?.fetchUserInfo()
       }
@@ -45,6 +47,8 @@ class UserViewModel: ObservableObject {
     guard let url = APIEndpoint.userInfo.url else { return }
     
     APIClient.shared.request(url: url)
+      .filter { (_, response) in response.statusCode < 300 }
+      .map(\.0)
       .decode(type: UserInfo.self, decoder: decoder)
       .receive(on: RunLoop.main)
       .sink { completion in

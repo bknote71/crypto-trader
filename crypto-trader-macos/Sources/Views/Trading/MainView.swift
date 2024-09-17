@@ -20,8 +20,7 @@ struct MainView: View {
       CryptoListView()
     }
     .background(Color.gray.opacity(0.1))
-    // width: 950 + 400 + 8 + 68,
-    .frame(height: 868)
+    .frame(height: MainViewConst.height)
   }
   
   var sidebarView: some View {
