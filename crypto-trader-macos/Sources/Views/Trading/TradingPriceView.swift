@@ -40,11 +40,13 @@ struct TradingPriceView: View {
   var header: some View {
     return HStack(alignment: .center, spacing: 0) {
       HStack(spacing: 0) {
-        Image(systemName: "bitcoinsign.circle.fill")
-          .resizable()
-          .frame(width: 24, height: 24)
-          .padding(.trailing, 4)
-          .foregroundStyle(.orange)
+        if let image = cryptoViewModel.crypto?.image.image {
+          Image(nsImage:  image)
+            .resizable()
+            .frame(width: 24, height: 24)
+            .padding(.trailing, 4)
+            .foregroundStyle(.orange)
+        }
         
         Text(cryptoViewModel.crypto!.nameKr)
           .font(.title3)

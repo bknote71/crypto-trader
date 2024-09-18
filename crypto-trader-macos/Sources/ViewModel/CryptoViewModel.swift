@@ -1,3 +1,4 @@
+import AppKit
 import Combine
 import Foundation
 
@@ -5,7 +6,18 @@ class CryptoViewModel: ObservableObject {
   static let shared = CryptoViewModel()
   
   @Published var items = SortedArray<Crypto>()
-  @Published var crypto: Crypto?
+
+  @Published var crypto: Crypto? {
+    didSet {
+      if let crypto = crypto {
+        if 
+          !crypto.image.isLoaded &&
+          !crypto.image.isLoading {
+          fetchCryptoImage(for: crypto)
+        }
+      }
+    }
+  }
   
   private let decoder = JSONDecoder()
   private var cancellableBag = Set<AnyCancellable>()
@@ -119,10 +131,136 @@ class CryptoViewModel: ObservableObject {
       self.crypto = newCrypto
     }
     
-    if items.allElements().contains(where: { $0.market == ticker.code }) {
-       items.update(where: { $0.market == ticker.code }, with: newCrypto)
+    if let idx = items.firstIndex(where: { $0.market == ticker.code }) {
+      newCrypto.image = items[idx].image
+      items.update(where: { $0.market == ticker.code }, with: newCrypto)
     } else {
       items.insert(newCrypto)
     }
   }
+  
+  private func generateImageUrl(for symbol: String) -> String {
+    return "https://cryptoicons.org/api/icon/\(symbol)/200"
+  }
+  
+  private func fetchCryptoImage(for crypto: Crypto) {
+    guard 
+      !crypto.image.isLoading,
+      !crypto.image.isLoaded,
+      let symbol = symbolToFullName[crypto.market] else {
+      return
+    }
+        
+    let apiUrl = "https://api.coingecko.com/api/v3/coins/\(symbol)"
+    guard let url = URL(string: apiUrl) else { return }
+    
+    crypto.image.isLoading = true
+    
+    APIClient.shared.request(url: url)
+      .receive(on: RunLoop.main)
+      .sink{ [weak self] completion in
+        switch completion {
+        case .finished:
+          break
+        case .failure(let error):
+          print("Failed to fetch coin data: \(error.localizedDescription)")
+          self?.updateCryptoImageState(for: crypto)
+        }
+      } receiveValue: { [weak self] (data, response) in
+        guard response.statusCode < 300 else {
+          self?.updateCryptoImageState(for: crypto)
+            return
+        }
+        
+        do {
+          // JSON 데이터 파싱
+          if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+             let imageInfo = json["image"] as? [String: String],
+             let imageUrl = imageInfo["thumb"] {
+            self?.loadCryptoImage(from: imageUrl, for: crypto)
+          }
+        } catch {
+          print("Failed to parse JSON: \(error.localizedDescription)")
+          self?.updateCryptoImageState(for: crypto)
+        }
+      }
+      .store(in: &cancellableBag)
+  }
+  
+  private func loadCryptoImage(from urlString: String, for crypto: Crypto) {
+    guard let url = URL(string: urlString) else { return }
+    
+    APIClient.shared.fetchImageData(url: url)
+      .receive(on: RunLoop.main)
+      .sink { [weak self] completion in
+        switch completion {
+        case .finished:
+          break
+        case .failure(let error):
+          self?.updateCryptoImageState(isLoading: false, isLoaded: false, for: crypto)
+        }
+      } receiveValue: { [weak self] (data, response) in
+        guard let data, let image = NSImage(data: data) else { return }
+        self?.updateCryptoImageState(isLoading: true, isLoaded: true, with: image, for: crypto)
+      }
+      .store(in: &cancellableBag)
+  }
+  
+  private func updateCryptoImageState(
+    isLoading: Bool = false,
+    isLoaded: Bool = false,
+    with image: NSImage? = nil,
+    for crypto: Crypto
+  ) {
+    if let index = items.firstIndex(where: { $0.market == crypto.market }) {
+      let updatedCrypto = items[index]
+      updatedCrypto.image.isLoading = isLoading
+      updatedCrypto.image.isLoaded = isLoaded
+      updatedCrypto.image.image = image
+      
+      self.crypto = updatedCrypto
+      items.update(where: { $0.market == crypto.market }, with: updatedCrypto)
+    }
+  }
 }
+
+let symbolToFullName: [String: String] = [
+    "KRW-BTC": "bitcoin",
+    "KRW-ETH": "ethereum",
+    "KRW-XRP": "ripple",
+    "KRW-ADA": "cardano",
+    "KRW-BCH": "bitcoin-cash",
+    "KRW-LTC": "litecoin",
+    "KRW-EOS": "eos",
+    "KRW-XLM": "stellar",
+    "KRW-DOT": "polkadot",
+    "KRW-TRX": "tron",
+    "KRW-BNB": "binancecoin",
+    "KRW-SOL": "solana",
+    "KRW-AVAX": "avalanche",
+    "KRW-UNI": "uniswap",
+    "KRW-ATOM": "cosmos",
+    "KRW-LINK": "chainlink",
+    "KRW-ALGO": "algorand",
+    "KRW-FTM": "fantom",
+    "KRW-SAND": "the-sandbox",
+    "KRW-MANA": "decentraland",
+    "KRW-AXS": "axie-infinity",
+    "KRW-NEO": "neo",
+    "KRW-KLAY": "klaytn",
+    "KRW-ICX": "icon",
+    "KRW-QTUM": "qtum",
+    "KRW-VET": "vechain",
+    "KRW-CHZ": "chiliz",
+    "KRW-MATIC": "polygon",
+    "KRW-ENJ": "enjincoin",
+    "KRW-THETA": "theta",
+    "KRW-HBAR": "hedera-hashgraph",
+    "KRW-XEM": "nem",
+    "KRW-ZIL": "zilliqa",
+    "KRW-OMG": "omg-network",
+    "KRW-ANKR": "ankr",
+    "KRW-AAVE": "aave",
+    "KRW-BAT": "basic-attention-token"
+    // 필요한 심볼-전체 이름 추가 가능
+]

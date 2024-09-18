@@ -12,8 +12,7 @@ struct SortedArray<Element: Comparable> {
 
   mutating func update(where predicate: (Element) -> Bool, with newElement: Element) {
     if let index = elements.firstIndex(where: predicate) {
-      elements.remove(at: index)
-      insert(newElement)
+      elements[index] = newElement
     }
   }
   

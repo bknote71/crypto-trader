@@ -1,5 +1,6 @@
-import Foundation
 import Combine
+import Foundation
+
 
 class APIClient {
   static let shared = APIClient()
@@ -46,5 +47,28 @@ class APIClient {
     return URLSession.shared.dataTaskPublisher(for: request)
       .map{ return ($0.data, $0.response as! HTTPURLResponse ) } // 응답에서 data만 추출
       .eraseToAnyPublisher() // AnyPublisher로 타입 지우기
+  }
+  
+  func fetchImageData(url: URL) -> AnyPublisher<(Data?, HTTPURLResponse?), URLError> {
+    let cacheDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+    let safeFileName = url.deletingPathExtension().lastPathComponent
+    let cachedUrl = cacheDirectory.appendingPathComponent(safeFileName, conformingTo: .png)
+    
+    if
+      FileManager.default.fileExists(atPath: cachedUrl.path),
+      let localData = try? Data(contentsOf: cachedUrl) {
+      return Just((localData, nil))
+        .setFailureType(to: URLError.self)
+        .eraseToAnyPublisher()
+    }
+    
+    let request = URLRequest(url: url)
+    
+    return URLSession.shared.dataTaskPublisher(for: request)
+      .map { output -> (Data, HTTPURLResponse) in
+        try? output.data.write(to: cachedUrl)
+        return (output.data, output.response as! HTTPURLResponse)
+      }
+      .eraseToAnyPublisher()
   }
 }
