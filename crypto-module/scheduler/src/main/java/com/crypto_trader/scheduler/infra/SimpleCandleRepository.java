@@ -16,7 +16,7 @@ public class SimpleCandleRepository {
         return candleStates;
     }
 
-    public void update(String market, double value) {
+    public void update(String market, double value, double volume) {
         CandleState candleState = candleStates.get(market);
 
         if (candleState == null) {
@@ -24,7 +24,7 @@ public class SimpleCandleRepository {
             return;
         }
 
-        candleState.update(value);
+        candleState.update(value, volume);
     }
 
     public void saveAllState() {

@@ -1,16 +1,12 @@
 import AppKit
 import Foundation
 
-struct CryptoItem: Decodable {
-  let market: String
-  let nameKr: String
-  let nameEn: String
-}
 
 class Crypto: Comparable, Equatable {
   let market: String
   let nameKr: String
   let nameEn: String
+  let startDate: Date = Date.now // TODO: - start date from cryptodto
   var ticker: Ticker
   var image: CryptoImage
   

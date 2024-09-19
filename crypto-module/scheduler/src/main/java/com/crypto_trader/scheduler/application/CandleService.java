@@ -63,7 +63,7 @@ public class CandleService {
                     String message = value.getMessage();
                     try {
                         Ticker ticker = objectMapper.readValue(message, Ticker.class);
-                        candleRepository.update(ticker.getCode(), ticker.getTradePrice());
+                        candleRepository.update(ticker.getMarket(), ticker.getTradePrice(), ticker.getAccTradeVolume());
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }

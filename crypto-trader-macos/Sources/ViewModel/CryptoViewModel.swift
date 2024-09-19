@@ -48,7 +48,7 @@ class CryptoViewModel: ObservableObject {
       return nil
     }
     
-    return items.allElements()[index]
+    return items[index]
   }
   
   // MARK: - Privacy
@@ -133,14 +133,10 @@ class CryptoViewModel: ObservableObject {
     
     if let idx = items.firstIndex(where: { $0.market == ticker.code }) {
       newCrypto.image = items[idx].image
-      items.update(where: { $0.market == ticker.code }, with: newCrypto)
+      items.update(idx, with: newCrypto)
     } else {
       items.insert(newCrypto)
     }
-  }
-  
-  private func generateImageUrl(for symbol: String) -> String {
-    return "https://cryptoicons.org/api/icon/\(symbol)/200"
   }
   
   private func fetchCryptoImage(for crypto: Crypto) {
@@ -196,8 +192,8 @@ class CryptoViewModel: ObservableObject {
         switch completion {
         case .finished:
           break
-        case .failure(let error):
-          self?.updateCryptoImageState(isLoading: false, isLoaded: false, for: crypto)
+        case .failure(_):
+          self?.updateCryptoImageState(for: crypto)
         }
       } receiveValue: { [weak self] (data, response) in
         guard let data, let image = NSImage(data: data) else { return }
@@ -219,7 +215,7 @@ class CryptoViewModel: ObservableObject {
       updatedCrypto.image.image = image
       
       self.crypto = updatedCrypto
-      items.update(where: { $0.market == crypto.market }, with: updatedCrypto)
+      items.update(index, with: updatedCrypto)
     }
   }
 }

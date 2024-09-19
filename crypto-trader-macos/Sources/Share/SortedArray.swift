@@ -9,16 +9,13 @@ struct SortedArray<Element: Comparable> {
     let index = elements.binarySearch { $0 < newElement }
     elements.insert(newElement, at: index)
   }
-
-  mutating func update(where predicate: (Element) -> Bool, with newElement: Element) {
-    if let index = elements.firstIndex(where: predicate) {
-      elements[index] = newElement
-    }
+  
+  mutating func update(_ index: Int, with newElement: Element) {
+    elements[index] = newElement
   }
   
   mutating func insertAll(_ values: [Element]) {
     for value in values {
-      print(value)
       insert(value)
     }
   }

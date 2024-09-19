@@ -23,13 +23,14 @@ public class Candle {
 
     public Candle() {}
 
-    public Candle(String market, double open, double close, double high, double low) {
+    public Candle(String market, double open, double close, double high, double low, double volume) {
         this.market = market;
         this.open = open;
         this.close = close;
         this.high = high;
         this.low = low;
         this.time = LocalDateTime.now().withSecond(0).withNano(0);
+        this.volume = volume;
     }
 
 }

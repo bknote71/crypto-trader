@@ -3,6 +3,7 @@ package com.crypto_trader.scheduler.domain;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
+@Getter
 public class Ticker {
     @JsonProperty("code")
     private String market; // 마켓 코드
@@ -20,11 +21,21 @@ public class Ticker {
     private double lowPrice; // 저가
     @JsonProperty("acc_trade_volume_24h")
     private double accTradeVolume24h; // 24시간 누적 거래량
+    @JsonProperty("acc_trade_volume")
+    private double accTradeVolume;
 
     public Ticker() {
     }
 
-    public Ticker(final String market, final double tradePrice, final double accTradePrice24h, final double signedChangePrice, final double signedChangeRate, final double highPrice, final double lowPrice, final double accTradeVolume24h) {
+    public Ticker(final String market,
+                  final double tradePrice,
+                  final double accTradePrice24h,
+                  final double signedChangePrice,
+                  final double signedChangeRate,
+                  final double highPrice,
+                  final double lowPrice,
+                  final double accTradeVolume24h,
+                  final double accTradeVolume) {
         this.market = market;
         this.tradePrice = tradePrice;
         this.accTradePrice24h = accTradePrice24h;
@@ -33,38 +44,6 @@ public class Ticker {
         this.highPrice = highPrice;
         this.lowPrice = lowPrice;
         this.accTradeVolume24h = accTradeVolume24h;
+        this.accTradeVolume = accTradeVolume;
     }
-
-    public String getCode() {
-        return market;
-    }
-
-    public double getTradePrice() {
-        return tradePrice;
-    }
-
-    public double getAccTradePrice24h() {
-        return accTradePrice24h;
-    }
-
-    public double getSignedChangePrice() {
-        return signedChangePrice;
-    }
-
-    public double getSignedChangeRate() {
-        return signedChangeRate;
-    }
-
-    public double getHighPrice() {
-        return highPrice;
-    }
-
-    public double getLowPrice() {
-        return lowPrice;
-    }
-
-    public double getAccTradeVolume24h() {
-        return accTradeVolume24h;
-    }
-
 }

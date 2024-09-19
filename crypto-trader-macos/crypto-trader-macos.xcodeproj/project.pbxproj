@@ -12,6 +12,9 @@
 		951D6FB22C93FE640043DFBB /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951D6FB12C93FE640043DFBB /* Account.swift */; };
 		951D6FB42C93FE6B0043DFBB /* CryptoAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951D6FB32C93FE6B0043DFBB /* CryptoAssets.swift */; };
 		951D6FB62C940C800043DFBB /* PortfolioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951D6FB52C940C800043DFBB /* PortfolioView.swift */; };
+		95217F182C9C0F780070EFF4 /* CandleChartRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95217F172C9C0F780070EFF4 /* CandleChartRepresentable.swift */; };
+		95217F1B2C9C0F920070EFF4 /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = 95217F1A2C9C0F920070EFF4 /* DGCharts */; };
+		95217F1E2C9C2E300070EFF4 /* BarChartRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95217F1D2C9C2E300070EFF4 /* BarChartRepresentable.swift */; };
 		952B4C082C953EFD00D33FA6 /* DonutSlice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952B4C072C953EFD00D33FA6 /* DonutSlice.swift */; };
 		952B4C0A2C95527400D33FA6 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952B4C092C95527400D33FA6 /* UserInfo.swift */; };
 		952B4C0C2C95536900D33FA6 /* CryptoAssetDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952B4C0B2C95536900D33FA6 /* CryptoAssetDto.swift */; };
@@ -38,7 +41,6 @@
 		958677A52C8D9D9A002C83F4 /* SortedArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 958677A42C8D9D9A002C83F4 /* SortedArray.swift */; };
 		958677A72C8DAD8D002C83F4 /* CryptoDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 958677A62C8DAD8D002C83F4 /* CryptoDto.swift */; };
 		95A62A822C97252E00941A34 /* WSEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A62A812C97252E00941A34 /* WSEndpoint.swift */; };
-		95B16F592C926C8B0009672C /* CandleChartDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95B16F582C926C8B0009672C /* CandleChartDetailView.swift */; };
 		95D308952C9596D000AB3F99 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D308942C9596D000AB3F99 /* APIClient.swift */; };
 		95D308972C95978A00AB3F99 /* APIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D308962C95978A00AB3F99 /* APIEndpoint.swift */; };
 		95D308992C95B0DD00AB3F99 /* DoubleTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D308982C95B0DD00AB3F99 /* DoubleTextField.swift */; };
@@ -83,6 +85,8 @@
 		951D6FB12C93FE640043DFBB /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		951D6FB32C93FE6B0043DFBB /* CryptoAssets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoAssets.swift; sourceTree = "<group>"; };
 		951D6FB52C940C800043DFBB /* PortfolioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioView.swift; sourceTree = "<group>"; };
+		95217F172C9C0F780070EFF4 /* CandleChartRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleChartRepresentable.swift; sourceTree = "<group>"; };
+		95217F1D2C9C2E300070EFF4 /* BarChartRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarChartRepresentable.swift; sourceTree = "<group>"; };
 		952B4C072C953EFD00D33FA6 /* DonutSlice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonutSlice.swift; sourceTree = "<group>"; };
 		952B4C092C95527400D33FA6 /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		952B4C0B2C95536900D33FA6 /* CryptoAssetDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoAssetDto.swift; sourceTree = "<group>"; };
@@ -110,7 +114,6 @@
 		958677A42C8D9D9A002C83F4 /* SortedArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortedArray.swift; sourceTree = "<group>"; };
 		958677A62C8DAD8D002C83F4 /* CryptoDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoDto.swift; sourceTree = "<group>"; };
 		95A62A812C97252E00941A34 /* WSEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSEndpoint.swift; sourceTree = "<group>"; };
-		95B16F582C926C8B0009672C /* CandleChartDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleChartDetailView.swift; sourceTree = "<group>"; };
 		95D308942C9596D000AB3F99 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		95D308962C95978A00AB3F99 /* APIEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIEndpoint.swift; sourceTree = "<group>"; };
 		95D308982C95B0DD00AB3F99 /* DoubleTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleTextField.swift; sourceTree = "<group>"; };
@@ -141,6 +144,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				95217F1B2C9C0F920070EFF4 /* DGCharts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -171,6 +175,15 @@
 				952B4C092C95527400D33FA6 /* UserInfo.swift */,
 			);
 			path = Dto;
+			sourceTree = "<group>";
+		};
+		95217F1C2C9C2E110070EFF4 /* Chart */ = {
+			isa = PBXGroup;
+			children = (
+				95217F172C9C0F780070EFF4 /* CandleChartRepresentable.swift */,
+				95217F1D2C9C2E300070EFF4 /* BarChartRepresentable.swift */,
+			);
+			path = Chart;
 			sourceTree = "<group>";
 		};
 		952E24202C92D88200B8EAC1 /* Component */ = {
@@ -208,7 +221,6 @@
 			isa = PBXGroup;
 			children = (
 				9586779C2C8D825B002C83F4 /* AskPriceView.swift */,
-				95B16F582C926C8B0009672C /* CandleChartDetailView.swift */,
 				9577E37A2C99A67C006E6CDA /* ChartView.swift */,
 				95FDD07B2C8C599D003F9FBF /* CryptoListView.swift */,
 				95FDD0792C8C598B003F9FBF /* MainView.swift */,
@@ -216,6 +228,7 @@
 				95FDD07D2C8C69FC003F9FBF /* OrderView.swift */,
 				95D3089A2C95B36E00AB3F99 /* PriceStepperView.swift */,
 				95FDD0722C8C58B2003F9FBF /* TradingPriceView.swift */,
+				95217F1C2C9C2E110070EFF4 /* Chart */,
 			);
 			path = Trading;
 			sourceTree = "<group>";
@@ -376,6 +389,7 @@
 			);
 			name = "crypto-trader-macos";
 			packageProductDependencies = (
+				95217F1A2C9C0F920070EFF4 /* DGCharts */,
 			);
 			productName = "crypto-trader-macos";
 			productReference = 95FDD03C2C8C5534003F9FBF /* crypto-trader-macos.app */;
@@ -450,6 +464,7 @@
 			);
 			mainGroup = 95FDD0332C8C5534003F9FBF;
 			packageReferences = (
+				95217F192C9C0F920070EFF4 /* XCRemoteSwiftPackageReference "Charts" */,
 			);
 			productRefGroup = 95FDD03D2C8C5534003F9FBF /* Products */;
 			projectDirPath = "";
@@ -518,6 +533,7 @@
 				952B4C0C2C95536900D33FA6 /* CryptoAssetDto.swift in Sources */,
 				95D308972C95978A00AB3F99 /* APIEndpoint.swift in Sources */,
 				952E241D2C92D56400B8EAC1 /* OrderViewModel.swift in Sources */,
+				95217F1E2C9C2E300070EFF4 /* BarChartRepresentable.swift in Sources */,
 				95D3089D2C95B95800AB3F99 /* OrderCreateDto.swift in Sources */,
 				95FDD0402C8C5534003F9FBF /* crypto_trader_macosApp.swift in Sources */,
 				9577E37D2C99A90C006E6CDA /* AssetListView.swift in Sources */,
@@ -531,11 +547,11 @@
 				952E24262C92DB3C00B8EAC1 /* OrderType.swift in Sources */,
 				951D6FB22C93FE640043DFBB /* Account.swift in Sources */,
 				95FDD07C2C8C599D003F9FBF /* CryptoListView.swift in Sources */,
-				95B16F592C926C8B0009672C /* CandleChartDetailView.swift in Sources */,
 				956EC9A92C8EE38000165FC5 /* Candle.swift in Sources */,
 				951D6FAB2C93FC880043DFBB /* UserViewModel.swift in Sources */,
 				951D6FB02C93FD790043DFBB /* User.swift in Sources */,
 				9577E37B2C99A67C006E6CDA /* ChartView.swift in Sources */,
+				95217F182C9C0F780070EFF4 /* CandleChartRepresentable.swift in Sources */,
 				952B4C0A2C95527400D33FA6 /* UserInfo.swift in Sources */,
 				95FDD0812C8C8BEE003F9FBF /* Color.swift in Sources */,
 				9577E3792C99A5B8006E6CDA /* Const.swift in Sources */,
@@ -861,6 +877,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		95217F192C9C0F920070EFF4 /* XCRemoteSwiftPackageReference "Charts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/danielgindi/Charts.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		95217F1A2C9C0F920070EFF4 /* DGCharts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 95217F192C9C0F920070EFF4 /* XCRemoteSwiftPackageReference "Charts" */;
+			productName = DGCharts;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 95FDD0342C8C5534003F9FBF /* Project object */;
 }

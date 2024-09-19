@@ -6,7 +6,7 @@ struct Candle: Decodable {
   let high: Double
   let low: Double
   let time: Date
-  var x: Date = Date.now
+  let volume: Double
   
   enum CodingKeys: CodingKey {
     case `open`
@@ -14,5 +14,6 @@ struct Candle: Decodable {
     case high
     case low
     case time
+    case volume
   }
 }

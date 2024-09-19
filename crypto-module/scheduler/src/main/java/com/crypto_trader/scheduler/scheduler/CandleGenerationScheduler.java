@@ -48,7 +48,8 @@ public class CandleGenerationScheduler {
                             candleState.getOpen(),
                             candleState.getLast(),
                             candleState.getHigh(),
-                            candleState.getLow()
+                            candleState.getLow(),
+                            candleState.getVolume()
                     );
                 })
                 .toList();

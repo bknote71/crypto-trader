@@ -1,45 +1,19 @@
 import Combine
+import DGCharts
 import Foundation
 
 class CandleViewModel: ObservableObject {
   
-  @Published var items = [Candle]()
-  @Published var isFetched: Bool = false
+  @Published var candleEntries = [CandleChartDataEntry]()
+  @Published var barEntries = [BarChartDataEntry]()
+  
+  private var items = [Candle]()
   
   private let encoder = JSONEncoder()
-  private let decoder: JSONDecoder = { // TODO: move to APIClient
-    let decoder = JSONDecoder()
-    decoder.dateDecodingStrategy = .custom { decoder in
-      let container = try decoder.singleValueContainer()
-      let dateString = try container.decode(String.self)
-      
-      // 지원하는 날짜 형식 리스트
-      let dateFormats = [
-        "yyyy-MM-dd'T'HH:mm:ss.SSSSS", // 밀리초/마이크로초 포함
-        "yyyy-MM-dd'T'HH:mm:ss",
-        "yyyy-MM-dd'T'HH:mm:ssZ",
-        "yyyy-MM-dd'T'HH:mm:ssXXXXX"
-      ]
-      
-      for format in dateFormats {
-        let formatter = DateFormatter()
-        formatter.dateFormat = format
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = TimeZone(secondsFromGMT: 0)
-        
-        if let date = formatter.date(from: dateString) {
-          return date
-        }
-      }
-      
-      // 날짜가 형식에 맞지 않으면 nil 반환
-      throw DecodingError.dataCorruptedError(in: container, debugDescription: "Date string does not match expected format.")
-    }
-    return decoder
-  }()
   
   private var cancellableBag = Set<AnyCancellable>()
   
+  private let candleAPIClient = JsonAPIClient<[Candle]>()
   private let candleWSClient = JsonWSClient<Candle>()
   
   init() {
@@ -48,15 +22,14 @@ class CandleViewModel: ObservableObject {
     
     // TODO: 2. connect
     connect()
+    send(market: "KRW-BTC", unit: .one_minute)
   }
   
   public func fetchAllCandles(market: String, unit: CandleUnit) {
     guard let allCandlesUrl = APIEndpoint.allCandles.url else { return }
-    print("fetch all candles: \(market)")
-    APIClient.shared.request(url: allCandlesUrl, param: ["market": market])
+    candleAPIClient.request(url: allCandlesUrl, param: ["market": market])
       .filter { (_, response) in response.statusCode < 300 }
       .map(\.0)
-      .decode(type: [Candle].self, decoder: decoder)
       .receive(on: RunLoop.main)
       .sink { completion in
         switch completion {
@@ -66,19 +39,18 @@ class CandleViewModel: ObservableObject {
           print("Failed with error: \(error)")
         }
       } receiveValue: { [weak self] candles in
-        guard let self else { return }
-        print("초기화!")
-        items = [Candle]() // 초기화
+        guard let self, let candles else { return }
+        print("fetch all candles from api \(Date.now)")
+        candleEntries = []
+        barEntries = []
+        items = []
+        
         candles.forEach { self.appendCandle($0) }
         
         connect()
         send(market: market, unit: unit)
-        
-        isFetched = true
       }
       .store(in: &cancellableBag)
-    
-    
   }
   
   private func connect() {
@@ -90,6 +62,7 @@ class CandleViewModel: ObservableObject {
       .receive(on: RunLoop.main)
       .sink { [weak self] candle in
         guard let self else { return }
+        print("append candle")
         appendCandle(candle)
       }
       .store(in: &cancellableBag)
@@ -112,17 +85,26 @@ class CandleViewModel: ObservableObject {
   
   private func appendCandle(_ candle: Candle) {
     guard candle.time != items.last?.time else { return }
-    
-    let lastX = items.last?.x ?? Date.now
+
     let newCandle = Candle(
       open: candle.open,
       close: candle.close,
       high: candle.high,
       low: candle.low,
       time: candle.time,
-      x: lastX + TimeInterval(60)
+      volume: candle.volume
     )
     
+    let newCandleEntry = CandleChartDataEntry(x: Double(candleEntries.count),
+                                        shadowH: candle.high,
+                                        shadowL: candle.low,
+                                        open: candle.open,
+                                        close: candle.close)
+    let newBarEntry = BarChartDataEntry(x: Double(barEntries.count),
+                                        y: min(1000, max(candle.volume * 1000, 5)))
+    
+    candleEntries.append(newCandleEntry)
+    barEntries.append(newBarEntry)
     items.append(newCandle)
   }
 }
