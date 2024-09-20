@@ -4,6 +4,10 @@ import SwiftUI
 struct ChartView: View {
   @EnvironmentObject private var cryptoViewModel: CryptoViewModel
   
+  @State private var lastMarket: String?
+  @State private var dragLineColor: Color = .gray100
+  @State private var isHovered: Bool = false
+  
   var body: some View {
     chartHeaderView
     divider
@@ -37,7 +41,7 @@ struct ChartView: View {
           
           // 오른쪽 상세 정보
           HStack(alignment: .center, spacing: 12) {
-            VStack(spacing: 8) {
+            VStack(spacing: 4) {
               HStack {
                 Text("고가")
                 Spacer()
@@ -75,13 +79,18 @@ struct ChartView: View {
         .background(.white)
       }
     }
+    .onReceive(cryptoViewModel.$crypto) { crypto in
+      guard let crypto, crypto.market != lastMarket else { return }
+      lastMarket = crypto.market
+      candleViewModel.fetchAllCandles(market: crypto.market, unit: .one_minute)
+    }
   }
   
   @EnvironmentObject var candleViewModel: CandleViewModel
   @ObservedObject var syncer = ChartXAxisSyncer()
   @State private var visibleCount: Double = 30
   @State private var chartRatio: CGFloat = 0.7
-  @State private var sharedXRange: ClosedRange<Double> = 0...10
+  @State private var sharedXRange: ClosedRange<Double> = 0...30
   
   var chartMainView: some View {
     GeometryReader { geo in
@@ -96,8 +105,9 @@ struct ChartView: View {
         .clipped()
         
         Rectangle()
-          .fill(Color.gray50)
-          .frame(height: 2)
+          .fill(dragLineColor)
+          .frame(height: 4)
+          .padding(.top, -11)
           .gesture(DragGesture()
             .onChanged { value in
               let dragAmount = value.translation.height / geo.size.height
@@ -105,6 +115,22 @@ struct ChartView: View {
               chartRatio = max(0.1, min(0.9, newRatio))
             }
           )
+        // Cursor change NOT WORKING
+        // https://stackoverflow.com/questions/61984959/swiftui-system-cursor/67851290#67851290
+          .onHover { isHovered in
+            self.isHovered = isHovered
+            if self.isHovered {
+              dragLineColor = .gray200
+              
+              NSApp.windows.forEach { $0.disableCursorRects() }
+              NSCursor.resizeUpDown.set() // 마우스가 호버되면 위아래로 늘릴 수 있는 커서 모양으로 변경
+            } else {
+              dragLineColor = .gray100
+              
+              NSCursor.arrow.pop() // 호버가 끝나면 기본 커서로 변경
+              NSApp.windows[0].enableCursorRects()
+            }
+          }
         
         BarChartRepresentable(
           entries: $candleViewModel.barEntries,
@@ -129,7 +155,6 @@ class ChartXAxisSyncer: ObservableObject {
     }
   }
 }
-
 
 //#Preview {
 ////    ChartView()

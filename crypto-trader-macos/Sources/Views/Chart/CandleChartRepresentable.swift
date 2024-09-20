@@ -9,6 +9,7 @@ struct CandleChartRepresentable: NSViewRepresentable {
   @Binding var sharedXRange: ClosedRange<Double> 
   
   @State var lastCount = 0
+  @State var isDragging = false
   
   class Coordinator: NSObject, ChartViewDelegate {
     var parent: CandleChartRepresentable
@@ -18,22 +19,27 @@ struct CandleChartRepresentable: NSViewRepresentable {
     }
     
     func chartTranslated(_ chartView: ChartViewBase, dX: CGFloat, dY: CGFloat) {
-      print("chart translated")
       guard let candleStickChartView = chartView as? CandleStickChartView else { return }
-      updateYAxis(for: candleStickChartView)
+      parent.isDragging = true
       parent.sharedXRange = candleStickChartView.lowestVisibleX...candleStickChartView.highestVisibleX
+      
+      updateYAxis(for: candleStickChartView)
     }
     
     func chartViewDidEndPanning(_ chartView: ChartViewBase) {
-      print("translating complete")
+      // 드래그 완료 시 호출
+      parent.isDragging = false
     }
     
     // 중복된 Y축 업데이트 로직을 함수로 분리
     func updateYAxis(for chartView: CandleStickChartView) {
       guard let dataSet = chartView.data?.dataSets.first as? CandleChartDataSet else { return }
       
-      let lowestVisibleX = Int(chartView.lowestVisibleX)
-      let highestVisibleX = Int(chartView.highestVisibleX)
+      let lowest = chartView.lowestVisibleX
+      let highest = chartView.highestVisibleX
+      
+      let lowestVisibleX = lowest > Double(Int.max) || lowest < Double(Int.min) ? 0 : Int(lowest)
+      let highestVisibleX = highest > Double(Int.max) || highest < Double(Int.min) ? 30 : Int(highest)
       
       let (low, high) = dataSet.entries
         .compactMap { $0 as? CandleChartDataEntry }
@@ -57,7 +63,7 @@ struct CandleChartRepresentable: NSViewRepresentable {
   }
   
   func makeNSView(context: Context) -> CandleStickChartView {
-    let chartView = CandleStickChartView()
+    let chartView = MouseTrackingCandleStickChartView()
     chartView.delegate = context.coordinator
     chartView.chartDescription.enabled = false
     chartView.doubleTapToZoomEnabled = false
@@ -82,7 +88,8 @@ struct CandleChartRepresentable: NSViewRepresentable {
     xAxis.labelPosition = .bottom
     xAxis.granularity = 1 // X 값의 간격을 1로 설정
     xAxis.avoidFirstLastClippingEnabled = true // X 축의 첫/마지막 캔들이 겹치지 않게 설정
-    xAxis.enabled = false
+//    xAxis.enabled = false
+    xAxis.drawLabelsEnabled = false
     
     let minuteFormatter = MinuteXAxisFormatter()
     xAxis.valueFormatter = minuteFormatter
@@ -107,51 +114,29 @@ struct CandleChartRepresentable: NSViewRepresentable {
     dataSet.decreasingFilled = true
     dataSet.drawValuesEnabled = false
     
+    // highlight
+    dataSet.highlightColor = .black
     
     let candleData = CandleChartData(dataSet: dataSet)
-    
-    if entries.count > Int(visibleCount) {
-      nsView.setVisibleXRangeMaximum(visibleCount)
-      
-      let nextX: Double
-      if entries.count != lastCount {
-        DispatchQueue.main.async {
-          lastCount = entries.count
-          sharedXRange = (sharedXRange.lowerBound + 1)...(sharedXRange.upperBound + 1)
-        }
-        nextX = sharedXRange.lowerBound + 1
-      } else {
-        nextX = sharedXRange.lowerBound
-      }
-      
-      nsView.moveViewToX(nextX)
-    }
-    
-    context.coordinator.updateYAxis(for: nsView)
-    
     nsView.data = candleData
     nsView.notifyDataSetChanged()
-  }
-}
-
-
-// x축 포메터
-class MinuteXAxisFormatter: NSObject, AxisValueFormatter {
-  var startDate: Date?
-  let dateFormatter: DateFormatter
-  
-  init(startDate: Date = Date.now) {
-    self.startDate = startDate
-    self.dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "MM/dd HH:mm" // 날짜와 시간을 원하는 형식으로 설정
-  }
-  
-  func stringForValue(_ value: Double, axis: AxisBase?) -> String {
-    guard let startDate = startDate else {
-      return ""
+    
+    guard !isDragging, entries.count > Int(visibleCount) else { return }
+    
+    nsView.setVisibleXRangeMaximum(visibleCount)
+    
+    let nextX: Double
+    if entries.count != lastCount {
+      DispatchQueue.main.async {
+        lastCount = entries.count
+        sharedXRange = (sharedXRange.lowerBound + 1)...(sharedXRange.upperBound + 1)
+      }
+      nextX = sharedXRange.lowerBound + 1
+    } else {
+      nextX = sharedXRange.lowerBound
     }
-    // 시작 날짜 + x값을 1분 단위로 더함
-    let date = Calendar.current.date(byAdding: .minute, value: Int(value), to: startDate)!
-    return dateFormatter.string(from: date)
+    
+    nsView.moveViewToX(nextX)
+    context.coordinator.updateYAxis(for: nsView)
   }
 }

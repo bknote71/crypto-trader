@@ -10,6 +10,7 @@ struct BarChartRepresentable: NSViewRepresentable {
   @Binding var candleEntries: [CandleChartDataEntry]
   
   @State var lastCount = 0
+  @State var isDragging = false
   
   class Coordinator: NSObject, ChartViewDelegate {
     var parent: BarChartRepresentable
@@ -20,7 +21,12 @@ struct BarChartRepresentable: NSViewRepresentable {
     
     func chartTranslated(_ chartView: ChartViewBase, dX: CGFloat, dY: CGFloat) {
       guard let barChartView = chartView as? BarChartView else { return }
+      parent.isDragging = true
       parent.sharedXRange = barChartView.lowestVisibleX...barChartView.highestVisibleX
+    }
+    
+    func chartViewDidEndPanning(_ chartView: ChartViewBase) {
+      parent.isDragging = false
     }
   }
   
@@ -29,7 +35,7 @@ struct BarChartRepresentable: NSViewRepresentable {
   }
   
   func makeNSView(context: Context) -> BarChartView {
-    let chartView = BarChartView()
+    let chartView = MouseTrackingBarChartView()
     chartView.delegate = context.coordinator
     chartView.chartDescription.enabled = false
     chartView.doubleTapToZoomEnabled = false
@@ -45,6 +51,7 @@ struct BarChartRepresentable: NSViewRepresentable {
     chartView.rightAxis.enabled = true
     chartView.rightAxis.minWidth = 60  // 동일한 너비로 고정 (적절한 값으로 조정)
     chartView.rightAxis.maxWidth = 60
+    chartView.rightAxis.setLabelCount(3, force: false)
     
     chartView.highlightPerTapEnabled = false
     
@@ -88,24 +95,24 @@ struct BarChartRepresentable: NSViewRepresentable {
     
     barDataSet.colors = barColors
     
-    if entries.count > Int(visibleCount) {
-      nsView.setVisibleXRangeMaximum(visibleCount)
-      
-      let nextX: Double
-      if entries.count != lastCount {
-        DispatchQueue.main.async {
-          lastCount = entries.count
-        }
-        nextX = sharedXRange.lowerBound + 1
-      } else {
-        nextX = sharedXRange.lowerBound
-      }
-      
-      nsView.moveViewToX(nextX)
-    }
-    
     let barData = BarChartData(dataSet: barDataSet)
     nsView.data = barData
     nsView.notifyDataSetChanged()
+    
+    guard !isDragging, entries.count > Int(visibleCount) else { return }
+    
+    nsView.setVisibleXRangeMaximum(visibleCount)
+    
+    let nextX: Double
+    if entries.count != lastCount {
+      DispatchQueue.main.async {
+        lastCount = entries.count
+      }
+      nextX = sharedXRange.lowerBound + 1
+    } else {
+      nextX = sharedXRange.lowerBound
+    }
+    
+    nsView.moveViewToX(nextX)
   }
 }

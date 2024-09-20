@@ -41,6 +41,11 @@
 		958677A52C8D9D9A002C83F4 /* SortedArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 958677A42C8D9D9A002C83F4 /* SortedArray.swift */; };
 		958677A72C8DAD8D002C83F4 /* CryptoDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 958677A62C8DAD8D002C83F4 /* CryptoDto.swift */; };
 		95A62A822C97252E00941A34 /* WSEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A62A812C97252E00941A34 /* WSEndpoint.swift */; };
+		95ABB5CE2C9D3A0E00717C16 /* CenteredTextFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95ABB5CD2C9D3A0E00717C16 /* CenteredTextFieldCell.swift */; };
+		95ABB5D22C9D41BD00717C16 /* MinuteXAxisFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95ABB5D12C9D41BD00717C16 /* MinuteXAxisFormatter.swift */; };
+		95ABB5D42C9D426000717C16 /* ChartMouseTraker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95ABB5D32C9D426000717C16 /* ChartMouseTraker.swift */; };
+		95ABB5D62C9D483600717C16 /* MouseTrackingCandleStickChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95ABB5D52C9D483600717C16 /* MouseTrackingCandleStickChartView.swift */; };
+		95ABB5D82C9D486400717C16 /* MouseTrackingBarChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95ABB5D72C9D486400717C16 /* MouseTrackingBarChartView.swift */; };
 		95D308952C9596D000AB3F99 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D308942C9596D000AB3F99 /* APIClient.swift */; };
 		95D308972C95978A00AB3F99 /* APIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D308962C95978A00AB3F99 /* APIEndpoint.swift */; };
 		95D308992C95B0DD00AB3F99 /* DoubleTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D308982C95B0DD00AB3F99 /* DoubleTextField.swift */; };
@@ -114,6 +119,11 @@
 		958677A42C8D9D9A002C83F4 /* SortedArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortedArray.swift; sourceTree = "<group>"; };
 		958677A62C8DAD8D002C83F4 /* CryptoDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoDto.swift; sourceTree = "<group>"; };
 		95A62A812C97252E00941A34 /* WSEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSEndpoint.swift; sourceTree = "<group>"; };
+		95ABB5CD2C9D3A0E00717C16 /* CenteredTextFieldCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenteredTextFieldCell.swift; sourceTree = "<group>"; };
+		95ABB5D12C9D41BD00717C16 /* MinuteXAxisFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinuteXAxisFormatter.swift; sourceTree = "<group>"; };
+		95ABB5D32C9D426000717C16 /* ChartMouseTraker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartMouseTraker.swift; sourceTree = "<group>"; };
+		95ABB5D52C9D483600717C16 /* MouseTrackingCandleStickChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MouseTrackingCandleStickChartView.swift; sourceTree = "<group>"; };
+		95ABB5D72C9D486400717C16 /* MouseTrackingBarChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MouseTrackingBarChartView.swift; sourceTree = "<group>"; };
 		95D308942C9596D000AB3F99 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		95D308962C95978A00AB3F99 /* APIEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIEndpoint.swift; sourceTree = "<group>"; };
 		95D308982C95B0DD00AB3F99 /* DoubleTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleTextField.swift; sourceTree = "<group>"; };
@@ -180,8 +190,12 @@
 		95217F1C2C9C2E110070EFF4 /* Chart */ = {
 			isa = PBXGroup;
 			children = (
-				95217F172C9C0F780070EFF4 /* CandleChartRepresentable.swift */,
 				95217F1D2C9C2E300070EFF4 /* BarChartRepresentable.swift */,
+				95217F172C9C0F780070EFF4 /* CandleChartRepresentable.swift */,
+				95ABB5D32C9D426000717C16 /* ChartMouseTraker.swift */,
+				95ABB5D12C9D41BD00717C16 /* MinuteXAxisFormatter.swift */,
+				95ABB5D72C9D486400717C16 /* MouseTrackingBarChartView.swift */,
+				95ABB5D52C9D483600717C16 /* MouseTrackingCandleStickChartView.swift */,
 			);
 			path = Chart;
 			sourceTree = "<group>";
@@ -189,6 +203,7 @@
 		952E24202C92D88200B8EAC1 /* Component */ = {
 			isa = PBXGroup;
 			children = (
+				95ABB5CD2C9D3A0E00717C16 /* CenteredTextFieldCell.swift */,
 				952B4C072C953EFD00D33FA6 /* DonutSlice.swift */,
 				95D308982C95B0DD00AB3F99 /* DoubleTextField.swift */,
 				952E24212C92D89200B8EAC1 /* RadioButton.swift */,
@@ -228,7 +243,6 @@
 				95FDD07D2C8C69FC003F9FBF /* OrderView.swift */,
 				95D3089A2C95B36E00AB3F99 /* PriceStepperView.swift */,
 				95FDD0722C8C58B2003F9FBF /* TradingPriceView.swift */,
-				95217F1C2C9C2E110070EFF4 /* Chart */,
 			);
 			path = Trading;
 			sourceTree = "<group>";
@@ -355,9 +369,10 @@
 		95FDD0712C8C58A2003F9FBF /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				9577E3812C99AA52006E6CDA /* Trading */,
-				9577E3802C99AA33006E6CDA /* Portfolio */,
+				95217F1C2C9C2E110070EFF4 /* Chart */,
 				952E24202C92D88200B8EAC1 /* Component */,
+				9577E3802C99AA33006E6CDA /* Portfolio */,
+				9577E3812C99AA52006E6CDA /* Trading */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -516,6 +531,7 @@
 				951D6FB62C940C800043DFBB /* PortfolioView.swift in Sources */,
 				952B4C082C953EFD00D33FA6 /* DonutSlice.swift in Sources */,
 				952E242A2C92DC4000B8EAC1 /* Double.swift in Sources */,
+				95ABB5D82C9D486400717C16 /* MouseTrackingBarChartView.swift in Sources */,
 				9577E3852C99AAD5006E6CDA /* OrderInfo.swift in Sources */,
 				956EC9A72C8EDD3900165FC5 /* CandleViewModel.swift in Sources */,
 				95D308952C9596D000AB3F99 /* APIClient.swift in Sources */,
@@ -526,6 +542,8 @@
 				95A62A822C97252E00941A34 /* WSEndpoint.swift in Sources */,
 				95FDD0702C8C5834003F9FBF /* CryptoViewModel.swift in Sources */,
 				952E241F2C92D61E00B8EAC1 /* OrderSide.swift in Sources */,
+				95ABB5D62C9D483600717C16 /* MouseTrackingCandleStickChartView.swift in Sources */,
+				95ABB5D42C9D426000717C16 /* ChartMouseTraker.swift in Sources */,
 				956EC9AE2C8EE4AC00165FC5 /* CandleUnit.swift in Sources */,
 				958677A72C8DAD8D002C83F4 /* CryptoDto.swift in Sources */,
 				958677A52C8D9D9A002C83F4 /* SortedArray.swift in Sources */,
@@ -544,11 +562,13 @@
 				952E24222C92D89200B8EAC1 /* RadioButton.swift in Sources */,
 				9586779F2C8D9139002C83F4 /* WSClient.swift in Sources */,
 				95D3089B2C95B36E00AB3F99 /* PriceStepperView.swift in Sources */,
+				95ABB5D22C9D41BD00717C16 /* MinuteXAxisFormatter.swift in Sources */,
 				952E24262C92DB3C00B8EAC1 /* OrderType.swift in Sources */,
 				951D6FB22C93FE640043DFBB /* Account.swift in Sources */,
 				95FDD07C2C8C599D003F9FBF /* CryptoListView.swift in Sources */,
 				956EC9A92C8EE38000165FC5 /* Candle.swift in Sources */,
 				951D6FAB2C93FC880043DFBB /* UserViewModel.swift in Sources */,
+				95ABB5CE2C9D3A0E00717C16 /* CenteredTextFieldCell.swift in Sources */,
 				951D6FB02C93FD790043DFBB /* User.swift in Sources */,
 				9577E37B2C99A67C006E6CDA /* ChartView.swift in Sources */,
 				95217F182C9C0F780070EFF4 /* CandleChartRepresentable.swift in Sources */,

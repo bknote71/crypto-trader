@@ -128,6 +128,7 @@ class CryptoViewModel: ObservableObject {
     )
     
     if crypto?.market == newCrypto.market {
+      newCrypto.image = crypto?.image ?? CryptoImage()
       self.crypto = newCrypto
     }
     
@@ -142,15 +143,32 @@ class CryptoViewModel: ObservableObject {
   private func fetchCryptoImage(for crypto: Crypto) {
     guard 
       !crypto.image.isLoading,
-      !crypto.image.isLoaded,
-      let symbol = symbolToFullName[crypto.market] else {
+      !crypto.image.isLoaded else {
       return
     }
+    
+    crypto.image.isLoading = true
+    
+    // 1. FileManager를 찾아본다.
+    guard let symbol = symbolToFullName[crypto.market] else {
+      return
+    }
+    
+    let cacheDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+    let cachedUrl = cacheDirectory.appendingPathComponent(symbol, conformingTo: .png)
+    
+    if
+      FileManager.default.fileExists(atPath: cachedUrl.path),
+      let localData = try? Data(contentsOf: cachedUrl) {
+      let image = NSImage(data: localData)
+      self.updateCryptoImageState(isLoading: true, isLoaded: true, with: image, for: crypto)
+      return
+    }
+    
+    // 2. 실패 시 코인게코에서 얻어온다.
         
     let apiUrl = "https://api.coingecko.com/api/v3/coins/\(symbol)"
     guard let url = URL(string: apiUrl) else { return }
-    
-    crypto.image.isLoading = true
     
     APIClient.shared.request(url: url)
       .receive(on: RunLoop.main)
@@ -185,7 +203,6 @@ class CryptoViewModel: ObservableObject {
   
   private func loadCryptoImage(from urlString: String, for crypto: Crypto) {
     guard let url = URL(string: urlString) else { return }
-    
     APIClient.shared.fetchImageData(url: url)
       .receive(on: RunLoop.main)
       .sink { [weak self] completion in
@@ -210,12 +227,9 @@ class CryptoViewModel: ObservableObject {
   ) {
     if let index = items.firstIndex(where: { $0.market == crypto.market }) {
       let updatedCrypto = items[index]
-      updatedCrypto.image.isLoading = isLoading
-      updatedCrypto.image.isLoaded = isLoaded
-      updatedCrypto.image.image = image
+      let cryptoImage = CryptoImage(image: image, isLoading: isLoading, isLoaded: isLoaded)
       
-      self.crypto = updatedCrypto
-      items.update(index, with: updatedCrypto)
+      self.crypto?.image = cryptoImage
     }
   }
 }

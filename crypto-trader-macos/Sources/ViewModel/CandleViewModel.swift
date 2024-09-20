@@ -18,11 +18,8 @@ class CandleViewModel: ObservableObject {
   
   init() {
     // TODO: 1. fetch all candle data(KRW-BTC)
-    // fetchAllCandles(market: "KRW-BTC", unit: .one_minute)
-    
-    // TODO: 2. connect
-    connect()
-    send(market: "KRW-BTC", unit: .one_minute)
+    // empty data?
+     // fetchAllCandles(market: "KRW-BTC", unit: .one_minute)
   }
   
   public func fetchAllCandles(market: String, unit: CandleUnit) {
@@ -40,7 +37,7 @@ class CandleViewModel: ObservableObject {
         }
       } receiveValue: { [weak self] candles in
         guard let self, let candles else { return }
-        print("fetch all candles from api \(Date.now)")
+        print("fetch all candles from api \(Date.now) \(candles.count)")
         candleEntries = []
         barEntries = []
         items = []
@@ -62,7 +59,6 @@ class CandleViewModel: ObservableObject {
       .receive(on: RunLoop.main)
       .sink { [weak self] candle in
         guard let self else { return }
-        print("append candle")
         appendCandle(candle)
       }
       .store(in: &cancellableBag)
