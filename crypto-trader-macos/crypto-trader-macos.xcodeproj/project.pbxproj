@@ -50,6 +50,7 @@
 		95ABB5DD2C9EC24C00717C16 /* SwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = 95ABB5DC2C9EC24C00717C16 /* SwiftProtobuf */; };
 		95ABB5DF2C9EC24C00717C16 /* SwiftProtobufPluginLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 95ABB5DE2C9EC24C00717C16 /* SwiftProtobufPluginLibrary */; };
 		95ABB5E12C9EC24C00717C16 /* protoc-gen-swift in Frameworks */ = {isa = PBXBuildFile; productRef = 95ABB5E02C9EC24C00717C16 /* protoc-gen-swift */; };
+		95ABB5E72C9EE29E00717C16 /* DataModel.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95ABB5E62C9EE29E00717C16 /* DataModel.pb.swift */; };
 		95D308952C9596D000AB3F99 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D308942C9596D000AB3F99 /* APIClient.swift */; };
 		95D308972C95978A00AB3F99 /* APIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D308962C95978A00AB3F99 /* APIEndpoint.swift */; };
 		95D308992C95B0DD00AB3F99 /* DoubleTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D308982C95B0DD00AB3F99 /* DoubleTextField.swift */; };
@@ -129,6 +130,7 @@
 		95ABB5D52C9D483600717C16 /* MouseTrackingCandleStickChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MouseTrackingCandleStickChartView.swift; sourceTree = "<group>"; };
 		95ABB5D72C9D486400717C16 /* MouseTrackingBarChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MouseTrackingBarChartView.swift; sourceTree = "<group>"; };
 		95ABB5D92C9D543A00717C16 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
+		95ABB5E62C9EE29E00717C16 /* DataModel.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataModel.pb.swift; path = Sources/Model/DataModel.pb.swift; sourceTree = SOURCE_ROOT; };
 		95D308942C9596D000AB3F99 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		95D308962C95978A00AB3F99 /* APIEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIEndpoint.swift; sourceTree = "<group>"; };
 		95D308982C95B0DD00AB3F99 /* DoubleTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleTextField.swift; sourceTree = "<group>"; };
@@ -351,6 +353,7 @@
 		95FDD06B2C8C57EE003F9FBF /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				95ABB5E62C9EE29E00717C16 /* DataModel.pb.swift */,
 				951D6FB12C93FE640043DFBB /* Account.swift */,
 				956EC9A82C8EE38000165FC5 /* Candle.swift */,
 				95FDD06C2C8C5801003F9FBF /* Crypto.swift */,
@@ -540,6 +543,7 @@
 				95D308992C95B0DD00AB3F99 /* DoubleTextField.swift in Sources */,
 				958677A22C8D9C6D002C83F4 /* Ticker.swift in Sources */,
 				952E24242C92D91900B8EAC1 /* OrderDetailView.swift in Sources */,
+				95ABB5E72C9EE29E00717C16 /* DataModel.pb.swift in Sources */,
 				95FDD07E2C8C69FC003F9FBF /* OrderView.swift in Sources */,
 				951D6FB62C940C800043DFBB /* PortfolioView.swift in Sources */,
 				952B4C082C953EFD00D33FA6 /* DonutSlice.swift in Sources */,

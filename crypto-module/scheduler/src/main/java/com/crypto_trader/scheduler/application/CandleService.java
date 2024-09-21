@@ -1,15 +1,11 @@
 package com.crypto_trader.scheduler.application;
 
-import com.crypto_trader.scheduler.domain.CandleState;
 import com.crypto_trader.scheduler.domain.Ticker;
 import com.crypto_trader.scheduler.domain.entity.Candle;
 import com.crypto_trader.scheduler.infra.CandleMongoRepository;
 import com.crypto_trader.scheduler.infra.SimpleCandleRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
@@ -17,34 +13,37 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.crypto_trader.scheduler.domain.CandleUnit.ONEMINUTE;
 import static com.crypto_trader.scheduler.global.constant.RedisConst.*;
+import static com.crypto_trader.scheduler.proto.DataModel.*;
 
 @Slf4j
 @Service
 public class CandleService {
 
     private final SimpleCandleRepository candleRepository;
-    private final ReactiveRedisTemplate<String, String> redisTemplate;
-    private final ObjectMapper objectMapper;
     private final CandleMongoRepository candleMongoRepository;
     private final MarketService marketService;
 
-    @Autowired
+    private final ObjectMapper objectMapper;
+    private final ReactiveRedisTemplate<String, String> stringRedisTemplate;
+    private final ReactiveRedisTemplate<String, byte[]> byteArrayRedisTemplate;
+
     public CandleService(SimpleCandleRepository candleRepository,
-                         ReactiveRedisTemplate<String, String> redisTemplate,
-                         ObjectMapper objectMapper,
                          CandleMongoRepository candleMongoRepository,
-                         MarketService marketService) {
+                         MarketService marketService,
+                         ObjectMapper objectMapper,
+                         ReactiveRedisTemplate<String, String> stringRedisTemplate,
+                         ReactiveRedisTemplate<String, byte[]> byteArrayRedisTemplate) {
         this.candleRepository = candleRepository;
-        this.redisTemplate = redisTemplate;
-        this.objectMapper = objectMapper;
         this.candleMongoRepository = candleMongoRepository;
         this.marketService = marketService;
+        this.objectMapper = objectMapper;
+        this.stringRedisTemplate = stringRedisTemplate;
+        this.byteArrayRedisTemplate = byteArrayRedisTemplate;
     }
 
     @EventListener(ApplicationReadyEvent.class)
@@ -58,7 +57,7 @@ public class CandleService {
         marketService.renewalMarkets();
 
         // Redis Ticker 구독 설정
-        redisTemplate
+        stringRedisTemplate
                 .listenToChannel(REDIS_TICKER)
                 .subscribe((value) -> {
                     String message = value.getMessage();
@@ -80,7 +79,8 @@ public class CandleService {
 
         for (String market : markets) {
             log.debug("Fetching candles for market: {}", market);
-            candles.addAll(candleMongoRepository.findCandlesByMarket(market));
+            List<Candle> candlesByMarket = candleMongoRepository.findCandlesByMarket(market);
+            candles.addAll(candlesByMarket.subList(0, Math.min(3600, candlesByMarket.size())));
         }
 
         // 각 캔들 데이터를 Redis에 저장
@@ -88,20 +88,20 @@ public class CandleService {
         candles.forEach(candle -> {
             String key = ONEMINUTE + ":minute_candle:" + candle.getMarket();
             try {
-                CandleState candleState = new CandleState(
-                        candle.getOpen(),
-                        candle.getClose(),
-                        candle.getHigh(),
-                        candle.getLow(),
-                        candle.getVolume()
-                );
+                PCandle pCandle = new PCandle.Builder()
+                        .setOpen(candle.getOpen())
+                        .setClose(candle.getClose())
+                        .setHigh(candle.getHigh())
+                        .setLow(candle.getLow())
+                        .setVolume(candle.getVolume())
+                        .setTime(candle.getTime().toString())
+                        .build();
 
-                String candleData = objectMapper.writeValueAsString(candleState); // Candle 객체를 JSON으로 변환
-                redisTemplate.opsForList()
-                        .rightPush(key, candleData)  // Redis 리스트에 저장
+                byteArrayRedisTemplate.opsForList()
+                        .rightPush(key, pCandle.toByteArray())  // Redis 리스트에 저장
                         .doOnSuccess(result -> log.debug("Successfully pushed to Redis: {}", key))
                         .subscribe();
-            } catch (JsonProcessingException e) {
+            } catch (Exception e) {
                 log.debug("Error serializing candle data: {}", e.getMessage());
             }
         });
@@ -109,7 +109,7 @@ public class CandleService {
 
     // Redis 데이터베이스를 삭제하는 메서드
     private Mono<Void> cleanRedisDB() {
-        return redisTemplate.execute(connection -> connection.serverCommands().flushAll())  // Redis에서 모든 데이터 삭제
+        return byteArrayRedisTemplate.execute(connection -> connection.serverCommands().flushAll())  // Redis에서 모든 데이터 삭제
                 .then(Mono.just("Redis cache cleared on startup."))
                 .doOnSuccess(log::debug)  // 성공 시 메시지 출력
                 .then();  // Void 반환

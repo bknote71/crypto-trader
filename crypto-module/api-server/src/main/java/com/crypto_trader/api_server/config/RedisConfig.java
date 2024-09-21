@@ -1,4 +1,4 @@
-package com.crypto_trader.scheduler.config;
+package com.crypto_trader.api_server.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

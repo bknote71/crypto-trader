@@ -1,6 +1,7 @@
 import Combine
 import DGCharts
 import Foundation
+import SwiftProtobuf
 
 class CandleViewModel: ObservableObject {
   
@@ -13,7 +14,7 @@ class CandleViewModel: ObservableObject {
   
   private var cancellableBag = Set<AnyCancellable>()
   
-  private let candleAPIClient = JsonAPIClient<[Candle]>()
+  private let pcandleAPIClient = JsonAPIClient<[Data]>()
   private let candleWSClient = JsonWSClient<Candle>()
   
   init() {
@@ -27,9 +28,9 @@ class CandleViewModel: ObservableObject {
     
     let startTime = Date()
     
-    candleAPIClient.request(url: allCandlesUrl, param: ["market": market])
+    pcandleAPIClient.request(url: allCandlesUrl, param: ["market": market, "unit": CandleUnit.one_minute.rawValue ])
       .filter { (_, response) in response.statusCode < 300 }
-      .map(\.0)
+      .compactMap(\.0)
       .receive(on: RunLoop.main)
       .sink { completion in
         switch completion {
@@ -39,8 +40,24 @@ class CandleViewModel: ObservableObject {
         case .failure(let error):
           print("Failed with error: \(error)")
         }
-      } receiveValue: { [weak self] candles in
-        guard let self, let candles else { return }
+      } receiveValue: { [weak self] datas in
+        guard let self else { return }
+        
+        let candles = datas
+          .compactMap { try? PCandle(serializedBytes: $0) }
+          .compactMap { (pcandle) -> Candle? in
+            guard let time = try? Date(pcandle.time, strategy: .iso8601) else {
+              print("wrong date time format: \(pcandle.time)")
+              return nil
+            }
+            
+            return Candle(open: pcandle.open,
+                          close: pcandle.close,
+                          high: pcandle.high,
+                          low: pcandle.low,
+                          time: time,
+                          volume: pcandle.volume)
+          }
         
         print("fetch candles count \(candles.count)")
         
@@ -87,7 +104,7 @@ class CandleViewModel: ObservableObject {
   
   private func appendCandle(_ candle: Candle) {
 //    guard candle.time != items.last?.time else { return }
-
+    
     let newCandle = Candle(
       open: candle.open,
       close: candle.close,
@@ -102,6 +119,7 @@ class CandleViewModel: ObservableObject {
                                         shadowL: candle.low,
                                         open: candle.open,
                                         close: candle.close)
+
     let newBarEntry = BarChartDataEntry(x: Double(barEntries.count),
                                         y: min(1000, max(candle.volume * 1000, 5)))
     
