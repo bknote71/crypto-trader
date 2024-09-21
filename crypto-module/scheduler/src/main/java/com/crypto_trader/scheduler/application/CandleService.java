@@ -1,5 +1,6 @@
 package com.crypto_trader.scheduler.application;
 
+import com.crypto_trader.scheduler.domain.CandleState;
 import com.crypto_trader.scheduler.domain.Ticker;
 import com.crypto_trader.scheduler.domain.entity.Candle;
 import com.crypto_trader.scheduler.infra.CandleMongoRepository;
@@ -70,25 +71,32 @@ public class CandleService {
                 });
     }
 
-    // MongoDB에서 48시간 전 캔들 데이터를 가져와 Redis에 저장하는 메서드
+    // MongoDB에서 모든 데이터 가져오기
     private void initRedisCandleFromMongo() {
         log.debug("Starting initRedisCandleFromMongo...");
-        LocalDateTime cutoffTime = LocalDateTime.now().minusHours(48);
 
         List<String> markets = marketService.getAllMarketCodes();
         List<Candle> candles = new ArrayList<>();
 
-        // MongoDB에서 데이터를 가져오는 부분에 로그 추가
         for (String market : markets) {
             log.debug("Fetching candles for market: {}", market);
-            candles.addAll(candleMongoRepository.findCandlesByMarketAndTime(market, cutoffTime));
+            candles.addAll(candleMongoRepository.findCandlesByMarket(market));
         }
 
         // 각 캔들 데이터를 Redis에 저장
+        // TODO: 5분봉, 10분봉 추가
         candles.forEach(candle -> {
             String key = ONEMINUTE + ":minute_candle:" + candle.getMarket();
             try {
-                String candleData = objectMapper.writeValueAsString(candle); // Candle 객체를 JSON으로 변환
+                CandleState candleState = new CandleState(
+                        candle.getOpen(),
+                        candle.getClose(),
+                        candle.getHigh(),
+                        candle.getLow(),
+                        candle.getVolume()
+                );
+
+                String candleData = objectMapper.writeValueAsString(candleState); // Candle 객체를 JSON으로 변환
                 redisTemplate.opsForList()
                         .rightPush(key, candleData)  // Redis 리스트에 저장
                         .doOnSuccess(result -> log.debug("Successfully pushed to Redis: {}", key))

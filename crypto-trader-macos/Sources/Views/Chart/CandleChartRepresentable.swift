@@ -3,16 +3,19 @@ import DGCharts
 import SwiftUI
 
 struct CandleChartRepresentable: NSViewRepresentable {
+  @State var id = UUID().uuidString
+  
   @Binding var entries: [CandleChartDataEntry]
   @Binding var crypto: Crypto?
   @Binding var visibleCount: Double
   @Binding var sharedXRange: ClosedRange<Double> 
   
   @State var lastCount = 0
-  @State var isDragging = false
+  @Binding var draggingId: String?
   
   class Coordinator: NSObject, ChartViewDelegate {
     var parent: CandleChartRepresentable
+    var debounceTimer: Timer?
     
     init(parent: CandleChartRepresentable) {
       self.parent = parent
@@ -20,15 +23,17 @@ struct CandleChartRepresentable: NSViewRepresentable {
     
     func chartTranslated(_ chartView: ChartViewBase, dX: CGFloat, dY: CGFloat) {
       guard let candleStickChartView = chartView as? CandleStickChartView else { return }
-      parent.isDragging = true
+      debounceTimer?.invalidate()
+      
+      parent.draggingId = parent.id
       parent.sharedXRange = candleStickChartView.lowestVisibleX...candleStickChartView.highestVisibleX
       
       updateYAxis(for: candleStickChartView)
-    }
-    
-    func chartViewDidEndPanning(_ chartView: ChartViewBase) {
-      // 드래그 완료 시 호출
-      parent.isDragging = false
+      
+      debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: false) { [weak self] _ in
+        print("dragging id nil")
+        self?.parent.draggingId = nil
+      }
     }
     
     // 중복된 Y축 업데이트 로직을 함수로 분리
@@ -121,19 +126,28 @@ struct CandleChartRepresentable: NSViewRepresentable {
     nsView.data = candleData
     nsView.notifyDataSetChanged()
     
-    guard !isDragging, entries.count > Int(visibleCount) else { return }
+    var countChanged = false
+    if lastCount != entries.count {
+      DispatchQueue.main.async {
+        lastCount = entries.count // in main thread
+      }
+      countChanged = true
+    }
+    
+    guard entries.count > Int(visibleCount), draggingId != id else { return }
     
     nsView.setVisibleXRangeMaximum(visibleCount)
     
     let nextX: Double
-    if entries.count != lastCount {
+    if draggingId != nil, draggingId != id {
+      nextX = sharedXRange.lowerBound
+    } else if draggingId == nil, countChanged {
       DispatchQueue.main.async {
-        lastCount = entries.count
         sharedXRange = (sharedXRange.lowerBound + 1)...(sharedXRange.upperBound + 1)
       }
-      nextX = sharedXRange.lowerBound + 1
-    } else {
       nextX = sharedXRange.lowerBound
+    } else {
+      return
     }
     
     nsView.moveViewToX(nextX)

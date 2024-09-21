@@ -24,6 +24,9 @@ class CandleViewModel: ObservableObject {
   
   public func fetchAllCandles(market: String, unit: CandleUnit) {
     guard let allCandlesUrl = APIEndpoint.allCandles.url else { return }
+    
+    let startTime = Date()
+    
     candleAPIClient.request(url: allCandlesUrl, param: ["market": market])
       .filter { (_, response) in response.statusCode < 300 }
       .map(\.0)
@@ -31,13 +34,16 @@ class CandleViewModel: ObservableObject {
       .sink { completion in
         switch completion {
         case .finished:
+          print("fetch completed \(Date().timeIntervalSince(startTime) * 1000)")
           break
         case .failure(let error):
           print("Failed with error: \(error)")
         }
       } receiveValue: { [weak self] candles in
         guard let self, let candles else { return }
-        print("fetch all candles from api \(Date.now) \(candles.count)")
+        
+        print("fetch candles count \(candles.count)")
+        
         candleEntries = []
         barEntries = []
         items = []
@@ -80,7 +86,7 @@ class CandleViewModel: ObservableObject {
   }
   
   private func appendCandle(_ candle: Candle) {
-    guard candle.time != items.last?.time else { return }
+//    guard candle.time != items.last?.time else { return }
 
     let newCandle = Candle(
       open: candle.open,

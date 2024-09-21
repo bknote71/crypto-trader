@@ -27,6 +27,8 @@ public class CandleState {
         this.high = value;
         this.low = value;
         this.time = LocalDateTime.now().withSecond(0).withNano(0);
+        this.prevVolume = 0;
+        this.volume = 0;
     }
 
     public CandleState(double open, double last, double high, double low, double volume) {
@@ -35,6 +37,7 @@ public class CandleState {
         this.high = high;
         this.low = low;
         this.time = LocalDateTime.now().withSecond(0).withNano(0);
+        this.prevVolume = 0;
         this.volume = volume;
     }
 

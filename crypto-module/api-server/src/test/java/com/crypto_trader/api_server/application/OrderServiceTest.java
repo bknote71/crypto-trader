@@ -1,7 +1,7 @@
 package com.crypto_trader.api_server.application;
 
-import com.crypto_trader.api_server.domain.Account;
 import com.crypto_trader.api_server.domain.OrderSide;
+import com.crypto_trader.api_server.domain.entities.Account;
 import com.crypto_trader.api_server.domain.entities.Order;
 import com.crypto_trader.api_server.domain.entities.OrderState;
 import com.crypto_trader.api_server.domain.entities.UserEntity;

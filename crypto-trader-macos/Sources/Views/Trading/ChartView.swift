@@ -91,6 +91,7 @@ struct ChartView: View {
   @State private var visibleCount: Double = 30
   @State private var chartRatio: CGFloat = 0.7
   @State private var sharedXRange: ClosedRange<Double> = 0...30
+  @State private var draggingId: String? = nil
   
   var chartMainView: some View {
     GeometryReader { geo in
@@ -99,7 +100,8 @@ struct ChartView: View {
           entries: $candleViewModel.candleEntries,
           crypto: $cryptoViewModel.crypto,
           visibleCount: $visibleCount,
-          sharedXRange: $sharedXRange
+          sharedXRange: $sharedXRange,
+          draggingId: $draggingId
         )
         .frame(height: geo.size.height * chartRatio)
         .clipped()
@@ -133,11 +135,12 @@ struct ChartView: View {
           }
         
         BarChartRepresentable(
-          entries: $candleViewModel.barEntries,
+          barEntries: $candleViewModel.barEntries,
+          candleEntries: $candleViewModel.candleEntries,
           crypto: $cryptoViewModel.crypto,
           visibleCount: $visibleCount,
           sharedXRange: $sharedXRange,
-          candleEntries: $candleViewModel.candleEntries
+          draggingId: $draggingId
         )
           .frame(height: geo.size.height * (1 - chartRatio))
           .clipped()

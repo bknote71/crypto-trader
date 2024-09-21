@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+message PCandle {
+  double open = 1;
+  double close = 2;
+  double high = 3;
+  double low = 4;
+  double volume = 5;
+  string time = 6;
+}

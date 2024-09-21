@@ -66,7 +66,10 @@ public class CandleWebSocketHandler extends JsonWebSocketHandler<CandleRequestDt
                         return;
                     redisTemplate.opsForList()
                             .range(key, -1, -1)
-                            .subscribe(candle -> sendJsonMessage(candle, session));
+                            .subscribe(candle -> {
+                                System.out.println("candle data: " + candle);
+                                sendJsonMessage(candle, session);
+                            });
 
                     // .blockFirst();
                     // - 리액티브 스트림을 동기식으로 처리: 이벤트 루프 블로킹 (이벤트 루프가 해당 작업에 묶여서 더 이상 새로운 명령어를 처리하지 못한다.)

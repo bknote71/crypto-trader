@@ -46,6 +46,10 @@
 		95ABB5D42C9D426000717C16 /* ChartMouseTraker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95ABB5D32C9D426000717C16 /* ChartMouseTraker.swift */; };
 		95ABB5D62C9D483600717C16 /* MouseTrackingCandleStickChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95ABB5D52C9D483600717C16 /* MouseTrackingCandleStickChartView.swift */; };
 		95ABB5D82C9D486400717C16 /* MouseTrackingBarChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95ABB5D72C9D486400717C16 /* MouseTrackingBarChartView.swift */; };
+		95ABB5DA2C9D543A00717C16 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95ABB5D92C9D543A00717C16 /* View.swift */; };
+		95ABB5DD2C9EC24C00717C16 /* SwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = 95ABB5DC2C9EC24C00717C16 /* SwiftProtobuf */; };
+		95ABB5DF2C9EC24C00717C16 /* SwiftProtobufPluginLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 95ABB5DE2C9EC24C00717C16 /* SwiftProtobufPluginLibrary */; };
+		95ABB5E12C9EC24C00717C16 /* protoc-gen-swift in Frameworks */ = {isa = PBXBuildFile; productRef = 95ABB5E02C9EC24C00717C16 /* protoc-gen-swift */; };
 		95D308952C9596D000AB3F99 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D308942C9596D000AB3F99 /* APIClient.swift */; };
 		95D308972C95978A00AB3F99 /* APIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D308962C95978A00AB3F99 /* APIEndpoint.swift */; };
 		95D308992C95B0DD00AB3F99 /* DoubleTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D308982C95B0DD00AB3F99 /* DoubleTextField.swift */; };
@@ -124,6 +128,7 @@
 		95ABB5D32C9D426000717C16 /* ChartMouseTraker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartMouseTraker.swift; sourceTree = "<group>"; };
 		95ABB5D52C9D483600717C16 /* MouseTrackingCandleStickChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MouseTrackingCandleStickChartView.swift; sourceTree = "<group>"; };
 		95ABB5D72C9D486400717C16 /* MouseTrackingBarChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MouseTrackingBarChartView.swift; sourceTree = "<group>"; };
+		95ABB5D92C9D543A00717C16 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		95D308942C9596D000AB3F99 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		95D308962C95978A00AB3F99 /* APIEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIEndpoint.swift; sourceTree = "<group>"; };
 		95D308982C95B0DD00AB3F99 /* DoubleTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleTextField.swift; sourceTree = "<group>"; };
@@ -154,7 +159,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				95ABB5E12C9EC24C00717C16 /* protoc-gen-swift in Frameworks */,
+				95ABB5DF2C9EC24C00717C16 /* SwiftProtobufPluginLibrary in Frameworks */,
 				95217F1B2C9C0F920070EFF4 /* DGCharts in Frameworks */,
+				95ABB5DD2C9EC24C00717C16 /* SwiftProtobuf in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -383,6 +391,7 @@
 				95FDD0802C8C8BEE003F9FBF /* Color.swift */,
 				95DD18672C92A8FD0083F531 /* Comparable.swift */,
 				952E24292C92DC4000B8EAC1 /* Double.swift */,
+				95ABB5D92C9D543A00717C16 /* View.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -405,6 +414,9 @@
 			name = "crypto-trader-macos";
 			packageProductDependencies = (
 				95217F1A2C9C0F920070EFF4 /* DGCharts */,
+				95ABB5DC2C9EC24C00717C16 /* SwiftProtobuf */,
+				95ABB5DE2C9EC24C00717C16 /* SwiftProtobufPluginLibrary */,
+				95ABB5E02C9EC24C00717C16 /* protoc-gen-swift */,
 			);
 			productName = "crypto-trader-macos";
 			productReference = 95FDD03C2C8C5534003F9FBF /* crypto-trader-macos.app */;
@@ -480,6 +492,7 @@
 			mainGroup = 95FDD0332C8C5534003F9FBF;
 			packageReferences = (
 				95217F192C9C0F920070EFF4 /* XCRemoteSwiftPackageReference "Charts" */,
+				95ABB5DB2C9EC24C00717C16 /* XCRemoteSwiftPackageReference "swift-protobuf" */,
 			);
 			productRefGroup = 95FDD03D2C8C5534003F9FBF /* Products */;
 			projectDirPath = "";
@@ -544,6 +557,7 @@
 				952E241F2C92D61E00B8EAC1 /* OrderSide.swift in Sources */,
 				95ABB5D62C9D483600717C16 /* MouseTrackingCandleStickChartView.swift in Sources */,
 				95ABB5D42C9D426000717C16 /* ChartMouseTraker.swift in Sources */,
+				95ABB5DA2C9D543A00717C16 /* View.swift in Sources */,
 				956EC9AE2C8EE4AC00165FC5 /* CandleUnit.swift in Sources */,
 				958677A72C8DAD8D002C83F4 /* CryptoDto.swift in Sources */,
 				958677A52C8D9D9A002C83F4 /* SortedArray.swift in Sources */,
@@ -907,6 +921,14 @@
 				minimumVersion = 5.1.0;
 			};
 		};
+		95ABB5DB2C9EC24C00717C16 /* XCRemoteSwiftPackageReference "swift-protobuf" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-protobuf.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.28.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -914,6 +936,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 95217F192C9C0F920070EFF4 /* XCRemoteSwiftPackageReference "Charts" */;
 			productName = DGCharts;
+		};
+		95ABB5DC2C9EC24C00717C16 /* SwiftProtobuf */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 95ABB5DB2C9EC24C00717C16 /* XCRemoteSwiftPackageReference "swift-protobuf" */;
+			productName = SwiftProtobuf;
+		};
+		95ABB5DE2C9EC24C00717C16 /* SwiftProtobufPluginLibrary */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 95ABB5DB2C9EC24C00717C16 /* XCRemoteSwiftPackageReference "swift-protobuf" */;
+			productName = SwiftProtobufPluginLibrary;
+		};
+		95ABB5E02C9EC24C00717C16 /* protoc-gen-swift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 95ABB5DB2C9EC24C00717C16 /* XCRemoteSwiftPackageReference "swift-protobuf" */;
+			productName = "protoc-gen-swift";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

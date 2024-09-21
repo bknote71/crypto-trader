@@ -3,17 +3,20 @@ import DGCharts
 import SwiftUI
 
 struct BarChartRepresentable: NSViewRepresentable {
-  @Binding var entries: [BarChartDataEntry]
+  @State var id = UUID().uuidString
+  
+  @Binding var barEntries: [BarChartDataEntry]
+  @Binding var candleEntries: [CandleChartDataEntry]
   @Binding var crypto: Crypto?
   @Binding var visibleCount: Double
   @Binding var sharedXRange: ClosedRange<Double>
-  @Binding var candleEntries: [CandleChartDataEntry]
   
   @State var lastCount = 0
-  @State var isDragging = false
+  @Binding var draggingId: String?
   
   class Coordinator: NSObject, ChartViewDelegate {
     var parent: BarChartRepresentable
+    var debounceTimer: Timer?
     
     init(parent: BarChartRepresentable) {
       self.parent = parent
@@ -21,12 +24,14 @@ struct BarChartRepresentable: NSViewRepresentable {
     
     func chartTranslated(_ chartView: ChartViewBase, dX: CGFloat, dY: CGFloat) {
       guard let barChartView = chartView as? BarChartView else { return }
-      parent.isDragging = true
+      debounceTimer?.invalidate()
+      
+      parent.draggingId = parent.id
       parent.sharedXRange = barChartView.lowestVisibleX...barChartView.highestVisibleX
-    }
-    
-    func chartViewDidEndPanning(_ chartView: ChartViewBase) {
-      parent.isDragging = false
+      
+      debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: false) { [weak self] _ in
+        self?.parent.draggingId = nil
+      }
     }
   }
   
@@ -75,14 +80,13 @@ struct BarChartRepresentable: NSViewRepresentable {
     
     (nsView.xAxis.valueFormatter as? MinuteXAxisFormatter)?.startDate = startDate
     
-    let barDataSet = BarChartDataSet(entries: entries, label: "Bar Data")
+    let barDataSet = BarChartDataSet(entries: barEntries, label: "Bar Data")
 //    barDataSet.colors = [.orange]
     barDataSet.drawValuesEnabled = false
     
     
-  
     var barColors: [NSUIColor] = []
-    for i in 0..<entries.count {
+    for i in 0..<barEntries.count {
       let correspondingCandle = candleEntries[i] // 동일한 인덱스에 대응하는 캔들 차트 데이터
       
       // 캔들의 증가/감소 여부에 따라 색상을 설정
@@ -99,20 +103,31 @@ struct BarChartRepresentable: NSViewRepresentable {
     nsView.data = barData
     nsView.notifyDataSetChanged()
     
-    guard !isDragging, entries.count > Int(visibleCount) else { return }
+    var countChanged = false
+    if lastCount != barEntries.count {
+      DispatchQueue.main.async {
+        lastCount = barEntries.count // in main thread
+      }
+      countChanged = true
+    }
+    
+    guard barEntries.count > Int(visibleCount), draggingId != id else { return }
     
     nsView.setVisibleXRangeMaximum(visibleCount)
     
     let nextX: Double
-    if entries.count != lastCount {
+    if draggingId != nil, draggingId != id {
+      nextX = sharedXRange.lowerBound
+    } else if draggingId == nil, countChanged {
       DispatchQueue.main.async {
-        lastCount = entries.count
+//        lastCount = barEntries.count // in main thread
       }
       nextX = sharedXRange.lowerBound + 1
     } else {
-      nextX = sharedXRange.lowerBound
+      return
     }
-    
+
+    // 그냥 이 nsView를
     nsView.moveViewToX(nextX)
   }
 }

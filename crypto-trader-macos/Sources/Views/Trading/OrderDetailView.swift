@@ -5,8 +5,9 @@ struct OrderDetailView: View {
   @EnvironmentObject private var userViewModel: UserViewModel
   
   @Binding var side: OrderSide
-  @State var selectedOrderType = "지정가"
+  @Binding var orderAction: Bool
   
+  @State var selectedOrderType = "지정가"
   @FocusState private var isEditing: Bool
 
   var body: some View {
@@ -111,7 +112,10 @@ struct OrderDetailView: View {
       .padding(.bottom, 8)
       
       Button {
-        orderViewModel.order(account: userViewModel.user!.account)
+        orderAction = true
+        // 1. 주문하시겠습니까 창 띄우기
+        // 2. 클릭하면 order
+//        orderViewModel.order(account: userViewModel.user!.account)
       } label: {
         Text("주문하기")
           .foregroundStyle(.white)
