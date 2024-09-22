@@ -76,7 +76,7 @@ public class CandleService {
     private void initRedisCandleFromMongo() {
         log.debug("Starting initRedisCandleFromMongo...");
 
-        List<String> markets = marketService.getAllMarketCodes();
+        List<String> markets = marketService.getAllMarketCodes().subList(0, 3);
         List<Candle> candles = new ArrayList<>();
 
         for (String market : markets) {
