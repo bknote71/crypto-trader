@@ -29,7 +29,7 @@ struct BarChartRepresentable: NSViewRepresentable {
       parent.draggingId = parent.id
       parent.sharedXRange = barChartView.lowestVisibleX...barChartView.highestVisibleX
       
-      debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: false) { [weak self] _ in
+      debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.001, repeats: false) { [weak self] _ in
         self?.parent.draggingId = nil
       }
     }
@@ -121,6 +121,7 @@ struct BarChartRepresentable: NSViewRepresentable {
     } else if draggingId == nil, countChanged {
       DispatchQueue.main.async {
 //        lastCount = barEntries.count // in main thread
+        sharedXRange = (sharedXRange.lowerBound + 1)...(sharedXRange.upperBound + 1)
       }
       nextX = sharedXRange.lowerBound + 1
     } else {
@@ -128,6 +129,7 @@ struct BarChartRepresentable: NSViewRepresentable {
     }
 
     // 그냥 이 nsView를
+    print("bar move \(nextX)")
     nsView.moveViewToX(nextX)
   }
 }

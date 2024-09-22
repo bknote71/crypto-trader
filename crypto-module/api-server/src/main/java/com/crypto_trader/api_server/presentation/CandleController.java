@@ -13,6 +13,7 @@ import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
@@ -48,9 +49,11 @@ public class CandleController {
 
     // using protobuf
     @GetMapping("/api/all-candles")
-    public Mono<List<byte[]>> getAllCandlesP(@RequestParam CandleRequestDto dto) {
+    public Mono<List<byte[]>> getAllCandlesP(@ModelAttribute CandleRequestDto dto) {
+        String key = dto.makeKey();
+        System.out.println("key? " + key);
         return byteArrayRedisTemplate.opsForList()
-                .range(dto.makeKey(), 0, -1)
+                .range(key, 0, -1)
                 .collectList();
     }
 }

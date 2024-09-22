@@ -18,16 +18,18 @@ public class TickerService {
     @Autowired
     public TickerService(TickerWebSocketHandler tickerWebSocketHandler) {
         this.tickerWebSocketHandler = tickerWebSocketHandler;
+    }
 
+    public void fetchAllTickers(List<String> marketCodes) {
+        tickerWebSocketHandler.fetchAllTicker(marketCodes);
+    }
+
+    public void fetchStart() {
         WebSocketConnectionManager webSocketConnectionManager = new WebSocketConnectionManager(
                 new StandardWebSocketClient(),
                 tickerWebSocketHandler,
                 WEBSOCKET_URL
         );
         webSocketConnectionManager.start();
-    }
-
-    public void fetchAllTickers(List<String> marketCodes) {
-        tickerWebSocketHandler.fetchAllTicker(marketCodes);
     }
 }

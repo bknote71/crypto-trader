@@ -15,7 +15,7 @@ class CandleViewModel: ObservableObject {
   private var cancellableBag = Set<AnyCancellable>()
   
   private let pcandleAPIClient = JsonAPIClient<[Data]>()
-  private let candleWSClient = JsonWSClient<Candle>()
+  private let candleWSClient = BinaryWSClient()
   
   init() {
     // TODO: 1. fetch all candle data(KRW-BTC)
@@ -46,20 +46,20 @@ class CandleViewModel: ObservableObject {
         let candles = datas
           .compactMap { try? PCandle(serializedBytes: $0) }
           .compactMap { (pcandle) -> Candle? in
-            guard let time = try? Date(pcandle.time, strategy: .iso8601) else {
-              print("wrong date time format: \(pcandle.time)")
-              return nil
-            }
+//            guard let time = try? Date(pcandle.time, strategy: .iso8601) else {
+//              print("wrong date time format: \(pcandle.time)")
+//              return nil
+//            }
             
             return Candle(open: pcandle.open,
                           close: pcandle.close,
                           high: pcandle.high,
                           low: pcandle.low,
-                          time: time,
+                          time: Date(),
                           volume: pcandle.volume)
           }
         
-        print("fetch candles count \(candles.count)")
+        print("fetch candles count \(datas.count) \(candles.count)")
         
         candleEntries = []
         barEntries = []
@@ -80,6 +80,16 @@ class CandleViewModel: ObservableObject {
     
     candleWSClient.connect(url: candleUrl)
       .receive(on: RunLoop.main)
+      .compactMap{ try? PCandle(serializedBytes: $0) }
+      .compactMap { (pcandle) -> Candle? in
+        
+        return Candle(open: pcandle.open,
+                      close: pcandle.close,
+                      high: pcandle.high,
+                      low: pcandle.low,
+                      time: Date(),
+                      volume: pcandle.volume)
+      }
       .sink { [weak self] candle in
         guard let self else { return }
         appendCandle(candle)

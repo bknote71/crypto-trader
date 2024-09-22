@@ -271,6 +271,11 @@ let symbolToFullName: [String: String] = [
     "KRW-OMG": "omg-network",
     "KRW-ANKR": "ankr",
     "KRW-AAVE": "aave",
-    "KRW-BAT": "basic-attention-token"
+    "KRW-BAT": "basic-attention-token",
+    "KRW-ARK": "ark",
+    "KRW-UXLINK": "uxlink",
+    "KRW-LOOM": "loom-network",
+    "KRW-PENDLE": "pendle",
+    "KRW-ARDR": "ardor",
     // 필요한 심볼-전체 이름 추가 가능
 ]

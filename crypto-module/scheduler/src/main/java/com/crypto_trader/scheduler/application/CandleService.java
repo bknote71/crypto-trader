@@ -31,30 +31,32 @@ public class CandleService {
     private final ObjectMapper objectMapper;
     private final ReactiveRedisTemplate<String, String> stringRedisTemplate;
     private final ReactiveRedisTemplate<String, byte[]> byteArrayRedisTemplate;
+    private final TickerService tickerService;
 
     public CandleService(SimpleCandleRepository candleRepository,
                          CandleMongoRepository candleMongoRepository,
                          MarketService marketService,
                          ObjectMapper objectMapper,
                          ReactiveRedisTemplate<String, String> stringRedisTemplate,
-                         ReactiveRedisTemplate<String, byte[]> byteArrayRedisTemplate) {
+                         ReactiveRedisTemplate<String, byte[]> byteArrayRedisTemplate, TickerService tickerService) {
         this.candleRepository = candleRepository;
         this.candleMongoRepository = candleMongoRepository;
         this.marketService = marketService;
         this.objectMapper = objectMapper;
         this.stringRedisTemplate = stringRedisTemplate;
         this.byteArrayRedisTemplate = byteArrayRedisTemplate;
+        this.tickerService = tickerService;
     }
 
     @EventListener(ApplicationReadyEvent.class)
     public void init() {
+        marketService.renewalMarkets();
+
         // cleanRedisDB가 완료된 후에만 initRedisCandleFromMongo 실행
         cleanRedisDB()
                 .then(Mono.fromRunnable(this::initRedisCandleFromMongo))  // DB 클리어 후에 Mongo 데이터를 Redis에 초기화
                 .subscribe(success -> log.debug("Redis initialized with Mongo data."),
                         error -> log.debug("Error initializing Redis: {}", error.getMessage()));
-
-        marketService.renewalMarkets();
 
         // Redis Ticker 구독 설정
         stringRedisTemplate
@@ -80,7 +82,7 @@ public class CandleService {
         for (String market : markets) {
             log.debug("Fetching candles for market: {}", market);
             List<Candle> candlesByMarket = candleMongoRepository.findCandlesByMarket(market);
-            candles.addAll(candlesByMarket.subList(0, Math.min(3600, candlesByMarket.size())));
+            candles.addAll(candlesByMarket);
         }
 
         // 각 캔들 데이터를 Redis에 저장
@@ -105,6 +107,8 @@ public class CandleService {
                 log.debug("Error serializing candle data: {}", e.getMessage());
             }
         });
+
+        tickerService.fetchStart();
     }
 
     // Redis 데이터베이스를 삭제하는 메서드

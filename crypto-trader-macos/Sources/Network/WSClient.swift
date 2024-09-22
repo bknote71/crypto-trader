@@ -119,3 +119,50 @@ class JsonWSClient<V: Decodable>: WSClient {
     }
   }
 }
+
+class BinaryWSClient: WSClient {
+  
+  private(set) var publisher = PassthroughSubject<Data, Never>()
+  private(set) var webSocketTask: URLSessionWebSocketTask?
+  let urlSession = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue())
+  
+  func connect(url: URL) -> PassthroughSubject<Data, Never> {
+    let webSocketTask = urlSession.webSocketTask(with: url)
+    webSocketTask.resume()
+    self.webSocketTask = webSocketTask
+    
+    receiveMessage()
+    
+    return publisher
+  }
+  
+  func disconnect() {
+    webSocketTask?.cancel(with: .goingAway, reason: nil)
+    webSocketTask = nil
+  }
+  
+  var isConnected: Bool {
+    webSocketTask != nil
+  }
+  
+  internal func receiveMessage() {
+    webSocketTask?.receive { [weak self] result in
+      switch result {
+      case .failure(let error):
+        print("메시지 수신 오류: \(error)")
+      case .success(let message):
+        switch message {
+        case .string(_):
+          assertionFailure()
+        case .data(let data):
+//          print("publish data \(data.count)")
+          self?.publisher.send(data)
+        @unknown default:
+          print("알 수 없는 메시지 수신")
+        }
+        // 다음 메시지를 계속 수신하도록 호출
+        self?.receiveMessage()
+      }
+    }
+  }
+}

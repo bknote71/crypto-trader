@@ -30,8 +30,7 @@ struct CandleChartRepresentable: NSViewRepresentable {
       
       updateYAxis(for: candleStickChartView)
       
-      debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: false) { [weak self] _ in
-        print("dragging id nil")
+      debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.001, repeats: false) { [weak self] _ in
         self?.parent.draggingId = nil
       }
     }
@@ -143,13 +142,14 @@ struct CandleChartRepresentable: NSViewRepresentable {
       nextX = sharedXRange.lowerBound
     } else if draggingId == nil, countChanged {
       DispatchQueue.main.async {
-        sharedXRange = (sharedXRange.lowerBound + 1)...(sharedXRange.upperBound + 1)
+        // ?
       }
-      nextX = sharedXRange.lowerBound
+      nextX = sharedXRange.lowerBound + 1
     } else {
       return
     }
     
+    print("candle move \(nextX)")
     nsView.moveViewToX(nextX)
     context.coordinator.updateYAxis(for: nsView)
   }

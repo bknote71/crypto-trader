@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.data.redis.listener.PatternTopic;
 import org.springframework.stereotype.Component;
+import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketSession;
 import reactor.core.Disposable;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -20,14 +22,13 @@ import static io.lettuce.core.protocol.CommandType.RPUSH;
 @Component
 public class CandleWebSocketHandler extends JsonWebSocketHandler<CandleRequestDto, String> {
 
-    private final ReactiveRedisTemplate<String, String> redisTemplate;
+    private final ReactiveRedisTemplate<String, byte[]> byteArrayRedisTemplate;
     private final Map<String, Disposable> sessionMap = new ConcurrentHashMap<>();
 
     @Autowired
-    public CandleWebSocketHandler(ReactiveRedisTemplate<String, String> redisTemplate,
-                                  ObjectMapper objectMapper) {
+    public CandleWebSocketHandler(ObjectMapper objectMapper, ReactiveRedisTemplate<String, byte[]> byteArrayRedisTemplate) {
         super(objectMapper);
-        this.redisTemplate = redisTemplate;
+        this.byteArrayRedisTemplate = byteArrayRedisTemplate;
     }
 
     @Override
@@ -39,12 +40,6 @@ public class CandleWebSocketHandler extends JsonWebSocketHandler<CandleRequestDt
 
         String key = instance.makeKey();
         subscribeLast(key, session);
-
-//        redisTemplate.opsForList()
-//                .range(key, 0, -1)
-//                .doOnNext(value -> sendJsonMessage(value, session)) //
-//                .doOnComplete(() -> subscribeLast(key, session)) // 2. 이후에 실시간 데이터만 가져오도록 한다.
-//                .subscribe();
     }
 
     @Override
@@ -58,17 +53,21 @@ public class CandleWebSocketHandler extends JsonWebSocketHandler<CandleRequestDt
 
     public void subscribeLast(String key, WebSocketSession session) {
         PatternTopic topic = new PatternTopic("__keyspace@0__:" + key);
-        Disposable subscribe = redisTemplate
+        Disposable subscribe = byteArrayRedisTemplate
                 .listenTo(topic)
                 .subscribe(value -> {
+                    String message = new String(value.getMessage());
                     log.debug("Received event: {}", value.getMessage());
-                    if (!value.getMessage().equals(RPUSH.name().toLowerCase()))
+                    if (!message.equals(RPUSH.name().toLowerCase()))
                         return;
-                    redisTemplate.opsForList()
+                    byteArrayRedisTemplate.opsForList()
                             .range(key, -1, -1)
                             .subscribe(candle -> {
-                                System.out.println("candle data: " + candle);
-                                sendJsonMessage(candle, session);
+                                try {
+                                    session.sendMessage(new BinaryMessage(candle));
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
                             });
 
                     // .blockFirst();
