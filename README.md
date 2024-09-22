@@ -2,6 +2,7 @@
 - 차트: https://youtu.be/sH0vQYZbY-s
 
 ## 아키텍처
+![Crypto](https://github.com/user-attachments/assets/6aa95f20-8f32-4cc6-8a0b-6d809cc26d19)
 
 ## 프로젝트 목표
 - 가상 거래소 시스템을 구현하는 것이 목표 입니다.
