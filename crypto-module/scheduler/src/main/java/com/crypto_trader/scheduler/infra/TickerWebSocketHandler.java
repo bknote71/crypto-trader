@@ -2,6 +2,7 @@ package com.crypto_trader.scheduler.infra;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ import static com.crypto_trader.scheduler.global.constant.RedisConst.REDIS_TICKE
 import static com.crypto_trader.scheduler.global.constant.WebSocketConst.SOCKET_ID;
 import static com.crypto_trader.scheduler.global.utils.StringUtils.*;
 
+@Slf4j
 @Component
 public class TickerWebSocketHandler extends BinaryWebSocketHandler {
 
@@ -40,7 +42,6 @@ public class TickerWebSocketHandler extends BinaryWebSocketHandler {
     protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
         super.handleBinaryMessage(session, message);
         String tickerJson = decodeToString(message.getPayload());
-        System.out.println(tickerJson);
         redisTemplate.convertAndSend(REDIS_TICKER, tickerJson).subscribe(); // publish
     }
 
@@ -57,6 +58,7 @@ public class TickerWebSocketHandler extends BinaryWebSocketHandler {
     public void fetchAllTicker(List<String> marketCodes) {
         if (session == null || !session.isOpen())
             return;
+
 
         try {
             String payload = createPayload(marketCodes);

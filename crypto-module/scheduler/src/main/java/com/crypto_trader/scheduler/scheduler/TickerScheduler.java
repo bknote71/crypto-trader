@@ -23,7 +23,6 @@ public class TickerScheduler {
 
     @EventListener(MarketsUpdateEvent.class)
     public void handleMarketsUpdatedEvent(MarketsUpdateEvent event) {
-        log.debug("MarketsUpdateEvent");
         try{
             List<String> allMarketCodes = marketService.getAllMarketCodes();
             tickerService.fetchAllTickers(allMarketCodes);
