@@ -111,11 +111,13 @@ public class CandleService {
         tickerService.fetchStart();
     }
 
-    // Redis 데이터베이스를 삭제하는 메서드
+    // Redis 데이터베이스에서 "market" 키를 제외한 모든 데이터를 삭제
     private Mono<Void> cleanRedisDB() {
-        return byteArrayRedisTemplate.execute(connection -> connection.serverCommands().flushAll())  // Redis에서 모든 데이터 삭제
-                .then(Mono.just("Redis cache cleared on startup."))
-                .doOnSuccess(log::debug)  // 성공 시 메시지 출력
-                .then();  // Void 반환
+        return stringRedisTemplate.keys("*")
+                .filter(key -> !key.equals(MARKET))
+                .flatMap(stringRedisTemplate::delete)
+                .then(Mono.just("Redis cache cleared except 'market' key on startup."))
+                .doOnSuccess(log::debug)
+                .then();
     }
 }

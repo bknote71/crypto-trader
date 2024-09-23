@@ -40,6 +40,7 @@ public class TickerWebSocketHandler extends BinaryWebSocketHandler {
     protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
         super.handleBinaryMessage(session, message);
         String tickerJson = decodeToString(message.getPayload());
+        System.out.println(tickerJson);
         redisTemplate.convertAndSend(REDIS_TICKER, tickerJson).subscribe(); // publish
     }
 
