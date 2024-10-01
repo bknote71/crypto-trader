@@ -36,17 +36,4 @@ public class OrderController {
         assert principalUser.getUser() != null;
         return orderService.cancelOrder(principalUser, orderCancelRequestDto);
     }
-
-    // test
-    @GetMapping
-    public List<OrderResponseDto> getOrders(@AuthenticationPrincipal PrincipalUser principalUser) {
-        assert principalUser.getUser() != null;
-        return orderService.getAllOrders(principalUser);
-    }
-
-    @GetMapping("/test")
-    public String getOrdersT(@AuthenticationPrincipal PrincipalUser principalUser) {
-        orderExecutionService.oldProcessOrderExecution("KRW-BTC", 99999999);
-        return "success";
-    }
 }
