@@ -1,14 +1,18 @@
 package com.crypto_trader.api_server.application.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class OrderCancelRequestDto {
     private String market;
     private Long orderId;
 
-    public String getMarket() {
-        return market;
-    }
+    public OrderCancelRequestDto() {}
 
-    public Long getOrderId() {
-        return orderId;
+    public OrderCancelRequestDto(String market, Long orderId) {
+        this.market = market;
+        this.orderId = orderId;
     }
 }

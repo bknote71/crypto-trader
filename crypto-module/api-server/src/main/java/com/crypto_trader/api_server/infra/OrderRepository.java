@@ -14,6 +14,7 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByUserId(Long id);
 
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT o FROM Orders o " +
             "JOIN FETCH o.user u " +
             "LEFT JOIN FETCH u.assets a " + // left가 있어야 user의 assets가 없어도 user가 조회 됨
@@ -28,5 +29,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "AND o.state = 'CREATED' " +
             "AND ((o.side = 'BID' AND o.price >= :tradePrice) OR (o.side = 'ASK' AND o.price <= :tradePrice))")
     Page<Order> findByMarketWithPrice(@Param("market") String market,
-                                      @Param("tradePrice") Number tradePrice,Pageable pageable);
+                                      @Param("tradePrice") Number tradePrice,
+                                      Pageable pageable);
 }

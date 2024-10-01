@@ -52,4 +52,6 @@ dependencyManagement {
 
 test {
     useJUnitPlatform()
+    minHeapSize = "1024m"
+    maxHeapSize = "4096m"
 }

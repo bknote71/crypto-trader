@@ -1,7 +1,9 @@
 package com.crypto_trader.api_server.application;
 
+import com.crypto_trader.api_server.domain.OrderSide;
 import com.crypto_trader.api_server.domain.Ticker;
 import com.crypto_trader.api_server.domain.entities.Order;
+import com.crypto_trader.api_server.domain.entities.OrderState;
 import com.crypto_trader.api_server.domain.events.TickerProcessingEvent;
 import com.crypto_trader.api_server.infra.OrderRepository;
 import com.crypto_trader.api_server.infra.SimpleMarketRepository;
@@ -12,7 +14,6 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,8 @@ import java.util.Map;
 @Service
 public class OrderExecutionService {
 
+    private final ProcessOrderExecution orderExecution;
+
     private final TickerRepository tickerRepository;
     private final SimpleMarketRepository marketRepository;
     private final OrderRepository orderRepository;
@@ -38,12 +41,15 @@ public class OrderExecutionService {
     private final Map<String, Sinks.Many<Ticker>> sinkMap = new HashMap<>();
     private final Map<String, Disposable> subscriptionMap = new HashMap<>();
 
+
     @Autowired
-    public OrderExecutionService(TickerRepository tickerRepository,
+    public OrderExecutionService(ProcessOrderExecution orderExecution,
+                                 TickerRepository tickerRepository,
                                  SimpleMarketRepository marketRepository,
                                  OrderRepository orderRepository,
                                  ApplicationEventPublisher publisher,
                                  ObjectMapper objectMapper) {
+        this.orderExecution = orderExecution;
         this.tickerRepository = tickerRepository;
         this.marketRepository = marketRepository;
         this.orderRepository = orderRepository;
@@ -116,23 +122,36 @@ public class OrderExecutionService {
         processOrderExecution(ticker.getMarket(), ticker.getTradePrice());
     }
 
-    @Transactional
     public void processOrderExecution(String market, double tradePrice) {
-        int pageSize = 100000;
+        long start = System.currentTimeMillis();
+        int pageSize = 20000;
         int pageNumber = 0;
 
-        Page<Order> ordersChunk = null;
+        boolean isLast;
         do {
             PageRequest pageable = PageRequest.of(pageNumber, pageSize);
-            ordersChunk = orderRepository.findByMarketWithPrice(market, tradePrice, pageable);
-
-            // 기본 parallelStream: ForkJoinPool.commonPool() 사용
-            // - 시스템의 가용 CPU 코어 수에 따라 설정
-
-            // 스레드 수를 직접 조정하려면 별도의 ForkJoinPool 사용
-            ordersChunk.getContent().parallelStream().forEach(Order::execution);
+            isLast = orderExecution.process(market, tradePrice, pageable);
 
             pageNumber++;
-        } while (!ordersChunk.isLast());
+            System.out.println("중간 주문 체결 " + (System.currentTimeMillis() - start));
+        } while (!isLast);
+
+        System.out.println("order execution completed " + (System.currentTimeMillis() - start));
+    }
+
+    @Transactional
+    public void oldProcessOrderExecution(String market, double tradePrice) throws InterruptedException {
+        long start = System.currentTimeMillis();
+        List<Order> byMarket = orderRepository.findByMarket(market);
+        System.out.println("old lock " + (System.currentTimeMillis() - start));
+        Thread.sleep(10000);
+        byMarket.stream()
+                .filter(order -> {
+                    double price = order.getPrice().doubleValue();
+                    return order.getState() == OrderState.CREATED &&
+                            ((order.getSide() == OrderSide.BID) ? tradePrice <= price : tradePrice >= price);
+                })
+                .forEach(Order::execution);
+        System.out.println("old order execution completed " + (System.currentTimeMillis() - start));
     }
 }

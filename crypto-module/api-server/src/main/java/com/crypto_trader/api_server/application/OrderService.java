@@ -11,10 +11,13 @@ import com.crypto_trader.api_server.infra.OrderRepository;
 import jakarta.persistence.LockModeType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -63,8 +66,8 @@ public class OrderService {
         if (!Objects.equals(order.getUser().getId(), user.getId()))
             throw new IllegalStateException("User id does not match");
 
-        if (order.getState() != OrderState.CREATED)
-            throw new IllegalStateException("Order can't be cancelled");
+//        if (order.getState() != OrderState.CREATED)
+//            throw new IllegalStateException("Order can't be cancelled");
 
         order.cancel(dto.getMarket());
 
