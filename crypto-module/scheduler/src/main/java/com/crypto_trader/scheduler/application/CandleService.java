@@ -27,7 +27,6 @@ public class CandleService {
     private final SimpleCandleRepository candleRepository;
     private final CandleMongoRepository candleMongoRepository;
     private final MarketService marketService;
-
     private final ObjectMapper objectMapper;
     private final ReactiveRedisTemplate<String, String> stringRedisTemplate;
     private final ReactiveRedisTemplate<String, byte[]> byteArrayRedisTemplate;
@@ -74,14 +73,16 @@ public class CandleService {
     private void initRedisCandleFromMongo() {
         log.debug("Starting initRedisCandleFromMongo...");
 
-        List<String> markets = marketService.getAllMarketCodes().subList(0, 3);
+        List<String> markets = marketService.getAllMarketCodes().subList(0, 12);
         List<Candle> candles = new ArrayList<>();
 
-        for (String market : markets) {
-            log.debug("Fetching candles for market: {}", market);
-            List<Candle> candlesByMarket = candleMongoRepository.findCandlesByMarket(market);
+        markets.parallelStream().forEach(m -> {
+            log.debug("Fetching candles for market: {}", m);
+            List<Candle> candlesByMarket = candleMongoRepository.findCandlesByMarket(m).subList(0, 200);
             candles.addAll(candlesByMarket);
-        }
+        });
+
+        System.out.println("all candle datas fetched");
 
         // 각 캔들 데이터를 Redis에 저장
         // TODO: 5분봉, 10분봉 추가
@@ -105,8 +106,8 @@ public class CandleService {
             }
         });
 
-        List<String> marketCodes = marketService.getAllMarketCodes();
-        tickerService.fetchStart(marketCodes);
+
+        tickerService.fetchStart();
     }
 
     // Redis 데이터베이스에서 "market" 키를 제외한 모든 데이터를 삭제

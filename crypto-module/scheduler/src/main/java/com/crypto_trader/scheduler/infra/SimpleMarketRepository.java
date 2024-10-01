@@ -1,7 +1,7 @@
 package com.crypto_trader.scheduler.infra;
 
 import com.crypto_trader.scheduler.domain.Market;
-import com.crypto_trader.scheduler.domain.event.MarketsUpdateEvent;
+import com.crypto_trader.scheduler.domain.event.FetchTickerEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +47,7 @@ public class SimpleMarketRepository {
                 redisTemplate.opsForValue()
                         .set(MARKET, objectMapper.writeValueAsString(markets.keySet()))
                         .block();
-                publisher.publishEvent(new MarketsUpdateEvent(this));
+                publisher.publishEvent(new FetchTickerEvent(this));
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }

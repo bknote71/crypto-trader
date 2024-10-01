@@ -24,15 +24,12 @@ public class TickerService {
         tickerWebSocketHandler.fetchAllTicker(marketCodes);
     }
 
-    public void fetchStart(List<String> marketCodes) {
+    public void fetchStart() {
         WebSocketConnectionManager webSocketConnectionManager = new WebSocketConnectionManager(
                 new StandardWebSocketClient(),
                 tickerWebSocketHandler,
                 WEBSOCKET_URL
         );
         webSocketConnectionManager.start();
-        while(!webSocketConnectionManager.isConnected()){
-            fetchAllTickers(marketCodes);
-        }
     }
 }

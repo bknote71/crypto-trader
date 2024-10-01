@@ -1,10 +1,9 @@
 package com.crypto_trader.scheduler.scheduler;
 
 import com.crypto_trader.scheduler.application.TickerService;
-import com.crypto_trader.scheduler.domain.event.MarketsUpdateEvent;
+import com.crypto_trader.scheduler.domain.event.FetchTickerEvent;
 import com.crypto_trader.scheduler.application.MarketService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -21,8 +20,9 @@ public class TickerScheduler {
         this.tickerService = tickerService;
     }
 
-    @EventListener(MarketsUpdateEvent.class)
-    public void handleMarketsUpdatedEvent(MarketsUpdateEvent event) {
+    @EventListener(FetchTickerEvent.class)
+    public void handleFetchTickerEvent(FetchTickerEvent event) {
+        log.debug("handle fetch ticker event");
         try{
             List<String> allMarketCodes = marketService.getAllMarketCodes();
             tickerService.fetchAllTickers(allMarketCodes);

@@ -1,9 +1,11 @@
 package com.crypto_trader.scheduler.infra;
 
+import com.crypto_trader.scheduler.domain.event.FetchTickerEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.*;
@@ -21,6 +23,7 @@ import static com.crypto_trader.scheduler.global.utils.StringUtils.*;
 @Component
 public class TickerWebSocketHandler extends BinaryWebSocketHandler {
 
+    private final ApplicationEventPublisher publisher;
     private final ObjectMapper objectMapper;
     private final ReactiveRedisTemplate<String, String> redisTemplate;
 
@@ -28,7 +31,11 @@ public class TickerWebSocketHandler extends BinaryWebSocketHandler {
     private WebSocketSession session;
 
     @Autowired
-    public TickerWebSocketHandler(ObjectMapper objectMapper, ReactiveRedisTemplate<String, String> redisTemplate) {
+    public TickerWebSocketHandler(ApplicationEventPublisher publisher,
+                                  ObjectMapper objectMapper,
+                                  ReactiveRedisTemplate<String, String> redisTemplate
+                                  ) {
+        this.publisher = publisher;
         this.objectMapper = objectMapper;
         this.redisTemplate = redisTemplate;
     }
@@ -36,6 +43,7 @@ public class TickerWebSocketHandler extends BinaryWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         this.session = session;
+        publisher.publishEvent(new FetchTickerEvent(this));
     }
 
     @Override
