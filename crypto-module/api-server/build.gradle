@@ -33,6 +33,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 
     runtimeOnly 'com.h2database:h2'
+    implementation 'com.mysql:mysql-connector-j'
 
     // Test dependencies
     testImplementation platform('org.junit:junit-bom:5.9.1')

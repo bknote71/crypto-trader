@@ -1,9 +1,7 @@
 package com.crypto_trader.api_server.application;
 
-import com.crypto_trader.api_server.domain.OrderSide;
 import com.crypto_trader.api_server.domain.Ticker;
 import com.crypto_trader.api_server.domain.entities.Order;
-import com.crypto_trader.api_server.domain.entities.OrderState;
 import com.crypto_trader.api_server.domain.events.TickerProcessingEvent;
 import com.crypto_trader.api_server.infra.OrderRepository;
 import com.crypto_trader.api_server.infra.SimpleMarketRepository;
@@ -11,11 +9,11 @@ import com.crypto_trader.api_server.infra.TickerRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
-import jakarta.persistence.LockModeType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
-import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.Disposable;
@@ -29,26 +27,28 @@ import java.util.Map;
 @Service
 public class OrderExecutionService {
 
-    private final OrderService orderService;
     private final TickerRepository tickerRepository;
     private final SimpleMarketRepository marketRepository;
+    private final OrderRepository orderRepository;
+
+    private final ApplicationEventPublisher publisher;
     private final ObjectMapper objectMapper;
-    private final ApplicationEventPublisher eventPublisher;
+
 
     private final Map<String, Sinks.Many<Ticker>> sinkMap = new HashMap<>();
     private final Map<String, Disposable> subscriptionMap = new HashMap<>();
 
     @Autowired
-    public OrderExecutionService(OrderService orderService,
-                                 TickerRepository tickerRepository,
+    public OrderExecutionService(TickerRepository tickerRepository,
                                  SimpleMarketRepository marketRepository,
-                                 ObjectMapper objectMapper,
-                                 ApplicationEventPublisher eventPublisher) {
-        this.orderService = orderService;
+                                 OrderRepository orderRepository,
+                                 ApplicationEventPublisher publisher,
+                                 ObjectMapper objectMapper) {
         this.tickerRepository = tickerRepository;
         this.marketRepository = marketRepository;
+        this.orderRepository = orderRepository;
+        this.publisher = publisher;
         this.objectMapper = objectMapper;
-        this.eventPublisher = eventPublisher;
     }
 
     @PostConstruct
@@ -71,8 +71,8 @@ public class OrderExecutionService {
             sinkMap.put(code, sink);
 
             Disposable subscription = sink.asFlux()
-                    .sampleFirst(Duration.ofSeconds(1))  // 1초에 한 번 처리
-                    .subscribe(ticker -> eventPublisher.publishEvent(new TickerProcessingEvent(this, ticker)));
+                    .sampleFirst(Duration.ofMillis(500))  // 0.5 초에 한 번 처리(쓰로틀링)
+                    .subscribe(ticker -> publisher.publishEvent(new TickerProcessingEvent(this, ticker)));
 
             subscriptionMap.put(code, subscription);
         }
@@ -113,7 +113,26 @@ public class OrderExecutionService {
     @EventListener
     public void processTicker(TickerProcessingEvent event) {
         Ticker ticker = event.getTicker();
-        List<Order> ordersToProcess = orderService.getOrderToProcess(ticker.getMarket(), ticker.getTradePrice());
-        ordersToProcess.forEach(orderService::processOrderWithLock);
+        processOrderExecution(ticker.getMarket(), ticker.getTradePrice());
+    }
+
+    @Transactional
+    public void processOrderExecution(String market, double tradePrice) {
+        int pageSize = 100000;
+        int pageNumber = 0;
+
+        Page<Order> ordersChunk = null;
+        do {
+            PageRequest pageable = PageRequest.of(pageNumber, pageSize);
+            ordersChunk = orderRepository.findByMarketWithPrice(market, tradePrice, pageable);
+
+            // 기본 parallelStream: ForkJoinPool.commonPool() 사용
+            // - 시스템의 가용 CPU 코어 수에 따라 설정
+
+            // 스레드 수를 직접 조정하려면 별도의 ForkJoinPool 사용
+            ordersChunk.getContent().parallelStream().forEach(Order::execution);
+
+            pageNumber++;
+        } while (!ordersChunk.isLast());
     }
 }

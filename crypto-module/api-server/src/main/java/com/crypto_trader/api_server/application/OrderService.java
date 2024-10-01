@@ -2,26 +2,22 @@ package com.crypto_trader.api_server.application;
 
 import com.crypto_trader.api_server.application.dto.OrderCancelRequestDto;
 import com.crypto_trader.api_server.auth.PrincipalUser;
-import com.crypto_trader.api_server.domain.OrderSide;
-import com.crypto_trader.api_server.domain.Ticker;
-import com.crypto_trader.api_server.domain.entities.CryptoAsset;
 import com.crypto_trader.api_server.domain.entities.Order;
 import com.crypto_trader.api_server.domain.entities.OrderState;
 import com.crypto_trader.api_server.domain.entities.UserEntity;
 import com.crypto_trader.api_server.application.dto.OrderCreateRequestDto;
 import com.crypto_trader.api_server.application.dto.OrderResponseDto;
-import com.crypto_trader.api_server.domain.events.TickerProcessingEvent;
 import com.crypto_trader.api_server.infra.OrderRepository;
 import jakarta.persistence.LockModeType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.event.EventListener;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.data.jpa.repository.Lock;
-import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 @Service
 public class OrderService {
@@ -76,58 +72,5 @@ public class OrderService {
         // orderRepository.delete(order);
 
         return new OrderResponseDto();
-    }
-
-    @Transactional
-    public List<Order> getOrderToProcess(String market, double tradePrice) {
-        return orderRepository.findByMarket(market).stream()
-                .filter(order -> {
-                    double price = order.getPrice().doubleValue();
-                    return order.getState() == OrderState.CREATED &&
-                            ((order.getSide() == OrderSide.BID) ? tradePrice <= price : tradePrice >= price);
-                })
-                .toList();
-    }
-
-    @Transactional
-    @Lock(value = LockModeType.PESSIMISTIC_WRITE)
-    public void processOrderWithLock(Order order) {
-        Order currentOrder = orderRepository.findById(order.getId()).orElseThrow(() -> new RuntimeException("Order not found"));
-
-        // 상태가 변경되었는지 재검사
-        if (currentOrder.getState() == OrderState.CREATED) {
-            currentOrder.execution();
-        } else {
-            throw new RuntimeException("Order already processed or invalid state");
-        }
-    }
-
-    @Transactional
-    @Lock(value = LockModeType.PESSIMISTIC_READ)
-    public void processOrderWithReadLock(Order order) throws InterruptedException {
-        Order currentOrder = orderRepository.findById(order.getId()).orElseThrow(() -> new RuntimeException("Order not found"));
-
-        Thread.sleep(1000);
-        // 상태가 변경되었는지 재검사
-        if (currentOrder.getState() == OrderState.CREATED) {
-            currentOrder.execution();
-        } else {
-            throw new RuntimeException("Order already processed or invalid state");
-        }
-    }
-
-    @Transactional
-    @Lock(value = LockModeType.PESSIMISTIC_WRITE)
-    public void beforeProcessTicker(Ticker ticker) {
-        String market = ticker.getMarket();
-        double tradePrice = ticker.getTradePrice();
-
-        orderRepository.findByMarket(market).stream()
-                .filter(order -> {
-                    double price = order.getPrice().doubleValue();
-                    return order.getState() == OrderState.CREATED &&
-                            (order.getSide() == OrderSide.BID) ? tradePrice <= price : tradePrice >= price;
-                })
-                .forEach(Order::execution);
     }
 }
