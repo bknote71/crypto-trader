@@ -4,6 +4,7 @@ import com.crypto_trader.api_server.application.dto.CryptoDto;
 import com.crypto_trader.api_server.infra.SimpleMarketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,17 +19,10 @@ public class SimpleMarketService {
         this.marketRepository = marketRepository;
     }
 
-    public List<CryptoDto> getAllCryptos() {
-        List<String> marketCodes = marketRepository.marketCodesUpdates()
-                .blockFirst();
-
-        if (marketCodes == null || marketCodes.isEmpty()) {
-            return new ArrayList<>();
-        }
-
-        return marketCodes
-                .stream()
+    public Mono<List<CryptoDto>> getAllCryptos() {
+        return marketRepository.marketCodesUpdates()
+                .flatMapIterable(list -> list)
                 .map(CryptoDto::new)
-                .toList();
+                .collectList();
     }
 }

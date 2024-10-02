@@ -77,7 +77,7 @@ public class OrderExecutionService {
             sinkMap.put(code, sink);
 
             Disposable subscription = sink.asFlux()
-                    .sampleFirst(Duration.ofMillis(500))  // 0.5 초에 한 번 처리(쓰로틀링)
+                    .sampleFirst(Duration.ofMillis(1000))  // 0.5 초에 한 번 처리(쓰로틀링)
                     .subscribe(ticker -> publisher.publishEvent(new TickerProcessingEvent(this, ticker)));
 
             subscriptionMap.put(code, subscription);
@@ -123,7 +123,6 @@ public class OrderExecutionService {
     }
 
     public void processOrderExecution(String market, double tradePrice) {
-        long start = System.currentTimeMillis();
         int pageSize = 20000;
         int pageNumber = 0;
 
@@ -133,10 +132,7 @@ public class OrderExecutionService {
             isLast = orderExecution.process(market, tradePrice, pageable);
 
             pageNumber++;
-            System.out.println("중간 주문 체결 " + (System.currentTimeMillis() - start));
         } while (!isLast);
-
-        System.out.println("order execution completed " + (System.currentTimeMillis() - start));
     }
 
     @Transactional

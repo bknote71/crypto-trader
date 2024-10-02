@@ -113,6 +113,8 @@ struct BarChartRepresentable: NSViewRepresentable {
     
     guard barEntries.count > Int(visibleCount), draggingId != id else { return }
     
+    // TODO: throttle
+    
     nsView.setVisibleXRangeMaximum(visibleCount)
     
     let nextX: Double
@@ -128,8 +130,6 @@ struct BarChartRepresentable: NSViewRepresentable {
       return
     }
 
-    // 그냥 이 nsView를
-    print("bar move \(nextX)")
     nsView.moveViewToX(nextX)
   }
 }

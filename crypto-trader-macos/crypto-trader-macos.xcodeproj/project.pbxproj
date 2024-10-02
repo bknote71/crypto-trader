@@ -51,6 +51,7 @@
 		95ABB5DF2C9EC24C00717C16 /* SwiftProtobufPluginLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 95ABB5DE2C9EC24C00717C16 /* SwiftProtobufPluginLibrary */; };
 		95ABB5E12C9EC24C00717C16 /* protoc-gen-swift in Frameworks */ = {isa = PBXBuildFile; productRef = 95ABB5E02C9EC24C00717C16 /* protoc-gen-swift */; };
 		95ABB5E72C9EE29E00717C16 /* DataModel.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95ABB5E62C9EE29E00717C16 /* DataModel.pb.swift */; };
+		95BAED3E2CAD2D75009D3348 /* CandlesInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95BAED3D2CAD2D75009D3348 /* CandlesInfo.swift */; };
 		95D308952C9596D000AB3F99 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D308942C9596D000AB3F99 /* APIClient.swift */; };
 		95D308972C95978A00AB3F99 /* APIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D308962C95978A00AB3F99 /* APIEndpoint.swift */; };
 		95D308992C95B0DD00AB3F99 /* DoubleTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D308982C95B0DD00AB3F99 /* DoubleTextField.swift */; };
@@ -131,6 +132,7 @@
 		95ABB5D72C9D486400717C16 /* MouseTrackingBarChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MouseTrackingBarChartView.swift; sourceTree = "<group>"; };
 		95ABB5D92C9D543A00717C16 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		95ABB5E62C9EE29E00717C16 /* DataModel.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataModel.pb.swift; path = Sources/Model/DataModel.pb.swift; sourceTree = SOURCE_ROOT; };
+		95BAED3D2CAD2D75009D3348 /* CandlesInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandlesInfo.swift; sourceTree = "<group>"; };
 		95D308942C9596D000AB3F99 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		95D308962C95978A00AB3F99 /* APIEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIEndpoint.swift; sourceTree = "<group>"; };
 		95D308982C95B0DD00AB3F99 /* DoubleTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleTextField.swift; sourceTree = "<group>"; };
@@ -193,6 +195,7 @@
 				958677A62C8DAD8D002C83F4 /* CryptoDto.swift */,
 				95D3089C2C95B95800AB3F99 /* OrderCreateDto.swift */,
 				952B4C092C95527400D33FA6 /* UserInfo.swift */,
+				95BAED3D2CAD2D75009D3348 /* CandlesInfo.swift */,
 			);
 			path = Dto;
 			sourceTree = "<group>";
@@ -593,6 +596,7 @@
 				952B4C0A2C95527400D33FA6 /* UserInfo.swift in Sources */,
 				95FDD0812C8C8BEE003F9FBF /* Color.swift in Sources */,
 				9577E3792C99A5B8006E6CDA /* Const.swift in Sources */,
+				95BAED3E2CAD2D75009D3348 /* CandlesInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
