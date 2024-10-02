@@ -6,6 +6,7 @@ import com.crypto_trader.api_server.application.dto.CryptoDto;
 import com.crypto_trader.api_server.application.dto.TickerResponseDto;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class HomeController {
     }
 
     @GetMapping("/api/cryptos")
-    public List<CryptoDto> getAllCryptos() {
+    public Mono<List<CryptoDto>> getAllCryptos() {
         return marketService.getAllCryptos();
     }
 
