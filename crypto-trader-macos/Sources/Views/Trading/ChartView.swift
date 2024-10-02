@@ -83,6 +83,7 @@ struct ChartView: View {
       guard let crypto, crypto.market != lastMarket else { return }
       lastMarket = crypto.market
       candleViewModel.fetchAllCandles(market: crypto.market, unit: .one_minute)
+//      candleViewModel.fetchCandleInfos(market: crypto.market, unit: .one_minute)
     }
   }
   
@@ -101,7 +102,8 @@ struct ChartView: View {
           crypto: $cryptoViewModel.crypto,
           visibleCount: $visibleCount,
           sharedXRange: $sharedXRange,
-          draggingId: $draggingId
+          draggingId: $draggingId,
+          candleViewModel: candleViewModel
         )
         .frame(height: geo.size.height * chartRatio)
         .clipped()

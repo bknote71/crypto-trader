@@ -8,6 +8,8 @@ enum APIEndpoint {
   case login
   case tickers
   case allCandles
+  case candlesInfo
+  case candles
     
   var url: URL? {
     switch self {
@@ -21,6 +23,10 @@ enum APIEndpoint {
       return URL(string: url("/api/tickers"))
     case .allCandles:
       return URL(string: url("/api/all-candles"))
+    case .candlesInfo:
+      return URL(string: url("/api/candles-info"))
+    case .candles:
+      return URL(string: url("/api/candles"))
     }
   }
   

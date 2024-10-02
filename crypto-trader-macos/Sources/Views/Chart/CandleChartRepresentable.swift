@@ -11,7 +11,10 @@ struct CandleChartRepresentable: NSViewRepresentable {
   @Binding var sharedXRange: ClosedRange<Double> 
   
   @State var lastCount = 0
+  @State var firstDragging = true
   @Binding var draggingId: String?
+  
+  var candleViewModel: CandleViewModel
   
   class Coordinator: NSObject, ChartViewDelegate {
     var parent: CandleChartRepresentable
@@ -25,8 +28,11 @@ struct CandleChartRepresentable: NSViewRepresentable {
       guard let candleStickChartView = chartView as? CandleStickChartView else { return }
       debounceTimer?.invalidate()
       
+      parent.firstDragging = false
       parent.draggingId = parent.id
       parent.sharedXRange = candleStickChartView.lowestVisibleX...candleStickChartView.highestVisibleX
+      
+      parent.candleViewModel.fetchCandlesBasedOnX(candleStickChartView.lowestVisibleX)
       
       updateYAxis(for: candleStickChartView)
       
@@ -109,8 +115,8 @@ struct CandleChartRepresentable: NSViewRepresentable {
     
     (nsView.xAxis.valueFormatter as? MinuteXAxisFormatter)?.startDate = startDate
     
-    let dataSet = CandleChartDataSet(entries: entries, label: "Candle Stick Data")
-    dataSet.colors = [.blue] // 아무것도 없을 때
+    let dataSet = CandleChartDataSet(entries: Array(entries), label: "Candle Stick Data")
+    dataSet.colors = [.clear] // 아무것도 없을 때
     dataSet.shadowColor = .darkGray
     dataSet.increasingColor = .blue
     dataSet.decreasingColor = .red
@@ -135,10 +141,14 @@ struct CandleChartRepresentable: NSViewRepresentable {
     
     guard entries.count > Int(visibleCount), draggingId != id else { return }
     
+    // TODO: throttle
+    
     nsView.setVisibleXRangeMaximum(visibleCount)
     
     let nextX: Double
-    if draggingId != nil, draggingId != id {
+    if firstDragging {
+      nextX = entries.last?.x ?? 0
+    } else if draggingId != nil, draggingId != id {
       nextX = sharedXRange.lowerBound
     } else if draggingId == nil, countChanged {
       DispatchQueue.main.async {
@@ -149,7 +159,6 @@ struct CandleChartRepresentable: NSViewRepresentable {
       return
     }
     
-    print("candle move \(nextX)")
     nsView.moveViewToX(nextX)
     context.coordinator.updateYAxis(for: nsView)
   }

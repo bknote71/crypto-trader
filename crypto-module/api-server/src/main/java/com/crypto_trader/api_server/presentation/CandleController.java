@@ -8,6 +8,9 @@ import com.crypto_trader.api_server.infra.CandleMongoRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.http.MediaType;
@@ -19,6 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,33 +33,69 @@ public class CandleController {
 
     private final ReactiveRedisTemplate<String, byte[]> byteArrayRedisTemplate;
 
+    // TEMP
+    private List<byte[]> tempList;
+
     @Autowired
     public CandleController(ReactiveRedisTemplate<String, byte[]> byteArrayRedisTemplate) {
         this.byteArrayRedisTemplate = byteArrayRedisTemplate;
-    }
 
-//    @GetMapping("/api/all-candles")
-//    public List<CandleResponseDto> getAllCandles(@RequestParam String market) {
-//        // MongoDB에서 해당 market에 대한 모든 candle 가져오기
-//        List<Candle> candles = candleMongoRepository.findCandlesByMarket(market);
-//
-//        // Candle 엔티티를 CandleResponseDto로 변환
-//        List<CandleResponseDto> response = candles.stream()
-//                .map(CandleResponseDto::new)
-//                .collect(Collectors.toList());
-//
-//
-//        System.out.println("response count?" + response.stream().count());
-//        return response;
-//    }
+        String key =  "ONEMINUTE:minute_candle:KRW-BTC";
+        this.tempList = byteArrayRedisTemplate.opsForList()
+                .range(key, 0, -1)
+                .collectList()
+                .block();
+
+        int targetSize = 1000;
+        while (tempList.size() < targetSize) {
+            tempList.addAll(tempList);
+        }
+        tempList = tempList.subList(0, targetSize);
+    }
 
     // using protobuf
     @GetMapping("/api/all-candles")
     public Mono<List<byte[]>> getAllCandlesP(@ModelAttribute CandleRequestDto dto) {
         String key = dto.makeKey();
-        System.out.println("key? " + key);
         return byteArrayRedisTemplate.opsForList()
                 .range(key, 0, -1)
                 .collectList();
+    }
+
+    // TEMP
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    static class CandlesInfo {
+        double startDate;
+        double endDate;
+        int count;
+        List<byte[]> candles;
+    }
+
+    @GetMapping("/api/candles-info")
+    public CandlesInfo getCandlesInfo(@ModelAttribute CandleRequestDto dto) {
+        // 100개 정도 임의 데이터 만들기
+        List<byte[]> bytes = tempList.subList(0, 100);
+        double startDate = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) / 60.0;
+        double endDate = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) / 60.0; // 어차피 필요 없음
+        int count = 1000;
+
+        CandlesInfo info = new CandlesInfo(
+                startDate,
+                endDate,
+                count,
+                bytes
+        );
+
+        return info;
+    }
+
+    @GetMapping("/api/candles")
+    public List<byte[]> getCandles(@RequestParam("market") String market,
+                                   @RequestParam("unit")  CandleUnit unit,
+                                   @RequestParam("start") double startDate,
+                                   @RequestParam("end") double endDate) {
+        return tempList.subList(100, 200);
     }
 }

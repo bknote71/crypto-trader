@@ -23,7 +23,6 @@ public class ProcessOrderExecution {
     @Transactional
     public boolean process(String market, double tradePrice, PageRequest pageable) {
         Page<Order> orderChunk = orderRepository.findByMarketWithPrice(market, tradePrice, pageable);
-
         // 기본 parallelStream: ForkJoinPool.commonPool() 사용
         // - 시스템의 가용 CPU 코어 수에 따라 설정
 

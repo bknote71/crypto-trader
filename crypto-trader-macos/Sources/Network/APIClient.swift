@@ -77,7 +77,7 @@ class APIClient {
   }
 }
 
-class JsonAPIClient<V: Decodable>: APIClient {
+class JsonAPIClient: APIClient {
   private let decoder: JSONDecoder = {
     let decoder = JSONDecoder()
     decoder.dateDecodingStrategy = .custom { decoder in
@@ -109,7 +109,7 @@ class JsonAPIClient<V: Decodable>: APIClient {
     return decoder
   }()
   
-  func request(
+  func request<V: Decodable>(
     url: URL,
     post: Bool = false,
     param: [String: String]? = nil,
