@@ -21,6 +21,12 @@ public class HomeController {
         this.tickerService = tickerService;
     }
 
+    @GetMapping("/")
+    public String home() {
+        System.out.println("Home page");
+        return "home";
+    }
+
     @GetMapping("/api/cryptos")
     public Mono<List<CryptoDto>> getAllCryptos() {
         return marketService.getAllCryptos();
