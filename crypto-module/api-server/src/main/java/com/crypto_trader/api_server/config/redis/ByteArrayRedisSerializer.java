@@ -1,4 +1,4 @@
-package com.crypto_trader.api_server.config;
+package com.crypto_trader.api_server.config.redis;
 
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
