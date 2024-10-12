@@ -1,6 +1,6 @@
 package com.crypto_trader.api_server.websocket;
 
-import com.crypto_trader.api_server.application.dto.CandleRequestDto;
+import com.crypto_trader.api_server.dto.CandleRequestDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

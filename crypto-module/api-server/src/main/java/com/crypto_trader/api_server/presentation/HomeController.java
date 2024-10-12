@@ -2,8 +2,8 @@ package com.crypto_trader.api_server.presentation;
 
 import com.crypto_trader.api_server.application.SimpleMarketService;
 import com.crypto_trader.api_server.application.TickerService;
-import com.crypto_trader.api_server.application.dto.CryptoDto;
-import com.crypto_trader.api_server.application.dto.TickerResponseDto;
+import com.crypto_trader.api_server.dto.CryptoDto;
+import com.crypto_trader.api_server.dto.TickerResponseDto;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;

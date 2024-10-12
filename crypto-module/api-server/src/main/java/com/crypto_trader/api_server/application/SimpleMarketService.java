@@ -1,12 +1,11 @@
 package com.crypto_trader.api_server.application;
 
-import com.crypto_trader.api_server.application.dto.CryptoDto;
+import com.crypto_trader.api_server.dto.CryptoDto;
 import com.crypto_trader.api_server.infra.SimpleMarketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

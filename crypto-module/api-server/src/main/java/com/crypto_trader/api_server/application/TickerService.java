@@ -1,6 +1,6 @@
 package com.crypto_trader.api_server.application;
 
-import com.crypto_trader.api_server.application.dto.TickerResponseDto;
+import com.crypto_trader.api_server.dto.TickerResponseDto;
 import com.crypto_trader.api_server.infra.TickerRepository;
 import org.springframework.stereotype.Service;
 

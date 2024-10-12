@@ -1,6 +1,5 @@
-package com.crypto_trader.api_server.application.dto;
+package com.crypto_trader.api_server.dto;
 
-import com.crypto_trader.api_server.domain.entities.CryptoAsset;
 import com.crypto_trader.api_server.domain.entities.UserEntity;
 import lombok.Getter;
 

@@ -1,4 +1,4 @@
-package com.crypto_trader.api_server.application.dto;
+package com.crypto_trader.api_server.dto;
 
 
 import com.crypto_trader.api_server.domain.CandleUnit;

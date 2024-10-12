@@ -1,19 +1,15 @@
 package com.crypto_trader.api_server.application;
 
 import com.crypto_trader.api_server.auth.JwtUtil;
-import com.crypto_trader.api_server.application.dto.UserInfoDto;
+import com.crypto_trader.api_server.dto.UserInfoDto;
 import com.crypto_trader.api_server.domain.entities.CryptoAsset;
 import com.crypto_trader.api_server.domain.entities.UserEntity;
 import com.crypto_trader.api_server.infra.UserEntityRepository;
 import jakarta.annotation.PostConstruct;
-import jakarta.transaction.TransactionScoped;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AuthService {

@@ -72,15 +72,17 @@ public class CandleService {
 
     private void initRedisCandleFromMongo() {
         log.debug("Starting initRedisCandleFromMongo...");
+        System.out.println("starting initRedisCandleFromMongo...");
 
-        List<String> markets = marketService.getAllMarketCodes().subList(0, 12);
+        List<String> markets = marketService.getAllMarketCodes();
         List<Candle> candles = new ArrayList<>();
 
-        markets.parallelStream().forEach(m -> {
-            log.debug("Fetching candles for market: {}", m);
-            List<Candle> candlesByMarket = candleMongoRepository.findCandlesByMarket(m).subList(0, 200);
-            candles.addAll(candlesByMarket);
-        });
+//        markets.parallelStream().forEach(m -> {
+//            log.debug("Fetching candles for market: {}", m);
+//            System.out.println("fetching candles for market: " + m);
+//            List<Candle> candlesByMarket = candleMongoRepository.findCandlesByMarket(m).subList(0, 1000);
+//            candles.addAll(candlesByMarket);
+//        });
 
         System.out.println("all candle datas fetched");
 
