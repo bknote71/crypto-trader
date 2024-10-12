@@ -46,11 +46,13 @@ public class CandleController {
                 .collectList()
                 .block();
 
-        int targetSize = 1000;
-        while (tempList.size() < targetSize) {
-            tempList.addAll(tempList);
+        if (!tempList.isEmpty()) {
+            int targetSize = 1000;
+            while (tempList.size() < targetSize) {
+                tempList.addAll(tempList);
+            }
+            tempList = tempList.subList(0, targetSize);
         }
-        tempList = tempList.subList(0, targetSize);
     }
 
     // using protobuf
