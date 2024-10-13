@@ -4,6 +4,7 @@ import com.crypto_trader.api_server.domain.Ticker;
 import com.crypto_trader.api_server.domain.events.TickerChangeEvent;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.redis.connection.ReactiveSubscription;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
@@ -32,7 +33,7 @@ public class TickerRepository {
     }
 
     @Autowired
-    public TickerRepository(ReactiveRedisTemplate<String, String> redisTemplate,
+    public TickerRepository(@Qualifier("pubSubRedisTemplate") ReactiveRedisTemplate<String, String> redisTemplate,
                             ApplicationEventPublisher publisher,
                             SimpleMarketRepository simpleMarketRepository) {
         this.redisTemplate = redisTemplate;
@@ -59,7 +60,8 @@ public class TickerRepository {
     }
 
     private void initTickers() {
-        simpleMarketRepository.marketCodesUpdates()
+        simpleMarketRepository
+                .marketCodesUpdates()
                 .doOnNext(marketCodes -> {
                     for (String marketCode : marketCodes) {
                         Ticker ticker = new Ticker(marketCode, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);

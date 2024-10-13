@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.data.redis.listener.PatternTopic;
 import org.springframework.stereotype.Repository;
@@ -29,7 +30,8 @@ public class SimpleMarketRepository {
     private Disposable subscription;
 
     @Autowired
-    public SimpleMarketRepository(ReactiveRedisTemplate<String, String> redisTemplate, ObjectMapper objectMapper) {
+    public SimpleMarketRepository(@Qualifier("pubSubRedisTemplate") ReactiveRedisTemplate<String, String> redisTemplate,
+                                  ObjectMapper objectMapper) {
         this.redisTemplate = redisTemplate;
         this.objectMapper = objectMapper;
     }

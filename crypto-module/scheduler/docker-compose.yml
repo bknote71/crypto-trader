@@ -1,0 +1,57 @@
+version: '3'
+services:
+  redis-master:
+    image: redis:latest
+    container_name: redis-master
+    networks:
+      - app-network
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --protected-mode no --bind 0.0.0.0 --notify-keyspace-events Kl
+
+  redis-slave1:
+    image: redis:latest
+    container_name: redis-slave1
+    networks:
+      - app-network
+    ports:
+      - "6380:6379"
+    command: redis-server --slaveof redis-master 6379 --protected-mode no --bind 0.0.0.0
+
+  redis-slave2:
+    image: redis:latest
+    container_name: redis-slave2
+    networks:
+      - app-network
+    ports:
+      - "6381:6379"
+    command: redis-server --slaveof redis-master 6379 --protected-mode no --bind 0.0.0.0
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    networks:
+      - app-network
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: testdb
+
+  spring-app:
+    image: bknote71/scheduler
+    container_name: spring-app
+    networks:
+      - app-network
+    environment:
+      - spring.profiles.active=prod
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis-master
+      - redis-slave1
+      - redis-slave2
+      - mongodb
+
+networks:
+  app-network:
+    driver: bridge

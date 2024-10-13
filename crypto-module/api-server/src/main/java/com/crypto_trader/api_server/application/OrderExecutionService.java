@@ -37,7 +37,6 @@ public class OrderExecutionService {
     private final ApplicationEventPublisher publisher;
     private final ObjectMapper objectMapper;
 
-
     private final Map<String, Sinks.Many<Ticker>> sinkMap = new HashMap<>();
     private final Map<String, Disposable> subscriptionMap = new HashMap<>();
 
