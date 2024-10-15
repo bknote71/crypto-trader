@@ -1,11 +1,11 @@
 package com.crypto_trader.api_server.infra;
 
+import com.crypto_trader.api_server.config.redis.ReactiveRedisPubSubTemplate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.data.redis.listener.PatternTopic;
 import org.springframework.stereotype.Repository;
@@ -21,6 +21,7 @@ import static com.crypto_trader.api_server.global.constant.Constants.MARKET;
 @Repository
 public class SimpleMarketRepository {
 
+    private final ReactiveRedisPubSubTemplate<String> pubSubTemplate;
     private final ReactiveRedisTemplate<String, String> redisTemplate;
     private final ObjectMapper objectMapper;
 
@@ -30,8 +31,10 @@ public class SimpleMarketRepository {
     private Disposable subscription;
 
     @Autowired
-    public SimpleMarketRepository(@Qualifier("pubSubRedisTemplate") ReactiveRedisTemplate<String, String> redisTemplate,
+    public SimpleMarketRepository(ReactiveRedisPubSubTemplate<String> pubSubTemplate,
+                                  ReactiveRedisTemplate<String, String> redisTemplate,
                                   ObjectMapper objectMapper) {
+        this.pubSubTemplate = pubSubTemplate;
         this.redisTemplate = redisTemplate;
         this.objectMapper = objectMapper;
     }
@@ -41,7 +44,8 @@ public class SimpleMarketRepository {
         getMarket();
 
         PatternTopic topic = new PatternTopic("__keyspace@0__:" + MARKET);
-        redisTemplate
+        pubSubTemplate
+                .select()
                 .listenTo(topic)
                 .subscribe(value -> getMarket());
     }

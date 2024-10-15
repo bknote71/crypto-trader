@@ -16,7 +16,7 @@ services:
       - app-network
     ports:
       - "6380:6379"
-    command: redis-server --slaveof redis-master 6379 --protected-mode no --bind 0.0.0.0
+    command: redis-server --slaveof redis-master 6379 --protected-mode no --bind 0.0.0.0 --notify-keyspace-events Kl
 
   redis-slave2:
     image: redis:latest
@@ -25,7 +25,7 @@ services:
       - app-network
     ports:
       - "6381:6379"
-    command: redis-server --slaveof redis-master 6379 --protected-mode no --bind 0.0.0.0
+    command: redis-server --slaveof redis-master 6379 --protected-mode no --bind 0.0.0.0 --notify-keyspace-events Kl
 
   mongodb:
     image: mongo:latest

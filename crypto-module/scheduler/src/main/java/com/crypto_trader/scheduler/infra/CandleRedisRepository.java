@@ -1,5 +1,6 @@
 package com.crypto_trader.scheduler.infra;
 
+import com.crypto_trader.scheduler.config.redis.ReactiveRedisPubSubTemplate;
 import com.crypto_trader.scheduler.domain.CandleState;
 import com.crypto_trader.scheduler.domain.CandleUnit;
 import com.crypto_trader.scheduler.proto.DataModel;
@@ -19,11 +20,11 @@ import static com.crypto_trader.scheduler.proto.DataModel.*;
 @Repository
 public class CandleRedisRepository {
 
-    private final ReactiveRedisTemplate<String, byte[]> byteArrayRedisTemplate;
+    private final ReactiveRedisPubSubTemplate<byte[]> pubSubTemplate;
 
     @Autowired
-    public CandleRedisRepository(ReactiveRedisTemplate<String, byte[]> byteArrayRedisTemplate) {
-        this.byteArrayRedisTemplate = byteArrayRedisTemplate;
+    public CandleRedisRepository(ReactiveRedisPubSubTemplate<byte[]> pubSubTemplate) {
+        this.pubSubTemplate = pubSubTemplate;
     }
 
     public void saveMinuteCandle(String market, CandleState candleState, CandleUnit unit) {
@@ -38,21 +39,20 @@ public class CandleRedisRepository {
                 .setTime(candleState.getTime().toString())
                 .build();
 
-        byteArrayRedisTemplate.opsForList()
+        pubSubTemplate
+                .master
+                .opsForList()
                 .rightPush(key, pCandle.toByteArray())  // 데이터를 리스트에 추가
-//                    .flatMap(result -> {
-//                        // 2. TTL 설정 (48시간)
-//                        return redisTemplate.expire(key, Duration.ofHours(48));  // 48시간 TTL 설정
-//                    })
-                .doOnSuccess(success -> {
-                })
                 .doOnError(error -> {log.debug(error.getMessage());})
                 .subscribe();
     }
 
     public Mono<List<CandleState>> getOneMinuteCandle(String market) {
         String key = CandleUnit.ONEMINUTE + MINUTE_CANDLE + market;
-        return byteArrayRedisTemplate.opsForList().range(key, 0, -1)
+        return pubSubTemplate
+                .master
+                .opsForList()
+                .range(key, 0, -1)
                 .<CandleState>handle((bytes, sink) -> {
                     try {
                         PCandle candle = PCandle.parseFrom(bytes);

@@ -1,4 +1,4 @@
-package com.crypto_trader.scheduler.config;
+package com.crypto_trader.scheduler.config.redis;
 
 
 import org.springframework.data.redis.serializer.RedisSerializer;

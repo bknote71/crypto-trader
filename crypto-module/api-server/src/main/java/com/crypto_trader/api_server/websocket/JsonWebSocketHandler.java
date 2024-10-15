@@ -53,15 +53,11 @@ public abstract class JsonWebSocketHandler<T, V> extends TextWebSocketHandler {
         }
     }
 
-    protected void sendJsonMessage(String json, WebSocketSession session) {
-        try {
-            if (!session.isOpen())
-                return;
+    protected void sendJsonMessage(String json, WebSocketSession session) throws IOException {
+        if (!session.isOpen())
+            return;
 
-            session.sendMessage(new TextMessage(json));
-        } catch (IOException e) {
-            // TODO: session이 close될 수 있다.
-        }
+        session.sendMessage(new TextMessage(json));
     }
 
     protected String convertToV(V message) throws JsonProcessingException {

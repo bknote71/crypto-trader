@@ -1,5 +1,6 @@
 package com.crypto_trader.api_server.application;
 
+import com.crypto_trader.api_server.config.redis.ReactiveRedisPubSubTemplate;
 import com.crypto_trader.api_server.infra.SimpleMarketRepository;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.data.redis.listener.PatternTopic;
@@ -13,12 +14,15 @@ import static io.lettuce.core.protocol.CommandType.RPUSH;
 @Service
 public class LatestCandleService {
 
-    private final ReactiveRedisTemplate<String, byte[]> byteArrayRedisTemplate;
+    private final ReactiveRedisPubSubTemplate<byte[]> pubSubTemplate;
+    private final ReactiveRedisTemplate<String, byte[]> redisTemplate;
     private Map<String, LatestCandleDatas> latestCandles;
 
-    public LatestCandleService(ReactiveRedisTemplate<String, byte[]> pubSubBytesRedisTemplate,
+    public LatestCandleService(ReactiveRedisPubSubTemplate<byte[]> pubSubTemplate,
+                               ReactiveRedisTemplate<String, byte[]> redisTemplate,
                                SimpleMarketRepository simpleMarketRepository) {
-        this.byteArrayRedisTemplate = pubSubBytesRedisTemplate;
+        this.pubSubTemplate = pubSubTemplate;
+        this.redisTemplate = redisTemplate;
 
         simpleMarketRepository
                 .marketCodesUpdates()
@@ -37,7 +41,8 @@ public class LatestCandleService {
         // 현재는 1분 캔들만 (TODO: 5분, 10분, ..)
         String key = "ONEMINUTE:minute_candle:" + code;
         PatternTopic topic = new PatternTopic("__keyspace@0__:" + key);
-        byteArrayRedisTemplate
+        pubSubTemplate
+                .select()
                 .listenTo(topic)
                 .subscribe(value -> {
                     String message = new String(value.getMessage());
@@ -45,13 +50,14 @@ public class LatestCandleService {
                         return;
 
                     // llen
-                    byteArrayRedisTemplate
+                    redisTemplate
                             .opsForList()
                             .size(key)
                             .subscribe(latestCandleDatas::setCount);
 
                     // lrange
-                    byteArrayRedisTemplate.opsForList()
+                    redisTemplate
+                            .opsForList()
                             .range(key, -1, -1)
                             .subscribe(latestCandleDatas::addCandle);
                 });
@@ -59,17 +65,5 @@ public class LatestCandleService {
 
     public LatestCandleDatas getLatestCandle(String code) {
         return latestCandles.get(code);
-    }
-
-    public Deque<byte[]> getLatestCandles(String code) {
-        return latestCandles.getOrDefault(code, new LatestCandleDatas()).getDeque();
-    }
-
-    public int getLatestCandleCount(String code) {
-        return (int) latestCandles.getOrDefault(code, new LatestCandleDatas()).getCount();
-    }
-
-    public Flux<byte[]> getCandleStream(String code) {
-        return latestCandles.getOrDefault(code, new LatestCandleDatas()).asFlux();
     }
 }

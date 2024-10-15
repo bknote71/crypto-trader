@@ -1,5 +1,6 @@
 package com.crypto_trader.scheduler.application;
 
+import com.crypto_trader.scheduler.config.redis.ReactiveRedisPubSubTemplate;
 import com.crypto_trader.scheduler.domain.Ticker;
 import com.crypto_trader.scheduler.domain.entity.Candle;
 import com.crypto_trader.scheduler.infra.CandleMongoRepository;
@@ -24,27 +25,30 @@ import static com.crypto_trader.scheduler.proto.DataModel.*;
 @Service
 public class CandleService {
 
-    private final SimpleCandleRepository candleRepository;
-    private final CandleMongoRepository candleMongoRepository;
     private final MarketService marketService;
-    private final ObjectMapper objectMapper;
-    private final ReactiveRedisTemplate<String, String> stringRedisTemplate;
-    private final ReactiveRedisTemplate<String, byte[]> byteArrayRedisTemplate;
     private final TickerService tickerService;
 
-    public CandleService(SimpleCandleRepository candleRepository,
+    private final SimpleCandleRepository candleRepository;
+    private final CandleMongoRepository candleMongoRepository;
+    private final ReactiveRedisPubSubTemplate<String> stringPubSubTemplate;
+    private final ReactiveRedisPubSubTemplate<byte[]> bytesPubsubTemplate;
+
+    private final ObjectMapper objectMapper;
+
+    public CandleService(MarketService marketService,
+                         TickerService tickerService,
+                         SimpleCandleRepository candleRepository,
                          CandleMongoRepository candleMongoRepository,
-                         MarketService marketService,
-                         ObjectMapper objectMapper,
-                         ReactiveRedisTemplate<String, String> stringRedisTemplate,
-                         ReactiveRedisTemplate<String, byte[]> byteArrayRedisTemplate, TickerService tickerService) {
+                         ReactiveRedisPubSubTemplate<String> stringPubSubTemplate,
+                         ReactiveRedisPubSubTemplate<byte[]> bytesPubsubTemplate,
+                         ObjectMapper objectMapper) {
+        this.marketService = marketService;
+        this.tickerService = tickerService;
         this.candleRepository = candleRepository;
         this.candleMongoRepository = candleMongoRepository;
-        this.marketService = marketService;
+        this.stringPubSubTemplate = stringPubSubTemplate;
+        this.bytesPubsubTemplate = bytesPubsubTemplate;
         this.objectMapper = objectMapper;
-        this.stringRedisTemplate = stringRedisTemplate;
-        this.byteArrayRedisTemplate = byteArrayRedisTemplate;
-        this.tickerService = tickerService;
     }
 
     @EventListener(ApplicationReadyEvent.class)
@@ -57,7 +61,8 @@ public class CandleService {
                         error -> log.debug("Error initializing Redis: {}", error.getMessage()));
 
         // Redis Ticker 구독 설정
-        stringRedisTemplate
+        stringPubSubTemplate
+                .master
                 .listenToChannel(REDIS_TICKER)
                 .subscribe((value) -> {
                     String message = value.getMessage();
@@ -79,7 +84,6 @@ public class CandleService {
 
 //        markets.parallelStream().forEach(m -> {
 //            log.debug("Fetching candles for market: {}", m);
-//            System.out.println("fetching candles for market: " + m);
 //            List<Candle> candlesByMarket = candleMongoRepository.findCandlesByMarket(m).subList(0, 1000);
 //            candles.addAll(candlesByMarket);
 //        });
@@ -100,7 +104,9 @@ public class CandleService {
                         .setTime(candle.getTime().toString())
                         .build();
 
-                byteArrayRedisTemplate.opsForList()
+                bytesPubsubTemplate
+                        .master
+                        .opsForList()
                         .rightPush(key, pCandle.toByteArray())  // Redis 리스트에 저장
                         .subscribe();
             } catch (Exception e) {
@@ -108,15 +114,16 @@ public class CandleService {
             }
         });
 
-
         tickerService.fetchStart();
     }
 
     // Redis 데이터베이스에서 "market" 키를 제외한 모든 데이터를 삭제
     private Mono<Void> cleanRedisDB() {
-        return stringRedisTemplate.keys("*")
+        return stringPubSubTemplate
+                .master
+                .keys("*")
                 .filter(key -> !key.equals(MARKET))
-                .flatMap(stringRedisTemplate::delete)
+                .flatMap(stringPubSubTemplate.master::delete)
                 .then(Mono.just("Redis cache cleared except 'market' key on startup."))
                 .doOnSuccess(log::debug)
                 .doOnError(Throwable::printStackTrace)

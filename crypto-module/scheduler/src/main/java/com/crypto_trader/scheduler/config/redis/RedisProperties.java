@@ -1,4 +1,4 @@
-package com.crypto_trader.api_server.config.redis;
+package com.crypto_trader.scheduler.config.redis;
 
 
 import lombok.Getter;

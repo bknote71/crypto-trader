@@ -5,13 +5,19 @@ import com.crypto_trader.api_server.domain.events.TickerChangeEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketSession;
 
+import javax.management.*;
+import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 public class TickerWebSocketHandler extends JsonWebSocketHandler<Void, Ticker> {
@@ -40,11 +46,26 @@ public class TickerWebSocketHandler extends JsonWebSocketHandler<Void, Ticker> {
         sessions.remove(session);
     }
 
+    @Override
+    public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
+        super.handleTransportError(session, exception);
+    }
+
     @EventListener
     public void onTickerChange(TickerChangeEvent event) throws JsonProcessingException {
         String ticker = convertToV(event.getTicker());
+        List<WebSocketSession> failedSessions = new CopyOnWriteArrayList<>();
+
         sessions
                 .parallelStream()
-                .forEach(session -> sendJsonMessage(ticker, session));
+                .forEach(session -> {
+                    try {
+                        sendJsonMessage(ticker, session);
+                    } catch (IOException e) {
+                        failedSessions.add(session);
+                    }
+                });
+
+        sessions.removeAll(failedSessions);
     }
 }

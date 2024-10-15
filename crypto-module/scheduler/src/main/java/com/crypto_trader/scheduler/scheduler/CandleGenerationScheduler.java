@@ -63,12 +63,12 @@ public class CandleGenerationScheduler {
 
     @Scheduled(cron = "0 */5 * * * *")
     public void generateFiveMinuteCandles() {
-        aggregateAndStoreCandles(CandleUnit.FIVEMINUTE);
+//        aggregateAndStoreCandles(CandleUnit.FIVEMINUTE);
     }
 
     @Scheduled(cron = "0 */10 * * * *")
     public void generateTenMinuteCandles() {
-        aggregateAndStoreCandles(CandleUnit.TENMINUTE);
+//        aggregateAndStoreCandles(CandleUnit.TENMINUTE);
     }
 
     private void aggregateAndStoreCandles(CandleUnit unit) {

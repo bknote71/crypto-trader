@@ -1,5 +1,6 @@
 package com.crypto_trader.scheduler.infra;
 
+import com.crypto_trader.scheduler.config.redis.ReactiveRedisPubSubTemplate;
 import com.crypto_trader.scheduler.domain.event.FetchTickerEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,21 +24,20 @@ import static com.crypto_trader.scheduler.global.utils.StringUtils.*;
 @Component
 public class TickerWebSocketHandler extends BinaryWebSocketHandler {
 
+    private final ReactiveRedisPubSubTemplate<String> pubSubTemplate;
     private final ApplicationEventPublisher publisher;
     private final ObjectMapper objectMapper;
-    private final ReactiveRedisTemplate<String, String> redisTemplate;
 
     // private state
     private WebSocketSession session;
 
     @Autowired
-    public TickerWebSocketHandler(ApplicationEventPublisher publisher,
-                                  ObjectMapper objectMapper,
-                                  ReactiveRedisTemplate<String, String> redisTemplate
-                                  ) {
+    public TickerWebSocketHandler(ReactiveRedisPubSubTemplate<String> pubSubTemplate,
+                                  ApplicationEventPublisher publisher,
+                                  ObjectMapper objectMapper) {
+        this.pubSubTemplate = pubSubTemplate;
         this.publisher = publisher;
         this.objectMapper = objectMapper;
-        this.redisTemplate = redisTemplate;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class TickerWebSocketHandler extends BinaryWebSocketHandler {
     protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
         super.handleBinaryMessage(session, message);
         String tickerJson = decodeToString(message.getPayload());
-        redisTemplate.convertAndSend(REDIS_TICKER, tickerJson).subscribe(); // publish
+        pubSubTemplate.publish(REDIS_TICKER, tickerJson);
     }
 
     @Override
@@ -66,7 +66,6 @@ public class TickerWebSocketHandler extends BinaryWebSocketHandler {
     public void fetchAllTicker(List<String> marketCodes) {
         if (session == null || !session.isOpen())
             return;
-
 
         try {
             String payload = createPayload(marketCodes);
