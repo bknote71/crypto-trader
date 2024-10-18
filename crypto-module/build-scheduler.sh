@@ -17,9 +17,9 @@ echo "Navigating to the scheduler directory..."
 cd scheduler
 
 echo "Building and pushing the Docker image..."
-#docker buildx build --platform linux/amd64 -t bknote71/scheduler:latest $NO_CACHE --push .
+docker buildx build --platform linux/amd64 -t bknote71/scheduler:latest $NO_CACHE --push .
 
-docker build -t bknote71/scheduler:latest $NO_CACHE .
-docker push bknote71/scheduler:latest
+#docker build -t bknote71/scheduler:latest $NO_CACHE .
+#docker push bknote71/scheduler:latest
 
 echo "Scheduler Docker image has been built, tagged, and pushed successfully!"

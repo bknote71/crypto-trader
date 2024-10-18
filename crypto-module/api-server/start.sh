@@ -4,7 +4,7 @@ docker stop api-server
 docker rm api-server
 
 echo "Pulling the latest bknote71/api-server image..."
-docker pull bknote71/api-server
+docker pull bknote71/api-server:latest
 
 echo "Removing old bknote71/api-server images..."
 # Get the image ID of the latest pulled image
@@ -15,10 +15,11 @@ docker images bknote71/scheduler --format "{{.ID}}" | grep -v "$latest_api_serve
 # --cpus="2" --memory="2g"
 echo "Run docker!"
 docker run -d --network scheduler_app-network -p 8090:8090 \
-        --name api-server bknote71/api-server
+        --name api-server bknote71/api-server:latest
+#        --sysctl net.core.somaxconn=4096 \
+#        --sysctl net.ipv4.tcp_max_syn_backlog=4096
+#        --privileged \
 #      --ulimit nofile=1048576:1048576 \
-#      --sysctl net.core.somaxconn=4096 \
-#      --sysctl net.ipv4.tcp_max_syn_backlog=4096 \
 
 
 echo "All tasks completed!"

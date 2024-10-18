@@ -17,9 +17,9 @@ echo "Navigating to the api-server directory..."
 cd api-server
 
 echo "Building and pushing the Docker image..."
-#docker buildx build --platform linux/amd64 -t bknote71/api-server:latest $NO_CACHE --push .
+docker buildx build --platform linux/amd64 -t bknote71/api-server:latest $NO_CACHE --push .
 
-docker build -t bknote71/api-server:latest $NO_CACHE .
-docker push bknote71/api-server:latest
+#docker build -t bknote71/api-server:latest $NO_CACHE .
+#docker push bknote71/api-server:latest
 
 echo "Api-server Docker image has been built, tagged, and pushed successfully!"

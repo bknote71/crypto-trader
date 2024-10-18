@@ -3,9 +3,7 @@ package com.crypto_trader.monitor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 
 @Service
@@ -17,7 +15,7 @@ public class WebSocketServerManager {
     private final List<String> webSocketServers = new ArrayList<>();
 
     private static final int WEBSOCKET_THRESHOLD = 10;  // 임계치 설정
-    private static final double SCALE_OUT_RATIO = 0.5;
+    private static final double SCALE_OUT_RATIO = 0.7;
     public static final String apiServerImage = "bknote71/api-server:latest";
 
     public WebSocketServerManager(RestTemplate restTemplate,
@@ -30,15 +28,20 @@ public class WebSocketServerManager {
         return webSocketServers;
     }
 
-    public double getWebSocketSessionCount(String serverUrl) {
+    public int getWebSocketSessionCount(String serverUrl) {
+        // /actuator/metrics/websocket.ticker.sessions.count
         String metricUrl = serverUrl + "/actuator/metrics/websocket.ticker.sessions.count";
         try {
-            Double sessionCount = restTemplate.getForObject(metricUrl, Double.class);
-            return sessionCount != null ? sessionCount : 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return 0;
-        }
+            Map<String, Object> response = restTemplate.getForObject(metricUrl, Map.class);
+
+            if (response != null && response.get("measurements") != null) {
+                List<Map<String, Object>> measurements = (List<Map<String, Object>>) response.get("measurements");
+                if (!measurements.isEmpty()) {
+                    return (int) measurements.get(0).get("value");
+                }
+            }
+        } catch (Exception e) {}
+        return 0;
     }
 
     public boolean isOverloaded(String serverUrl) {
@@ -46,9 +49,9 @@ public class WebSocketServerManager {
     }
 
     public String getBestServer() {
-        // TODO: 조금 더 복잡한 조건
+        // TODO: 조금 더 엄밀한 조건
         return webSocketServers.stream()
-                .min(Comparator.comparingDouble(this::getWebSocketSessionCount))
+                .min(Comparator.comparingInt(this::getWebSocketSessionCount))
                 .orElseThrow(() -> new RuntimeException("No Available WebSocket Servers"));
     }
 
@@ -57,11 +60,15 @@ public class WebSocketServerManager {
                 .filter(this::isOverloaded)
                 .count();
 
+        // TODO: minimum size requirements
+
         if (overloadedCount >= webSocketServers.size() * SCALE_OUT_RATIO) {
             try {
                 String newServerUrl = dockerService.scaleOut(apiServerImage, "websocket-server-" + System.currentTimeMillis());
-                webSocketServers.add(newServerUrl);
-                System.out.println("New WebSocket server added: " + newServerUrl);
+                if (newServerUrl != null) {
+                    webSocketServers.add(newServerUrl);
+                    System.out.println("New WebSocket server added: " + newServerUrl);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
