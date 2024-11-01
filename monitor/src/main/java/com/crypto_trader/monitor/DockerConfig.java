@@ -50,8 +50,6 @@ public class DockerConfig {
                         String name = image[0];
                         String tag = image.length > 1 ? image[1] : "";
 
-                        System.out.println("image name: " + name + " tag: " + tag);
-
                         if (apiServerImage.equals(name) && "latest".equals(tag)) {
                             dockerClient.stopContainerCmd(container.getId()).exec();
                             dockerClient.removeContainerCmd(container.getId()).exec();

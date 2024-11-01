@@ -21,6 +21,9 @@ RUN apt-get update && apt-get install -y \
     iproute2 \
     && rm -rf /var/lib/apt/lists/*
 
+RUN apt update
+RUN apt install net-tools
+
 # OpenJDK 17 설치
 RUN apt-get update && apt-get install -y openjdk-17-jdk
 
