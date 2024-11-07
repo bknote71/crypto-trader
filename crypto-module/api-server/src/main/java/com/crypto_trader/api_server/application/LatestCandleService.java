@@ -44,6 +44,10 @@ public class LatestCandleService {
         pubSubTemplate
                 .select()
                 .listenTo(topic)
+                .onErrorResume(e -> {
+                    subscribeRealtimeCandle(code, latestCandleDatas);
+                    return Flux.empty(); // 기존 스트림 종료
+                })
                 .subscribe(value -> {
                     String message = new String(value.getMessage());
                     if (!message.equals(RPUSH.name().toLowerCase()))

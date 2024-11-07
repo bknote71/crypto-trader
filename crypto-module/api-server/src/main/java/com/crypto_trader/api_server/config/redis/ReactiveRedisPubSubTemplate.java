@@ -1,5 +1,6 @@
 package com.crypto_trader.api_server.config.redis;
 
+import org.springframework.data.redis.connection.RedisSentinelConfiguration;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
@@ -28,15 +29,20 @@ public class ReactiveRedisPubSubTemplate<V> {
 
         this.redisTemplates.add(new ReactiveRedisTemplate<>(factory, serializationContext));
 
-        for (RedisProperties.RedisNode slave : properties.getSlaves()) {
-            RedisStandaloneConfiguration slaveConfig = new RedisStandaloneConfiguration(slave.getHost(), slave.getPort());
-            LettuceConnectionFactory slaveFactory = new LettuceConnectionFactory(slaveConfig);
-            slaveFactory.afterPropertiesSet(); // 빈 초기화
+//        for (RedisProperties.RedisNode slave : properties.getSlaves()) {
+//            RedisStandaloneConfiguration slaveConfig = new RedisStandaloneConfiguration(slave.getHost(), slave.getPort());
+//            LettuceConnectionFactory slaveFactory = new LettuceConnectionFactory(slaveConfig);
+//            slaveFactory.afterPropertiesSet(); // 빈 초기화
+//
+//            this.redisTemplates.add(new ReactiveRedisTemplate<>(slaveFactory, serializationContext));
+//        }
 
-            this.redisTemplates.add(new ReactiveRedisTemplate<>(slaveFactory, serializationContext));
+        for (RedisProperties.RedisNode sentinel : properties.getSentinels()) {
+            RedisStandaloneConfiguration sentinelConfig = new RedisStandaloneConfiguration(sentinel.getHost(), sentinel.getPort());
+            LettuceConnectionFactory sentinelFactory = new LettuceConnectionFactory(sentinelConfig);
+            factory.afterPropertiesSet(); // 빈 초기화
+            this.redisTemplates.add(new ReactiveRedisTemplate<>(sentinelFactory, serializationContext));
         }
-
-
     }
 
     public ReactiveRedisTemplate<String, V> select() {

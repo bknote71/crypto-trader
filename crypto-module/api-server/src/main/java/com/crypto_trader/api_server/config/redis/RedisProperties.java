@@ -15,20 +15,32 @@ public class RedisProperties {
 
     private RedisNode master;
     private List<RedisNode> slaves;
+    private List<RedisNode> sentinels;
 
     public RedisProperties() {
-        this.master = new RedisNode("localhost", 6379);
+        this.master = new RedisNode("mymaster", 6379);
         this.slaves = new ArrayList<>();
+        this.sentinels = new ArrayList<>();
     }
 
-    public RedisProperties(RedisNode master, List<RedisNode> slaves) {
+    public RedisProperties(RedisNode master, List<RedisNode> sentinels) {
+        this.master = master;
+        this.slaves = new ArrayList<>();
+        this.sentinels = sentinels;
+    }
+
+    public RedisProperties(RedisNode master, List<RedisNode> slaves, List<RedisNode> sentinels) {
         this.master = master;
         this.slaves = slaves;
+        this.sentinels = sentinels;
     }
 
+    @Getter
+    @Setter
     public static class RedisNode {
         private String host;
         private int port;
+        private String name;
 
         public RedisNode() {}
 
@@ -37,20 +49,10 @@ public class RedisProperties {
             this.port = port;
         }
 
-        public String getHost() {
-            return host;
-        }
-
-        public void setHost(String host) {
+        public RedisNode(String host, int port, String name) {
             this.host = host;
-        }
-
-        public int getPort() {
-            return port;
-        }
-
-        public void setPort(int port) {
             this.port = port;
+            this.name = name;
         }
     }
 }
